@@ -42,6 +42,8 @@ The installed skill (`typesafe:typesafe-ai` 0.5.7) defers to the live docs at do
 
 VENDOR limits: 64k tokens per request, 32k for state plus the longest question, 1,200 requests a minute, 250k tokens a second, "adjusting dynamically". At most 255 choice options. No documented cap on questions per request.
 
+**Known limits of jev-1.13. VENDOR, from https://docs.typesafe.ai/model-jaggedness/jev-1.13, read 2026-09-18.** The company that makes Jev says it reads instructions literally, does not count reliably, is unreliable at comparing dates and doing arithmetic, handles double negatives and indirect instructions poorly, gets less accurate as the text it is given fills with detail unrelated to the question, can be swayed by text that argues with it, and does not write text. We have not tested these ourselves. They are why this project counts words, numbers and question parts in code, sends the model only the question, the reply and a few computed facts, and asks one narrow thing per question.
+
 **Gate 0 measurements. FACT, 2026-09-19, raw output in `docs/gate0/jev-response.json`.**
 
 - Model pinned as `jev-1.13.0`. The response echoes that version.

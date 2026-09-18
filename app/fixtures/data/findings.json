@@ -273,6 +273,121 @@
       "statement": "Of replies read as not answered, also read as declining with a reason",
       "numerator": 0,
       "denominator": 0
+    },
+    {
+      "statement": "Questions asking for a figure where the reply read as giving it",
+      "numerator": 1,
+      "denominator": 2
+    },
+    {
+      "statement": "Multi-part questions where the reply read as addressing every part",
+      "numerator": 1,
+      "denominator": 1
+    }
+  ],
+  "civics": {
+    "askers": [
+      { "name": "Alice MP", "questions": 2, "distinctQuestions": 2, "portfoliosAsked": 2 },
+      { "name": "Bob MP", "questions": 1, "distinctQuestions": 1, "portfoliosAsked": 1 }
+    ],
+    "portfolioVolumes": [
+      {
+        "slug": "health",
+        "name": "Minister of Health",
+        "questions": 2,
+        "distinctQuestions": 2,
+        "askers": 2
+      },
+      {
+        "slug": "education",
+        "name": "Minister of Education",
+        "questions": 1,
+        "distinctQuestions": 1,
+        "askers": 1
+      }
+    ],
+    "mostRepeatedQuestions": [
+      {
+        "question": "What is the number?",
+        "sentTo": 2,
+        "example": { "year": 2024, "number": 1 }
+      }
+    ],
+    "busiestDays": [
+      { "date": "2024-03-15", "questions": 2 },
+      { "date": "2024-04-01", "questions": 1 }
+    ]
+  },
+  "byQuestionOpener": [
+    {
+      "group": "Asks for a list of documents or advice",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "How many or how much",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "When or on what date",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "Yes or no (does, has, is, will, did)",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "Why or how",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "What or which",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "Other",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
     }
   ],
   "sameQuestionDifferentReading": []

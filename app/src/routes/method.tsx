@@ -9,6 +9,7 @@ import { useJson } from "../hooks/use-json.ts";
 import {
   ATTRIBUTION_TEXT,
   CC_LICENCE_URL,
+  JEV_VENDOR_LIMITS_NOTE,
   NOT_CHECKED_YET_NOTE,
   NOT_GOOD_AT,
   TERMS,
@@ -147,6 +148,7 @@ export function Method() {
           ))}
         </ul>
         <p>{NOT_GOOD_AT.vendorNote}</p>
+        <p>{JEV_VENDOR_LIMITS_NOTE}</p>
       </section>
 
       <section>

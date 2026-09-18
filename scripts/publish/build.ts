@@ -698,6 +698,139 @@ function crossChecks(readable: readonly Rec[]): Findings["crossChecks"] {
   ];
 }
 
+// ----- civics: plain counts from the official record, no model involved --------------------------
+
+function askersBreakdown(records: readonly Rec[]): Findings["civics"]["askers"] {
+  const byName = new Map<
+    string,
+    { questions: number; groups: Set<string>; portfolios: Set<string> }
+  >();
+  for (const r of records) {
+    const name = r.detail.askedBy.trim();
+    if (name === "") continue;
+    let entry = byName.get(name);
+    if (entry === undefined) {
+      entry = { questions: 0, groups: new Set(), portfolios: new Set() };
+      byName.set(name, entry);
+    }
+    entry.questions++;
+    entry.groups.add(r.question.duplicateGroup);
+    entry.portfolios.add(r.detail.portfolioSlug);
+  }
+  return Array.from(byName.entries())
+    .map(([name, e]) => ({
+      name,
+      questions: e.questions,
+      distinctQuestions: e.groups.size,
+      portfoliosAsked: e.portfolios.size,
+    }))
+    .sort((a, b) => b.questions - a.questions || a.name.localeCompare(b.name));
+}
+
+function portfolioVolumesBreakdown(
+  records: readonly Rec[],
+): Findings["civics"]["portfolioVolumes"] {
+  const bySlug = new Map<
+    string,
+    { name: string; questions: number; groups: Set<string>; askers: Set<string> }
+  >();
+  for (const r of records) {
+    let entry = bySlug.get(r.detail.portfolioSlug);
+    if (entry === undefined) {
+      entry = { name: r.detail.portfolio, questions: 0, groups: new Set(), askers: new Set() };
+      bySlug.set(r.detail.portfolioSlug, entry);
+    }
+    entry.questions++;
+    entry.groups.add(r.question.duplicateGroup);
+    const asker = r.detail.askedBy.trim();
+    if (asker !== "") entry.askers.add(asker);
+  }
+  return Array.from(bySlug.entries())
+    .map(([slug, e]) => ({
+      slug,
+      name: e.name,
+      questions: e.questions,
+      distinctQuestions: e.groups.size,
+      askers: e.askers.size,
+    }))
+    .sort((a, b) => b.questions - a.questions || a.name.localeCompare(b.name));
+}
+
+function mostRepeatedQuestionsBreakdown(
+  records: readonly Rec[],
+  dupCount: ReadonlyMap<string, number>,
+): Findings["civics"]["mostRepeatedQuestions"] {
+  const byGroup = new Map<string, Rec[]>();
+  for (const r of records) {
+    const list = byGroup.get(r.question.duplicateGroup);
+    if (list === undefined) byGroup.set(r.question.duplicateGroup, [r]);
+    else list.push(r);
+  }
+  const entries = Array.from(byGroup.entries()).map(([group, items]) => {
+    const lowest = items.reduce((a, b) => (b.detail.number < a.detail.number ? b : a));
+    const truncated = truncateAtWord(lowest.detail.question, 240);
+    return {
+      question: truncated.text,
+      sentTo: dupCount.get(group) ?? items.length,
+      example: { year: lowest.detail.year, number: lowest.detail.number },
+    };
+  });
+  return entries
+    .sort((a, b) => b.sentTo - a.sentTo || a.question.localeCompare(b.question))
+    .slice(0, 15);
+}
+
+function busiestDaysBreakdown(records: readonly Rec[]): Findings["civics"]["busiestDays"] {
+  const byDate = new Map<string, number>();
+  for (const r of records)
+    byDate.set(r.detail.dateAsked, (byDate.get(r.detail.dateAsked) ?? 0) + 1);
+  return Array.from(byDate.entries())
+    .map(([date, questions]) => ({ date, questions }))
+    .sort((a, b) => b.questions - a.questions || a.date.localeCompare(b.date))
+    .slice(0, 10);
+}
+
+// ----- what kind of question gets what kind of reply ---------------------------------------------
+
+const OPENER_LIST_DOCS =
+  /^(what|which) (advice|reports?|briefings?|papers?|documents?|correspondence|communications?)/;
+const OPENER_HOW_MANY = /^how (many|much)/;
+const OPENER_WHAT_TOTAL = /^what (is|was|were|are) the (total|number|cost|amount)/;
+const OPENER_WHEN = /^(when|on what dates?)/;
+const OPENER_YES_NO = /^(does|do|did|has|have|had|is|are|was|were|will|would|can|could|should)\b/;
+const OPENER_WHY_HOW = /^(why|how)\b/;
+const OPENER_WHAT_WHICH = /^(what|which|who|where)\b/;
+
+export const QUESTION_OPENER_GROUPS = [
+  "Asks for a list of documents or advice",
+  "How many or how much",
+  "When or on what date",
+  "Yes or no (does, has, is, will, did)",
+  "Why or how",
+  "What or which",
+  "Other",
+] as const;
+
+// ponytail: an opening-words regex, not a parse of the question. A question that buries its real
+// ask after throat-clearing ("Following on from the Minister's answer, does she...") is read fine
+// here, but a compound opener the list above doesn't anticipate falls through to "Other" or a
+// coarser bucket than a human reader would pick. Good enough for a findings breakdown; upgrade to
+// an actual parse only if a reader needs the boundary to be exact.
+export function questionOpenerGroup(text: string): string {
+  const trimmed = text.trim().toLowerCase();
+  const first12Words = trimmed.split(/\s+/).slice(0, 12).join(" ");
+  if (OPENER_LIST_DOCS.test(trimmed) || /\blist\b/.test(first12Words)) {
+    return "Asks for a list of documents or advice";
+  }
+  if (OPENER_HOW_MANY.test(trimmed) || OPENER_WHAT_TOTAL.test(trimmed))
+    return "How many or how much";
+  if (OPENER_WHEN.test(trimmed)) return "When or on what date";
+  if (OPENER_YES_NO.test(trimmed)) return "Yes or no (does, has, is, will, did)";
+  if (OPENER_WHY_HOW.test(trimmed)) return "Why or how";
+  if (OPENER_WHAT_WHICH.test(trimmed)) return "What or which";
+  return "Other";
+}
+
 function sameQuestionDifferentReading(
   readable: readonly Rec[],
   dupCount: ReadonlyMap<string, number>,
@@ -805,6 +938,16 @@ function buildFindings(
       declinesWithReasonHistogram: declinesHistogram(readable),
     },
     crossChecks: crossChecks(readable),
+    civics: {
+      askers: askersBreakdown(records),
+      portfolioVolumes: portfolioVolumesBreakdown(records),
+      mostRepeatedQuestions: mostRepeatedQuestionsBreakdown(records, dupCount),
+      busiestDays: busiestDaysBreakdown(records),
+    },
+    byQuestionOpener: breakdownOver(
+      QUESTION_OPENER_GROUPS,
+      readable.map((r) => ({ group: questionOpenerGroup(r.detail.question), label: r.label })),
+    ),
     sameQuestionDifferentReading: sameQuestionDifferentReading(readable, dupCount),
   };
 }

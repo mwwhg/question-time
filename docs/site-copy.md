@@ -128,6 +128,50 @@ Built from computed features only. It describes structure, never motive.
 
 This work includes part of Office of the Clerk/Parliamentary Service's written parliamentary questions and replies, which is licensed by the Clerk of the House of Representatives and/or the Parliamentary Corporation on behalf of Parliamentary Service for re-use under the Creative Commons Attribution 4.0 International licence. Full licence available at https://creativecommons.org/licenses/by/4.0/. Text has been shortened in places and machine-generated readings have been added beside it.
 
+## Vendor's own limits note (How we checked, under "What Jev is not good at, and what we did about it")
+
+The company that makes Jev says it reads instructions literally, does not count reliably, is unreliable at comparing dates and doing arithmetic, handles double negatives and indirect instructions poorly, gets less accurate as the text it is given fills with detail unrelated to the question, can be swayed by text that argues with it, and does not write text. We have not tested these claims ourselves. This is why code does the counting, the model is sent only the question, the reply and a few computed facts, and each question we ask it is one narrow thing.
+
+## What we found so far (Start page, under "New here? Start with this")
+
+Headline cards. Each is one number, one plain sentence and one line saying what it cannot tell you, built live from `findings.json` and `portfolios.json`. Numbers below are examples; the site always computes the live figure.
+
+- **Questions and askers.** "{N} written questions got a reply. They were asked by {M} different MPs." Cannot tell: "This counts questions asked, not whether the replies were any good."
+- **Repeated wording.** "{P}% of written questions repeat a wording already sent to another minister." Cannot tell: "This can't tell you whether sending the same wording to many ministers was a reasonable way to ask it."
+- **Referrals.** "{N in 100} replies do not answer in their own words. They only point to a reply the minister gave earlier." Cannot tell: "This can't tell you whether the earlier reply, once read together with the question, actually answered it."
+- **The published label split.** "This is how the model read every reply, split across the four possible readings." Cannot tell: "This is the model's own reading. It has not yet been checked against people."
+- **Figures given.** "Of questions that ask for a number, amount or date, this is how often the model read the reply as giving it." Cannot tell: "This is the model's own reading of whether a figure was given, not a check that the figure is correct."
+- **Every part addressed.** "Of questions that ask more than one thing, this is how often the model read the reply as addressing every part." Cannot tell: "This is the model's own reading. It does not say which part, if any, was missed."
+- **Cost and time.** "{$X} is what it cost to have a model read every one of these replies, {over about D days | over about H hours | in under an hour}." Cannot tell: "This can't tell you whether that cost is worth it. That is a judgement call."
+
+## Parliament's written questions in numbers (`/findings`, plain counts, no model)
+
+**Section heading:** Parliament's written questions in numbers
+
+**Who asked the most questions.** Table of members: questions, distinct questions, portfolios asked. Names exactly as the source gives them, no party, no adjectives. Top 15, with a button "Show all {N} members".
+
+Explanatory line: "Asking many questions is a normal part of an opposition MP's job. The same wording sent to 20 ministers counts as 20 questions here, once for each minister who had to reply."
+
+**Which portfolios were asked the most.** Table of portfolios by questions received, each linking to its browse page.
+
+Explanatory line: "How many questions a portfolio receives depends on what is in the news and what the portfolio covers, not on how it replies."
+
+**Why there is no table of who answered best.** Exact text, placed right after the portfolio volume table:
+
+> You might expect a list here of which minister gave the best answers. We have not made one, for three reasons. First, the readings come from a computer model and have not yet been checked against people, so a league table would present unchecked guesses as a verdict on named people. Second, ministers are not sent the same questions. A minister asked for long lists of documents will look different from one asked yes or no questions, whatever they do. Third, a reply that declines can be a proper reply. What you can do instead is open any portfolio, read the questions and replies yourself, and see the kinds of question that tend to get a full reply in the section below.
+
+"open any portfolio" links to `/browse`.
+
+**The most repeated questions.** List with sentTo and a link to the example.
+
+**The busiest days.** List of dates and how many questions were lodged that day.
+
+## What kind of question gets what kind of reply (`/findings`)
+
+Shows: "Code sorts each question by how it opens, such as 'How many or how much' or 'Yes or no'. This shows how the readings differ by the kind of question asked."
+
+Cannot show: "A list-of-documents question is harder to answer in full than a yes/no one, so this compares kinds of question, not people."
+
 ## Label wording
 
 | Data value | Shown as | One-line meaning |
