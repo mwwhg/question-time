@@ -1,0 +1,138 @@
+{
+  "at": "2026-09-18T20:57:08.773Z",
+  "sdk": "@typesafe-ai/sdk@0.6.0",
+  "requestId": "req_01a0b64f02557fbea979ce6024f0e3fe",
+  "latencyMs": 719,
+  "rateHeaders": {},
+  "request": {
+    "model": "jev-1.13.0",
+    "state": {
+      "question": "Does the Minister stand by his statement “We're going to be a Government that delivers, not just talks”; if so, what transport projects, if any, does he expect to start and finish in the next three years?",
+      "reply": "Corrected reply: Yes. Decisions around which projects are funded and delivered over the coming three years will be made in the coming months as the National Land Transport Programme is finalised."
+    },
+    "questions": {
+      "answered": {
+        "type": "choice",
+        "instructions": "Does the `reply` give the information that the `question` asks for?",
+        "criteria": {
+          "answered": "The reply gives the information asked for, or a direct yes/no where that is what was asked.",
+          "partly_answered": "The reply gives some of the information asked for and leaves some of it out.",
+          "not_answered": "The reply does not give the information asked for, whether it declines, talks about something else, or only restates policy.",
+          "unclear": "The reply cannot be judged from its text alone, for example because the information is said to be in an attachment or another document."
+        }
+      },
+      "declinesWithReason": {
+        "type": "noul",
+        "instructions": "Does the `reply` decline to provide the information asked for and state a reason for declining?"
+      },
+      "completeness": {
+        "type": "score",
+        "instructions": "How much of what the `question` asks for does the `reply` supply?",
+        "criteria": [
+          "None of the requested information is supplied.",
+          "A small part of the requested information is supplied.",
+          "Most of the requested information is supplied.",
+          "All of the requested information is supplied."
+        ]
+      }
+    }
+  },
+  "response": {
+    "model": "jev-1.13.0",
+    "answers": {
+      "answered": {
+        "type": "choice",
+        "choice": "partly_answered",
+        "confidence": 0.94,
+        "probabilities": {
+          "not_answered": 0.02,
+          "answered": 0.03,
+          "partly_answered": 0.95,
+          "unclear": 0
+        }
+      },
+      "declinesWithReason": {
+        "type": "noul",
+        "noul": 0.6
+      },
+      "completeness": {
+        "type": "score",
+        "score": 1.12,
+        "confidence": 0.88,
+        "legend": {
+          "0": "None of the requested information is supplied.",
+          "1": "A small part of the requested information is supplied.",
+          "2": "Most of the requested information is supplied.",
+          "3": "All of the requested information is supplied."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.89,
+          "2": 0.1,
+          "3": 0.01
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 639,
+      "output_tokens": 95
+    }
+  },
+  "questionCountProbe": [
+    {
+      "n": 1,
+      "ok": true,
+      "ms": 229,
+      "usage": {
+        "input_tokens": 377,
+        "output_tokens": 21
+      },
+      "answers": 1
+    },
+    {
+      "n": 5,
+      "ok": true,
+      "ms": 295,
+      "usage": {
+        "input_tokens": 457,
+        "output_tokens": 89
+      },
+      "answers": 5
+    },
+    {
+      "n": 20,
+      "ok": true,
+      "ms": 258,
+      "usage": {
+        "input_tokens": 767,
+        "output_tokens": 354
+      },
+      "answers": 20
+    },
+    {
+      "n": 50,
+      "ok": true,
+      "ms": 365,
+      "usage": {
+        "input_tokens": 1397,
+        "output_tokens": 894
+      },
+      "answers": 50
+    },
+    {
+      "n": 200,
+      "ok": true,
+      "ms": 515,
+      "usage": {
+        "input_tokens": 4647,
+        "output_tokens": 3694
+      },
+      "answers": 200
+    }
+  ],
+  "burstProbe": {
+    "concurrent": 20,
+    "fulfilled": 20,
+    "wallMs": 493
+  }
+}
