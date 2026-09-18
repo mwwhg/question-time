@@ -109,7 +109,7 @@ The company that makes it says one request can carry up to 64,000 tokens of text
 
 ## Found a mistake?
 
-If a reading is wrong, or a question or reply is shown incorrectly, tell us at [contact address] and we will correct it and list the correction on the How we checked page.
+If a reading is wrong, or a question or reply is shown incorrectly, message Matthew Wood on LinkedIn (https://www.linkedin.com/in/matthewawood/) and we will correct it and list the correction on the How we checked page.
 
 ## Reading it yourself (template, every question page)
 
