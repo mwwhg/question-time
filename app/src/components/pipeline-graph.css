@@ -1,0 +1,173 @@
+.pipeline {
+  margin: 24px 0 8px;
+  /* The graph needs more room than the 70ch prose column, so it runs wider than its parent. */
+  width: min(980px, calc(100vw - 2 * var(--gutter)));
+  max-width: none;
+}
+
+.pipeline-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.pipeline-canvas {
+  fill: var(--ground);
+}
+
+.pipeline-dot {
+  fill: var(--line);
+}
+
+.pipeline-edge {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.pipeline-edge-pending {
+  stroke-dasharray: 5 5;
+}
+
+.pipeline-arrowhead {
+  fill: var(--muted);
+}
+
+.pipeline-node {
+  fill: var(--surface);
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.pipeline-node-source {
+  fill: var(--source-tint);
+  stroke: var(--source);
+}
+
+.pipeline-node-model {
+  fill: var(--partly-tint);
+  stroke: var(--partly);
+  stroke-width: 1.5;
+}
+
+.pipeline-node-site {
+  stroke: var(--ink);
+}
+
+.pipeline-node-pending {
+  stroke-dasharray: 5 4;
+}
+
+.pipeline-bar-source {
+  fill: var(--source);
+}
+
+.pipeline-bar-code {
+  fill: var(--muted);
+}
+
+.pipeline-bar-model {
+  fill: var(--partly);
+}
+
+.pipeline-bar-people {
+  fill: var(--answered);
+}
+
+.pipeline-bar-site {
+  fill: var(--ink);
+}
+
+.pipeline-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--muted);
+}
+
+.pipeline-title {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.pipeline-caption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+.pipeline-steps {
+  list-style: none;
+  counter-reset: pipeline;
+  margin: 20px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pipeline-step {
+  counter-increment: pipeline;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--muted);
+  border-radius: var(--radius-card);
+  padding: 16px 18px;
+}
+
+.pipeline-step-source {
+  border-left-color: var(--source);
+}
+
+.pipeline-step-model {
+  border-left-color: var(--partly);
+  background: var(--partly-tint);
+}
+
+.pipeline-step-people {
+  border-left-color: var(--answered);
+}
+
+.pipeline-step-site {
+  border-left-color: var(--ink);
+}
+
+.pipeline-step h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.pipeline-step h3::before {
+  content: counter(pipeline) ". ";
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.pipeline-step p {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--body-dark);
+}
+
+@media (max-width: 900px) {
+  /* Node text would be unreadably small on a phone; the numbered steps carry the same content. */
+  .pipeline-svg,
+  .pipeline-caption {
+    display: none;
+  }
+
+  .pipeline-steps {
+    grid-template-columns: 1fr;
+    margin-top: 0;
+  }
+}

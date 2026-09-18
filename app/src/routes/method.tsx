@@ -1,5 +1,10 @@
+import type { PortfolioIndex } from "@contract";
+import { portfolioIndexPath } from "@contract";
+import { PipelineGraph } from "../components/pipeline-graph.tsx";
+import { RunFacts } from "../components/run-facts.tsx";
 import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
+import { useJson } from "../hooks/use-json.ts";
 import { ATTRIBUTION_TEXT, CC_LICENCE_URL } from "../lib/copy.ts";
 import { QS_V1_INSTRUCTIONS } from "../lib/qs-v1-texts.ts";
 import "./method.css";
@@ -28,10 +33,33 @@ const NOT_DONE_YET = [
 export function Method() {
   useDocumentTitle("How we checked");
   const checkedAgainstPeople = useCheckedAgainstPeople();
+  const indexState = useJson<PortfolioIndex>(portfolioIndexPath);
 
   return (
     <div className="prose">
       <h1>How we checked</h1>
+
+      <section>
+        <h2>How it works</h2>
+        <p>
+          A model does one narrow job here: it reads a question and its reply and says whether the
+          reply gives what was asked. Everything around that job is ordinary code or people.
+        </p>
+      </section>
+      <PipelineGraph />
+
+      <section>
+        <h2>The run, in numbers</h2>
+        <p>
+          These figures come from the run's own records: the time stamped on each reading and the
+          amount of text the model reported receiving.
+        </p>
+        {indexState.status === "ok" ? (
+          <RunFacts run={indexState.data.run} />
+        ) : (
+          <p>The run figures could not be loaded.</p>
+        )}
+      </section>
 
       <section>
         <h2>What Jev is</h2>
