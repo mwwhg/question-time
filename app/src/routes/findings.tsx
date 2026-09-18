@@ -2,6 +2,7 @@ import type { Breakdown, Findings as FindingsData, LabelCounts, PortfolioIndex }
 import { findingsPath, portfolioIndexPath } from "@contract";
 import { Link } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { RunFacts } from "../components/run-facts.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import { formatNumber } from "../lib/format.ts";
@@ -335,30 +336,7 @@ export function Findings() {
         </p>
         {indexState.status === "loading" && <LoadingNote />}
         {indexState.status === "error" && <ErrorNote />}
-        {indexState.status === "ok" && (
-          <ul className="corpus-facts">
-            <li>
-              <span className="mono">{formatNumber(indexState.data.run.pairsJudged)}</span> pairs
-              read, <span className="mono">{formatNumber(indexState.data.run.pairsFailed)}</span>{" "}
-              failed
-            </li>
-            <li>
-              <span className="mono">{formatNumber(indexState.data.run.inputTokens)}</span> input
-              tokens, <span className="mono">{formatNumber(indexState.data.run.outputTokens)}</span>{" "}
-              output tokens
-            </li>
-            <li>
-              Estimated cost:{" "}
-              <span className="mono">US${indexState.data.run.estimatedCostUsd.toFixed(2)}</span>
-            </li>
-            <li>
-              Median time per pair:{" "}
-              <span className="mono">{formatNumber(indexState.data.run.latencyMsP50)} ms</span>{" "}
-              (95th percentile{" "}
-              <span className="mono">{formatNumber(indexState.data.run.latencyMsP95)} ms</span>)
-            </li>
-          </ul>
-        )}
+        {indexState.status === "ok" && <RunFacts run={indexState.data.run} />}
       </section>
     </div>
   );
