@@ -1,0 +1,279 @@
+{
+  "generatedAt": "2026-09-19T00:00:00Z",
+  "corpus": {
+    "records": 4,
+    "answered": 3,
+    "awaiting": 0,
+    "withdrawn": 1,
+    "distinctQuestionTexts": 4,
+    "referralReplies": 1,
+    "referralsUnresolved": 0,
+    "attachmentOnlyReplies": 1,
+    "correctedReplies": 0,
+    "replyCharsMedian": 62,
+    "replyCharsP95": 84
+  },
+  "byReplyShape": [
+    {
+      "group": "text",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 1
+      }
+    },
+    {
+      "group": "referral",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "attachment-only",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 1
+      }
+    }
+  ],
+  "byReplyLength": [
+    {
+      "group": "under 10 words",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 1
+      }
+    },
+    {
+      "group": "10 to 29",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 1
+      }
+    },
+    {
+      "group": "30 to 99",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "100 or more",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    }
+  ],
+  "byQuestionParts": [
+    {
+      "group": "1",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 2
+      }
+    },
+    {
+      "group": "2",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "3 or more",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    }
+  ],
+  "byMonth": [
+    {
+      "group": "2024-03",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "2024-04",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "2024-05",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 1
+      }
+    },
+    {
+      "group": "2024-06",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 1
+      }
+    }
+  ],
+  "byFanOut": [
+    {
+      "group": "sent to 1 minister",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 2
+      }
+    },
+    {
+      "group": "2 to 9",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    },
+    {
+      "group": "10 or more",
+      "counts": {
+        "answered": 0,
+        "partly_answered": 0,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 0
+      }
+    }
+  ],
+  "byStockPhrase": [
+    {
+      "group": "none of these phrases",
+      "counts": {
+        "answered": 1,
+        "partly_answered": 1,
+        "not_answered": 0,
+        "unclear": 0,
+        "noReading": 2
+      }
+    }
+  ],
+  "confidenceHistogram": [
+    {
+      "from": 0.0,
+      "to": 0.1,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.1,
+      "to": 0.2,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.2,
+      "to": 0.3,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.3,
+      "to": 0.4,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.4,
+      "to": 0.5,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.5,
+      "to": 0.6,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.6,
+      "to": 0.7,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.7,
+      "to": 0.8,
+      "byChoice": { "answered": 0, "partly_answered": 1, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.8,
+      "to": 0.9,
+      "byChoice": { "answered": 0, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    },
+    {
+      "from": 0.9,
+      "to": 1.0,
+      "byChoice": { "answered": 1, "partly_answered": 0, "not_answered": 0, "unclear": 0 }
+    }
+  ],
+  "secondary": {
+    "givesRequestedFigure": { "yes": 1, "no": 0, "no_figure_requested": 1 },
+    "addressesAllParts": {
+      "all_parts": 0,
+      "some_parts": 1,
+      "no_parts": 0,
+      "single_part_question": 1
+    },
+    "evasionType": { "related_topic": 0, "restates_policy": 0, "refers_elsewhere": 1, "none": 1 },
+    "declinesWithReasonHistogram": [2, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  },
+  "crossChecks": [
+    {
+      "statement": "Of replies read as not answered, also read as declining with a reason",
+      "numerator": 0,
+      "denominator": 0
+    }
+  ],
+  "sameQuestionDifferentReading": []
+}

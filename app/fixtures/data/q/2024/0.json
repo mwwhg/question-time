@@ -1,0 +1,228 @@
+{
+  "year": 2024,
+  "block": 0,
+  "items": [
+    {
+      "year": 2024,
+      "number": 1,
+      "dateAsked": "2024-03-05T00:00:00Z",
+      "askedBy": "Hon Jane Sample",
+      "portfolio": "Health",
+      "portfolioSlug": "health",
+      "minister": "Hon Sam Example",
+      "question": "How many hospital beds were available in the Waikato region as at 1 March 2024?",
+      "reply": "As at 1 March 2024, there were 612 hospital beds available in the Waikato region.",
+      "replyTruncated": false,
+      "replyShape": "text",
+      "referredReply": null,
+      "referredReplyTruncated": false,
+      "referralChain": [],
+      "attachmentName": null,
+      "sameQuestionSentTo": 1,
+      "features": {
+        "replyWords": 14,
+        "hasNumber": true,
+        "questionParts": 1,
+        "stockPhrases": []
+      },
+      "reading": {
+        "answered": {
+          "choice": "answered",
+          "probabilities": {
+            "answered": 0.94,
+            "partly_answered": 0.04,
+            "not_answered": 0.01,
+            "unclear": 0.01
+          },
+          "confidence": 0.94,
+          "unsure": false
+        },
+        "givesRequestedFigure": {
+          "choice": "yes",
+          "probabilities": { "yes": 0.96, "no": 0.02, "no_figure_requested": 0.02 },
+          "confidence": 0.96,
+          "unsure": false
+        },
+        "addressesAllParts": {
+          "choice": "single_part_question",
+          "probabilities": {
+            "all_parts": 0.02,
+            "some_parts": 0.01,
+            "no_parts": 0.01,
+            "single_part_question": 0.96
+          },
+          "confidence": 0.96,
+          "unsure": false
+        },
+        "declinesWithReason": 0.02,
+        "evasionType": {
+          "choice": "none",
+          "probabilities": {
+            "related_topic": 0.01,
+            "restates_policy": 0.01,
+            "refers_elsewhere": 0.01,
+            "none": 0.97
+          },
+          "confidence": 0.97,
+          "unsure": false
+        }
+      },
+      "noReadingReason": null,
+      "provenance": {
+        "sourceUrl": "https://questions.parliament.nz/written-questions/question/fixture-1",
+        "retrievedAt": "2026-09-18T00:00:00Z",
+        "featuresVersion": "features-v1",
+        "model": "jev-1.13.0",
+        "questionSetVersion": "qs-v1",
+        "questionSetHash": "fixturehash01",
+        "evaluatedAt": "2026-09-19T00:01:00Z"
+      }
+    },
+    {
+      "year": 2024,
+      "number": 2,
+      "dateAsked": "2024-04-12T00:00:00Z",
+      "askedBy": "Hon Jane Sample",
+      "portfolio": "Health",
+      "portfolioSlug": "health",
+      "minister": "Hon Sam Example",
+      "question": "What advice has the Minister received on emergency department wait times, and what did that advice say?",
+      "reply": "Please see my answer to written question number 2001 (2023).",
+      "replyTruncated": false,
+      "replyShape": "referral",
+      "referredReply": "The Ministry of Health advised that emergency department wait times increased in three regions over the past year, without providing further detail on the content of that advice.",
+      "referredReplyTruncated": false,
+      "referralChain": ["reply number 2001 (2023)"],
+      "attachmentName": null,
+      "sameQuestionSentTo": 1,
+      "features": {
+        "replyWords": 10,
+        "hasNumber": false,
+        "questionParts": 2,
+        "stockPhrases": []
+      },
+      "reading": {
+        "answered": {
+          "choice": "partly_answered",
+          "probabilities": {
+            "answered": 0.1,
+            "partly_answered": 0.71,
+            "not_answered": 0.15,
+            "unclear": 0.04
+          },
+          "confidence": 0.71,
+          "unsure": false
+        },
+        "givesRequestedFigure": {
+          "choice": "no_figure_requested",
+          "probabilities": { "yes": 0.05, "no": 0.1, "no_figure_requested": 0.85 },
+          "confidence": 0.85,
+          "unsure": false
+        },
+        "addressesAllParts": {
+          "choice": "some_parts",
+          "probabilities": {
+            "all_parts": 0.1,
+            "some_parts": 0.75,
+            "no_parts": 0.1,
+            "single_part_question": 0.05
+          },
+          "confidence": 0.75,
+          "unsure": false
+        },
+        "declinesWithReason": 0.08,
+        "evasionType": {
+          "choice": "refers_elsewhere",
+          "probabilities": {
+            "related_topic": 0.1,
+            "restates_policy": 0.05,
+            "refers_elsewhere": 0.8,
+            "none": 0.05
+          },
+          "confidence": 0.8,
+          "unsure": false
+        }
+      },
+      "noReadingReason": null,
+      "provenance": {
+        "sourceUrl": "https://questions.parliament.nz/written-questions/question/fixture-2",
+        "retrievedAt": "2026-09-18T00:00:00Z",
+        "featuresVersion": "features-v1",
+        "model": "jev-1.13.0",
+        "questionSetVersion": "qs-v1",
+        "questionSetHash": "fixturehash01",
+        "evaluatedAt": "2026-09-19T00:02:00Z"
+      }
+    },
+    {
+      "year": 2024,
+      "number": 3,
+      "dateAsked": "2024-05-20T00:00:00Z",
+      "askedBy": "Hon Jane Sample",
+      "portfolio": "Health",
+      "portfolioSlug": "health",
+      "minister": "Hon Sam Example",
+      "question": "What is the full breakdown of costs for the new radiology contract by line item?",
+      "reply": "This information is contained in the attached document.",
+      "replyTruncated": false,
+      "replyShape": "attachment-only",
+      "referredReply": null,
+      "referredReplyTruncated": false,
+      "referralChain": [],
+      "attachmentName": "radiology-contract-costs.pdf",
+      "sameQuestionSentTo": 1,
+      "features": {
+        "replyWords": 8,
+        "hasNumber": false,
+        "questionParts": 1,
+        "stockPhrases": []
+      },
+      "reading": null,
+      "noReadingReason": "attachment_not_read",
+      "provenance": {
+        "sourceUrl": "https://questions.parliament.nz/written-questions/question/fixture-3",
+        "retrievedAt": "2026-09-18T00:00:00Z",
+        "featuresVersion": "features-v1",
+        "model": "jev-1.13.0",
+        "questionSetVersion": "qs-v1",
+        "questionSetHash": "fixturehash01",
+        "evaluatedAt": null
+      }
+    },
+    {
+      "year": 2024,
+      "number": 4,
+      "dateAsked": "2024-06-01T00:00:00Z",
+      "askedBy": "Hon Jane Sample",
+      "portfolio": "Health",
+      "portfolioSlug": "health",
+      "minister": "Hon Sam Example",
+      "question": "Does the Minister still have confidence in the district health board's financial management?",
+      "reply": "Yes, I have confidence in the board's financial management.",
+      "replyTruncated": false,
+      "replyShape": "text",
+      "referredReply": null,
+      "referredReplyTruncated": false,
+      "referralChain": [],
+      "attachmentName": null,
+      "sameQuestionSentTo": 1,
+      "features": {
+        "replyWords": 10,
+        "hasNumber": false,
+        "questionParts": 1,
+        "stockPhrases": []
+      },
+      "reading": null,
+      "noReadingReason": "held_for_human_check",
+      "provenance": {
+        "sourceUrl": "https://questions.parliament.nz/written-questions/question/fixture-4",
+        "retrievedAt": "2026-09-18T00:00:00Z",
+        "featuresVersion": "features-v1",
+        "model": "jev-1.13.0",
+        "questionSetVersion": "qs-v1",
+        "questionSetHash": "fixturehash01",
+        "evaluatedAt": null
+      }
+    }
+  ]
+}

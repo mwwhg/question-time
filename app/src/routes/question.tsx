@@ -1,0 +1,254 @@
+import type { ChoiceReading, QuestionBlock, QuestionDetail } from "@contract";
+import { questionBlockPath } from "@contract";
+import { useParams } from "react-router";
+import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
+import { useDocumentTitle } from "../hooks/use-document-title.ts";
+import { useJson } from "../hooks/use-json.ts";
+import {
+  EVASION_TYPE_HEADING,
+  LABEL_WORDING,
+  NO_READING_REASON_TEXT,
+  READING_IT_YOURSELF_CLOSE,
+  READING_IT_YOURSELF_INTRO,
+} from "../lib/copy.ts";
+import { formatDate, formatNInHundred } from "../lib/format.ts";
+import { QS_V1_INSTRUCTIONS } from "../lib/qs-v1-texts.ts";
+import "./question.css";
+
+const SHORTENED_NOTE = "Shortened here. The full text is on the official record.";
+
+const CHOICE_LABELS: Readonly<Record<string, string>> = {
+  answered: "Answered",
+  partly_answered: "Partly answered",
+  not_answered: "Not answered",
+  unclear: "Unclear",
+  yes: "Yes",
+  no: "No",
+  no_figure_requested: "No figure requested",
+  all_parts: "All parts",
+  some_parts: "Some parts",
+  no_parts: "No parts",
+  single_part_question: "Single-part question",
+  related_topic: "Talks about a related topic",
+  restates_policy: "Restates government policy",
+  refers_elsewhere: "Refers elsewhere without giving the content",
+  none: "None of the above",
+};
+
+function prettyChoice(choice: string): string {
+  return CHOICE_LABELS[choice] ?? choice.replaceAll("_", " ");
+}
+
+export function Question() {
+  const { year = "", number = "" } = useParams();
+  const yearNumber = Number(year);
+  const numberNumber = Number(number);
+  const state = useJson<QuestionBlock>(questionBlockPath(yearNumber, numberNumber));
+
+  const item =
+    state.status === "ok" ? state.data.items.find((i) => i.number === numberNumber) : undefined;
+
+  useDocumentTitle(item ? `WQ ${item.number} (${item.year})` : `WQ ${number}`);
+
+  if (state.status === "loading") return <LoadingNote />;
+  if (state.status === "error") return <ErrorNote />;
+  if (!item) return <EmptyNote>That question could not be found.</EmptyNote>;
+
+  return <QuestionView item={item} />;
+}
+
+function QuestionView({ item }: { readonly item: QuestionDetail }) {
+  const checkedAgainstPeople = useCheckedAgainstPeople();
+  const displayLabel = item.reading
+    ? item.reading.answered.unsure
+      ? "unclear"
+      : item.reading.answered.choice
+    : null;
+
+  return (
+    <article>
+      <p className="mono question-header">
+        WQ {item.number} · {item.year} · {formatDate(item.dateAsked)} · {item.portfolio}
+      </p>
+      <p>
+        asked by {item.askedBy} &middot; reply from {item.minister}
+      </p>
+
+      <div className="source-box">
+        <p className="section-label">The question</p>
+        <p className="question-text">{item.question}</p>
+      </div>
+
+      <div className="source-box" style={{ marginTop: 16 }}>
+        <p className="section-label">The reply</p>
+        <p>{item.reply}</p>
+        {item.replyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
+      </div>
+
+      {item.referredReply !== null && (
+        <div className="source-box" style={{ marginTop: 16 }}>
+          <p className="section-label">The earlier reply it points to</p>
+          <p>{item.referredReply}</p>
+          {item.referredReplyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
+        </div>
+      )}
+
+      <div className="gold-box" style={{ marginTop: 24 }}>
+        <p className="section-label">The model's reading</p>
+        {item.reading === null ? (
+          <p>{item.noReadingReason ? NO_READING_REASON_TEXT[item.noReadingReason] : null}</p>
+        ) : (
+          <ReadingView
+            reading={item.reading}
+            displayLabel={displayLabel}
+            checkedAgainstPeople={checkedAgainstPeople}
+          />
+        )}
+      </div>
+
+      <div className="prose reading-yourself">
+        <p className="section-label">Reading it yourself</p>
+        <p style={{ fontSize: 13, color: "var(--muted)" }}>{READING_IT_YOURSELF_INTRO}</p>
+        <ul>
+          {readingItYourselfBullets(item).map((bullet) => (
+            <li key={bullet}>{bullet}</li>
+          ))}
+        </ul>
+        <p>{READING_IT_YOURSELF_CLOSE}</p>
+      </div>
+
+      <div className="mono provenance">
+        <p className="section-label">Provenance</p>
+        <p>
+          <a href={item.provenance.sourceUrl} target="_blank" rel="noopener noreferrer">
+            Read the full text on the official record
+          </a>
+        </p>
+        <p>Retrieved {formatDate(item.provenance.retrievedAt)}</p>
+        <p>Model {item.provenance.model}</p>
+        <p>
+          Question set {item.provenance.questionSetVersion} ({item.provenance.questionSetHash})
+        </p>
+        <p>Features {item.provenance.featuresVersion}</p>
+        <p>
+          {item.provenance.evaluatedAt
+            ? `Evaluated ${item.provenance.evaluatedAt}`
+            : "Not yet evaluated"}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+function readingItYourselfBullets(item: QuestionDetail): string[] {
+  const bullets: string[] = [];
+  bullets.push(
+    item.features.questionParts === 1
+      ? "This question asks one thing."
+      : `This question asks ${item.features.questionParts} separate things.`,
+  );
+  bullets.push(`The reply is ${item.features.replyWords} words long.`);
+  bullets.push(`The reply ${item.features.hasNumber ? "contains" : "does not contain"} a number.`);
+  if (item.replyShape === "referral" && item.referredReply !== null) {
+    const pointer = item.referralChain[0];
+    bullets.push(
+      pointer
+        ? `The reply points to an earlier reply, ${pointer}. We show that earlier reply below, and the model read both.`
+        : "The reply points to an earlier reply. We show that earlier reply below, and the model read both.",
+    );
+  }
+  if (item.noReadingReason === "attachment_not_read") {
+    bullets.push(NO_READING_REASON_TEXT.attachment_not_read ?? "");
+  }
+  for (const phrase of item.features.stockPhrases) {
+    bullets.push(`The reply uses the phrase “${phrase}”.`);
+  }
+  return bullets;
+}
+
+function ReadingView({
+  reading,
+  displayLabel,
+  checkedAgainstPeople,
+}: {
+  readonly reading: NonNullable<QuestionDetail["reading"]>;
+  readonly displayLabel: string | null;
+  readonly checkedAgainstPeople: boolean;
+}) {
+  const unsure = reading.answered.unsure;
+  const wording = displayLabel ? LABEL_WORDING[displayLabel] : undefined;
+
+  return (
+    <div className={unsure ? "disabled" : undefined}>
+      <p className="reading-label">{wording?.shownAs ?? displayLabel}</p>
+      {unsure && (
+        <p style={{ color: "var(--muted)" }}>
+          The model was not sure enough to say, so we count this as unclear.
+        </p>
+      )}
+
+      <ChoiceBars reading={reading.answered} />
+
+      <p>
+        {checkedAgainstPeople
+          ? `How sure: ${formatNInHundred(reading.answered.confidence)}`
+          : `The model's own confidence: ${formatNInHundred(reading.answered.confidence)} (not yet checked against people)`}
+      </p>
+
+      <div className="secondary-readings">
+        <SecondaryChoice
+          heading={QS_V1_INSTRUCTIONS[1].label}
+          reading={reading.givesRequestedFigure}
+        />
+        <SecondaryChoice
+          heading={QS_V1_INSTRUCTIONS[2].label}
+          reading={reading.addressesAllParts}
+        />
+        <div className="secondary-reading">
+          <h3 className="secondary-heading">{QS_V1_INSTRUCTIONS[3].label}</h3>
+          <p className="mono">{formatNInHundred(reading.declinesWithReason)}</p>
+        </div>
+        {displayLabel !== "answered" && (
+          <SecondaryChoice heading={EVASION_TYPE_HEADING} reading={reading.evasionType} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ChoiceBars({ reading }: { readonly reading: ChoiceReading }) {
+  return (
+    <ul className="choice-bars">
+      {Object.entries(reading.probabilities).map(([choice, probability]) => (
+        <li key={choice} className="choice-bar-row">
+          <span className="choice-bar-label">{prettyChoice(choice)}</span>
+          <span className="choice-bar-track">
+            <span
+              className="choice-bar-fill"
+              style={{ width: `${Math.round(probability * 100)}%` }}
+            />
+          </span>
+          <span className="mono choice-bar-value">{formatNInHundred(probability)}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function SecondaryChoice({
+  heading,
+  reading,
+}: {
+  readonly heading: string;
+  readonly reading: ChoiceReading;
+}) {
+  return (
+    <div className="secondary-reading">
+      <h3 className="secondary-heading">{heading}</h3>
+      <p className="mono">
+        {prettyChoice(reading.choice)}: {formatNInHundred(reading.confidence)}
+      </p>
+    </div>
+  );
+}

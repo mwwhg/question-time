@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-09-19T00:00:00Z",
+  "checkedAgainstPeople": false,
+  "years": [2024, 2025],
+  "totals": {
+    "all": { "answered": 2, "partly_answered": 0, "not_answered": 0, "unclear": 0, "noReading": 2 },
+    "distinctQuestions": {
+      "answered": 2,
+      "partly_answered": 0,
+      "not_answered": 0,
+      "unclear": 0,
+      "noReading": 2
+    }
+  },
+  "run": {
+    "model": "jev-1.13.0",
+    "questionSetVersion": "qs-v1",
+    "questionSetHash": "fixturehash01",
+    "featuresVersion": "features-v1",
+    "pairsJudged": 4,
+    "pairsFailed": 0,
+    "questionsPerPair": 5,
+    "inputTokens": 4200,
+    "outputTokens": 0,
+    "usdPerMillionInputTokens": 0.042,
+    "estimatedCostUsd": 0.0002,
+    "latencyMsP50": 260,
+    "latencyMsP95": 480,
+    "firstJudgementAt": "2026-09-19T00:00:00Z",
+    "lastJudgementAt": "2026-09-19T00:05:00Z"
+  },
+  "portfolios": [
+    {
+      "slug": "health",
+      "name": "Health",
+      "byYear": {
+        "2024": {
+          "all": {
+            "answered": 1,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 2
+          },
+          "distinctQuestions": {
+            "answered": 1,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 2
+          }
+        },
+        "2025": {
+          "all": {
+            "answered": 0,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 0
+          },
+          "distinctQuestions": {
+            "answered": 0,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 0
+          }
+        }
+      }
+    },
+    {
+      "slug": "education",
+      "name": "Education",
+      "byYear": {
+        "2024": {
+          "all": {
+            "answered": 1,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 0
+          },
+          "distinctQuestions": {
+            "answered": 1,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 0
+          }
+        },
+        "2025": {
+          "all": {
+            "answered": 0,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 0
+          },
+          "distinctQuestions": {
+            "answered": 0,
+            "partly_answered": 0,
+            "not_answered": 0,
+            "unclear": 0,
+            "noReading": 0
+          }
+        }
+      }
+    }
+  ]
+}

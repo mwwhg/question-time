@@ -1,0 +1,85 @@
+.question-header {
+  margin-bottom: 4px;
+}
+
+.question-text {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.shortened-note {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.reading-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  margin: 4px 0 12px;
+}
+
+.choice-bars {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice-bar-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.choice-bar-track {
+  height: 10px;
+  background: var(--track);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.choice-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--partly-text);
+}
+
+.choice-bar-value {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.secondary-readings {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.secondary-heading {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--body-dark);
+  margin: 0 0 4px;
+}
+
+.reading-yourself {
+  margin-top: 28px;
+}
+
+.provenance {
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.provenance p {
+  margin: 2px 0;
+}
