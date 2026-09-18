@@ -57,7 +57,7 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "code",
     title: "Tidy and link replies",
-    body: "Ordinary code, no model. About one reply in four only says “see my earlier reply”, so the code finds that earlier reply and puts the two together.",
+    body: "Ordinary code, no model. About one reply in four does not answer in its own words. It just says “see my earlier reply”. The code goes and finds that earlier reply and puts the two together, so the model reads both.",
   },
   {
     kind: "code",
@@ -67,12 +67,12 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "model",
     title: "Jev reads every pair",
-    body: "This is the only step that needs judgement. Jev is given one question, its reply, and the same five plain questions every time. It does not write anything. For each question it gives back a probability for every possible answer, such as 95 in 100 for “partly answered”. The time it took and what it cost are set out below.",
+    body: "This is the only step that needs judgement. Jev is given one question, its reply, and the same five plain questions every time. It never writes a sentence. For each question it splits 100 between the possible answers, such as 95 in 100 for “partly answered”, and the biggest share is the answer. What it took and what it cost are set out below.",
   },
   {
     kind: "code",
     title: "Trick pairs test Jev",
-    body: "We swapped in replies from unrelated questions, and replies that only repeat the question. A reader that is paying attention should call these not answered. The results are further down this page.",
+    body: "We made up pairs where we already knew the right answer. Some put a reply from a completely different subject under the question. Some reply by repeating the question back. Anyone paying attention calls both of these not answered. The results are further down this page.",
   },
   {
     kind: "people",
@@ -82,7 +82,7 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "code",
     title: "Add up the readings",
-    body: "Code groups the readings by portfolio, month, reply length and more, and writes them out as plain data files.",
+    body: "Code adds the readings up by portfolio, by month, by how long the reply was, and more, then writes the totals out as plain data files. No model is involved in any count on this site.",
   },
   {
     kind: "site",

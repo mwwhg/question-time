@@ -83,3 +83,9 @@
 .provenance p {
   margin: 2px 0;
 }
+
+.secondary-intro {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 14px;
+}

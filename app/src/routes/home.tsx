@@ -3,10 +3,18 @@ import { portfolioIndexPath } from "@contract";
 import { useState } from "react";
 import { Link } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { LabelKey } from "../components/label-key.tsx";
 import { StackedLabelBar } from "../components/stacked-label-bar.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { KNOW_BEFORE_YOU_READ, WHAT_THIS_IS, WHAT_THIS_IS_NOT } from "../lib/copy.ts";
+import {
+  KNOW_BEFORE_YOU_READ,
+  NEW_HERE,
+  TERMS,
+  WHAT_THIS_IS,
+  WHAT_THIS_IS_NOT,
+  WORKED_EXAMPLE,
+} from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
 import "./home.css";
 
@@ -17,15 +25,22 @@ export function Home() {
 
   return (
     <div>
-      <section className="prose">
-        <h1>{WHAT_THIS_IS.heading}</h1>
-        {WHAT_THIS_IS.paragraphs.map((p) => (
+      <section className="card prose new-here">
+        <h1>{NEW_HERE.heading}</h1>
+        {NEW_HERE.paragraphs.map((p) => (
           <p key={p.slice(0, 24)}>{p}</p>
         ))}
       </section>
 
       <section className="card headline-bar">
-        <p className="section-label">All 2024–2025 replies</p>
+        <p className="section-label">Every written question and reply, 2024 and 2025</p>
+        <p>
+          Each band is one reading. The wider the band, the more replies got that reading. The five
+          readings are explained under the bar.
+        </p>
+        <p style={{ color: "var(--muted)" }}>
+          It cannot tell you whether any one reading is right, and it is not a score for anyone.
+        </p>
         {state.status === "loading" && <LoadingNote />}
         {state.status === "error" && <ErrorNote />}
         {state.status === "ok" &&
@@ -39,8 +54,10 @@ export function Home() {
               counts.unclear +
               counts.noReading;
             if (total === 0) return <EmptyNote>No data yet.</EmptyNote>;
+            const noReadingShare = Math.round((counts.noReading / total) * 100);
             return (
               <>
+                <p>{TERMS.distinctQuestion}</p>
                 <fieldset className="toggle-row">
                   <legend className="visually-hidden">
                     Count every question, or each distinct question once
@@ -66,9 +83,42 @@ export function Home() {
                   counts={counts}
                   label={mode === "all" ? "Every question" : "Each distinct question once"}
                 />
+                {noReadingShare >= 10 && (
+                  <p>
+                    About {noReadingShare} in 100 of the bar is “No reading”. The model has read{" "}
+                    {formatNumber(total - counts.noReading)} of these {formatNumber(total)} so far.
+                  </p>
+                )}
+                <LabelKey />
               </>
             );
           })()}
+      </section>
+
+      <section className="card prose worked-example">
+        <h2>{WORKED_EXAMPLE.heading}</h2>
+        <p>One question, one reply, and what came back. {WORKED_EXAMPLE.standfirst}</p>
+        <p className="section-label">The question, {WORKED_EXAMPLE.questionRef}</p>
+        <p>{WORKED_EXAMPLE.question}</p>
+        <p className="section-label">The reply</p>
+        <p>{WORKED_EXAMPLE.reply}</p>
+        <p className="section-label">What Jev gave back</p>
+        <p>{WORKED_EXAMPLE.outcome}</p>
+        <p>
+          <Link to="/method">See the whole example, and how we checked the readings</Link>
+        </p>
+      </section>
+
+      <section className="prose">
+        <h2>{WHAT_THIS_IS.heading}</h2>
+        {WHAT_THIS_IS.paragraphs.map((p) => (
+          <p key={p.slice(0, 24)}>{p}</p>
+        ))}
+        <p>
+          Reading a few hundred replies by hand means choosing which few hundred. Counting words
+          cannot tell whether a reply is about the question.{" "}
+          <Link to="/method">Why we read every reply</Link>.
+        </p>
       </section>
 
       <section className="prose">

@@ -1,11 +1,20 @@
 import type { PortfolioIndex } from "@contract";
 import { portfolioIndexPath } from "@contract";
+import { Link } from "react-router";
 import { PipelineGraph } from "../components/pipeline-graph.tsx";
 import { RunFacts } from "../components/run-facts.tsx";
 import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { ATTRIBUTION_TEXT, CC_LICENCE_URL } from "../lib/copy.ts";
+import {
+  ATTRIBUTION_TEXT,
+  CC_LICENCE_URL,
+  NOT_CHECKED_YET_NOTE,
+  NOT_GOOD_AT,
+  TERMS,
+  WHY_READ_EVERY_REPLY,
+  WORKED_EXAMPLE,
+} from "../lib/copy.ts";
 import { QS_V1_INSTRUCTIONS } from "../lib/qs-v1-texts.ts";
 import "./method.css";
 
@@ -27,7 +36,7 @@ const DISCARD_EXPLANATION =
 const NOT_DONE_YET = [
   "The 300-pair human check, comparing the model's readings against two independent people.",
   "A comparison with a general-purpose language model on the same 300 pairs.",
-  "The calibration chart showing whether the model's stated confidence tracks how often it is actually right.",
+  "A calibration chart: whether the readings the model was surest about turn out right more often than the ones it was unsure about.",
 ];
 
 export function Method() {
@@ -41,6 +50,7 @@ export function Method() {
 
       <section>
         <h2>How it works</h2>
+        <p>{TERMS.writtenQuestion}</p>
         <p>
           A model does one narrow job here: it reads a question and its reply and says whether the
           reply gives what was asked. Everything around that job is ordinary code or people.
@@ -48,12 +58,38 @@ export function Method() {
       </section>
       <PipelineGraph />
 
+      <section className="worked-example card">
+        <h2>{WORKED_EXAMPLE.heading}</h2>
+        <p>{WORKED_EXAMPLE.standfirst}</p>
+        <p className="section-label">What went in: the question, {WORKED_EXAMPLE.questionRef}</p>
+        <p>{WORKED_EXAMPLE.question}</p>
+        <p className="section-label">What went in: the reply</p>
+        <p>{WORKED_EXAMPLE.reply}</p>
+        <p className="section-label">What Jev was asked</p>
+        <p>{WORKED_EXAMPLE.asked}</p>
+        <p className="section-label">What came out</p>
+        <p>{WORKED_EXAMPLE.outcome}</p>
+        <p className="section-label">Why that is a sensible reading</p>
+        <p>{WORKED_EXAMPLE.why}</p>
+        <p className="section-label">What it took</p>
+        <p>{WORKED_EXAMPLE.cost}</p>
+        <p>
+          <Link to={WORKED_EXAMPLE.sitePath}>See this pair on this site</Link>, or{" "}
+          <a href={WORKED_EXAMPLE.officialUrl} target="_blank" rel="noopener noreferrer">
+            read it on the official record
+          </a>
+          . The numbers above come from the record of that first test, kept in the project files,
+          not from the run below.
+        </p>
+      </section>
+
       <section>
         <h2>The run, in numbers</h2>
         <p>
           These figures come from the run's own records: the time stamped on each reading and the
           amount of text the model reported receiving.
         </p>
+        <p style={{ color: "var(--muted)" }}>{TERMS.token}</p>
         {indexState.status === "ok" ? (
           <RunFacts run={indexState.data.run} />
         ) : (
@@ -62,29 +98,55 @@ export function Method() {
       </section>
 
       <section>
+        <h2>{WHY_READ_EVERY_REPLY.heading}</h2>
+        {WHY_READ_EVERY_REPLY.paragraphs.map((p) => (
+          <p key={p.slice(0, 24)}>{p}</p>
+        ))}
+      </section>
+
+      <section>
         <h2>What Jev is</h2>
         <p>
-          Jev is a small, fast model built to answer typed questions about a piece of text with
-          probabilities. Given a question and a reply, it does not write any text back. It answers
-          each of the five questions below by choosing one option from a fixed list, or a single
-          yes/no probability, and it reports how confident it is in that choice.
+          Jev is a small, fast computer model. You hand it a piece of text and a question about that
+          text, and it hands back numbers. It never writes a sentence. For a question with a fixed
+          list of answers, it splits 100 between them, and the largest share is the answer. For a
+          yes or no question, it gives one number out of 100 for yes. The worked example above shows
+          exactly what that looks like.
         </p>
+        <p style={{ color: "var(--muted)" }}>{TERMS.confidence}</p>
       </section>
 
       <section>
         <h2>The five questions asked of every reply</h2>
         <p>
-          Every method — the phrase rules, a general-purpose language model, and Jev — is given the
-          same five questions, word for word:
+          Jev is asked the same five questions about every pair, in the same words every time. The
+          phrase rules and a general-purpose language model are given the same five, so the three
+          can be compared. Here they are in plain words.
         </p>
         <ol className="question-set-list">
           {QS_V1_INSTRUCTIONS.map((q) => (
             <li key={q.key}>
-              <p className="mono qs-key">{q.key}</p>
-              <p>{q.instructions}</p>
+              <p className="qs-plain">{q.label}</p>
+              <p className="qs-answers">Answers: {q.answers}</p>
+              <details>
+                <summary>The exact words the model was given</summary>
+                <p className="qs-exact">{q.instructions}</p>
+              </details>
             </li>
           ))}
         </ol>
+      </section>
+
+      <section>
+        <h2>{NOT_GOOD_AT.heading}</h2>
+        <ul>
+          {NOT_GOOD_AT.items.map((item) => (
+            <li key={item.lead}>
+              <strong>{item.lead}</strong> {item.body}
+            </li>
+          ))}
+        </ul>
+        <p>{NOT_GOOD_AT.vendorNote}</p>
       </section>
 
       <section>
@@ -115,12 +177,18 @@ export function Method() {
       </section>
 
       <section>
-        <h2>Controls</h2>
+        <h2>Trick pairs, and what the phrase rules got wrong</h2>
+        <p>{TERMS.controls}</p>
         <p>
-          Before judging real pairs, Jev and the rules baseline were run against two kinds of
-          constructed control: a "swapped" reply taken from a different portfolio, which should read
-          as not answered, and an "echo" reply that just restates the question, which should read as
-          not answered or unclear.
+          We built two kinds. A "swapped" pair keeps the question and puts a reply from a completely
+          different portfolio underneath it. A reader paying attention calls that not answered. An
+          "echo" pair replies to the question by repeating it back, which also answers nothing.
+        </p>
+        <p>
+          Two methods were tested on them. The phrase rules look for set forms of words in the reply
+          and nothing else. Jev reads the question and the reply together. "Swapped at 0.8+" counts
+          the swapped pairs a method called not answered while giving that answer at least 80 of its
+          100 shares.
         </p>
         <div className="table-scroll">
           <table>
@@ -146,6 +214,14 @@ export function Method() {
             </tbody>
           </table>
         </div>
+        <p>
+          The phrase rules got 2 of 10 swapped pairs and 0 of 10 echo pairs. That is what matching
+          words does when the words are in the wrong place: an echo reply is made entirely of the
+          question's own words and contains no stock phrase at all, so the rules have nothing to go
+          on. Jev got 10 of 10 on both. These are twenty pairs we built ourselves. They show the
+          rules cannot tell what a reply is about. They do not show how often Jev is right on real
+          replies.
+        </p>
         <p>{DISCARD_EXPLANATION}</p>
       </section>
 
@@ -158,8 +234,8 @@ export function Method() {
         </ul>
         <p>
           {checkedAgainstPeople
-            ? "These are now complete; see the Findings page for results."
-            : 'Until these are done, the "how sure" wording is switched off across the site. Confidence is shown on each question page as the model\'s own confidence, not yet checked against people.'}
+            ? "These are now complete; see the What the data shows page for results."
+            : NOT_CHECKED_YET_NOTE}
         </p>
       </section>
 

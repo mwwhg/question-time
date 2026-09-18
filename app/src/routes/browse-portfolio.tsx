@@ -3,9 +3,10 @@ import { browseShardPath, LABELS } from "@contract";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { LabelKey } from "../components/label-key.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { LABEL_WORDING, NO_READING_WORDING } from "../lib/copy.ts";
+import { LABEL_WORDING, NO_READING_WORDING, TERMS } from "../lib/copy.ts";
 import { formatDate } from "../lib/format.ts";
 import "./browse-portfolio.css";
 
@@ -48,14 +49,23 @@ export function BrowsePortfolio() {
       {state.status === "ok" && (
         <>
           <h1>{state.data.portfolio}</h1>
-          <p className="mono">{year}</p>
+          <p>Written questions sent to this portfolio in {year}.</p>
+          <p style={{ color: "var(--muted)", maxWidth: "70ch" }}>
+            {TERMS.wq} Each row is one question. Open a number to read the question, the reply and
+            the reading side by side. The table cannot tell you whether a reading is right, and it
+            is not a score for the minister who replied.
+          </p>
+          <LabelKey />
 
           {state.data.rows.length === 0 ? (
             <EmptyNote>No questions for this portfolio in {year}.</EmptyNote>
           ) : (
             <>
-              <fieldset className="control-group">
-                <legend className="visually-hidden">Filter by label</legend>
+              <p className="control-note" id="filter-note">
+                Show only questions with this reading:
+              </p>
+              <fieldset className="control-group" aria-describedby="filter-note">
+                <legend className="visually-hidden">Filter by reading</legend>
                 <button
                   type="button"
                   className="button"
@@ -92,12 +102,13 @@ export function BrowsePortfolio() {
                   <div className="table-scroll">
                     <table>
                       <caption className="section-label">
-                        WQ {filtered.length === state.data.rows.length ? "all" : "filtered"}{" "}
-                        questions
+                        {filtered.length === state.data.rows.length
+                          ? "All questions"
+                          : "Questions matching the filter"}
                       </caption>
                       <thead>
                         <tr>
-                          <th scope="col">WQ</th>
+                          <th scope="col">Question number</th>
                           <th scope="col">Date asked</th>
                           <th scope="col">Question</th>
                           <th scope="col">Reading</th>

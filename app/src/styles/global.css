@@ -84,6 +84,13 @@ fieldset.toggle-row {
   margin: 0;
 }
 
+.control-note {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
 .page-shell {
   max-width: 1080px;
   margin: 0 auto;

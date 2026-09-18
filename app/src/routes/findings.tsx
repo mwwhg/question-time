@@ -2,9 +2,11 @@ import type { Breakdown, Findings as FindingsData, LabelCounts, PortfolioIndex }
 import { findingsPath, portfolioIndexPath } from "@contract";
 import { Link } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { LabelKey } from "../components/label-key.tsx";
 import { RunFacts } from "../components/run-facts.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
+import { TERMS } from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
 import "./findings.css";
 
@@ -21,6 +23,41 @@ function totalOf(counts: LabelCounts): number {
 function percent(part: number, total: number): string {
   return total === 0 ? "0%" : `${Math.round((part / total) * 100)}%`;
 }
+
+/** "about 1 in 4", "about 4 in 10": a share a reader can hold in their head without a percentage. */
+function aboutOneIn(part: number, total: number): string {
+  if (total === 0 || part === 0) return "none of them";
+  const share = part / total;
+  if (share >= 0.95) return "nearly all of them";
+  if (share >= 0.15) return `about ${Math.round(share * 10)} in 10`;
+  return `about 1 in ${Math.round(1 / share)}`;
+}
+
+/** The three reply shapes, in the words the site uses for them elsewhere. */
+const GROUP_WORDING: Readonly<Record<string, string>> = {
+  text: "answers in its own words",
+  referral: "points to an earlier reply",
+  "attachment-only": "says the answer is in an attached file",
+};
+
+function groupWording(group: string): string {
+  return GROUP_WORDING[group] ?? group;
+}
+
+/** The raw option names from the question set, in the words the site uses for them. */
+const SECONDARY_KEY_WORDING: Readonly<Record<string, string>> = {
+  yes: "Yes, the reply states the figure",
+  no: "No, the reply does not state it",
+  no_figure_requested: "The question did not ask for a figure",
+  all_parts: "Every part",
+  some_parts: "Some parts",
+  no_parts: "No parts",
+  single_part_question: "The question asked only one thing",
+  related_topic: "Talks about a related topic",
+  restates_policy: "Restates government policy",
+  refers_elsewhere: "Points somewhere else without giving the content",
+  none: "None of those",
+};
 
 const LABEL_KEYS = ["answered", "partly_answered", "not_answered", "unclear", "noReading"] as const;
 const LABEL_HEADS = ["Answered", "Partly answered", "Not answered", "Unclear", "No reading"];
@@ -40,6 +77,15 @@ function BreakdownTable({
     <section className="findings-section">
       <h2>{title}</h2>
       <p>{shows}</p>
+      {rows[0] !== undefined && totalOf(rows[0].counts) > 0 && (
+        <p>
+          How to read it: the first row covers {formatNumber(totalOf(rows[0].counts))} questions in
+          the group “{groupWording(rows[0].group)}”. Of those,{" "}
+          {aboutOneIn(rows[0].counts.answered, totalOf(rows[0].counts))} were read as answered,
+          which is {formatNumber(rows[0].counts.answered)} questions. Every other row reads the same
+          way.
+        </p>
+      )}
       <p style={{ color: "var(--muted)" }}>{cannotShow}</p>
       {rows.length === 0 ? (
         <EmptyNote>No data yet.</EmptyNote>
@@ -62,7 +108,7 @@ function BreakdownTable({
                 const total = totalOf(row.counts);
                 return (
                   <tr key={row.group}>
-                    <td>{row.group}</td>
+                    <td>{groupWording(row.group)}</td>
                     {LABEL_KEYS.map((key) => (
                       <td key={key} className="mono">
                         {formatNumber(row.counts[key])} ({percent(row.counts[key], total)})
@@ -100,6 +146,30 @@ export function Findings() {
   return (
     <div>
       <h1>What the data shows</h1>
+      <p className="prose">
+        Every table on this page counts readings. A reading is what the model said about one reply.
+        The five readings are below. Each table says in one line what it shows and what it cannot
+        tell you.
+      </p>
+      <p className="prose">
+        A table is a count, not a question you can read. To read real questions, open a portfolio in{" "}
+        <Link to="/browse">Browse the results</Link> and pick one.
+      </p>
+      <LabelKey />
+
+      <section className="findings-section">
+        <h2>What it cost to read everything</h2>
+        <p>
+          This is what it took to have one model read every pair and answer five questions about
+          each. It is the reason this page can count all of them instead of a sample.
+        </p>
+        <p style={{ color: "var(--muted)" }}>
+          It cannot show whether that cost is worth it; that is a judgement call. {TERMS.token}
+        </p>
+        {indexState.status === "loading" && <LoadingNote />}
+        {indexState.status === "error" && <ErrorNote />}
+        {indexState.status === "ok" && <RunFacts run={indexState.data.run} />}
+      </section>
 
       {findingsState.status === "loading" && <LoadingNote />}
       {findingsState.status === "error" && <ErrorNote />}
@@ -107,10 +177,10 @@ export function Findings() {
       {findingsState.status === "ok" && (
         <>
           <section className="findings-section">
-            <h2>The corpus</h2>
+            <h2>What the record looks like</h2>
             <p>
-              This shows the shape of the 2024–2025 written-question record before any model reading
-              is applied.
+              This is the shape of the whole 2024 and 2025 written-question record, counted by
+              ordinary code before the model read anything.
             </p>
             <p style={{ color: "var(--muted)" }}>
               It cannot show whether any reading of it is correct.
@@ -118,108 +188,116 @@ export function Findings() {
             <ul className="corpus-facts">
               <li>
                 <span className="mono">{formatNumber(findingsState.data.corpus.records)}</span>{" "}
-                records
+                written questions were sent in 2024 and 2025, each with its own reply
               </li>
               <li>
-                <span className="mono">{formatNumber(findingsState.data.corpus.answered)}</span>{" "}
-                answered,{" "}
+                <span className="mono">{formatNumber(findingsState.data.corpus.answered)}</span> of
+                them had a reply by the time we copied the record,{" "}
                 <span className="mono">{formatNumber(findingsState.data.corpus.awaiting)}</span>{" "}
-                awaiting reply,{" "}
+                were still waiting for one, and{" "}
                 <span className="mono">{formatNumber(findingsState.data.corpus.withdrawn)}</span>{" "}
-                withdrawn
+                were taken back by the MP who asked
               </li>
               <li>
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.distinctQuestionTexts)}
                 </span>{" "}
-                distinct question texts
+                of those are different wordings. The same question is often sent to many ministers
+                on the same day, so the number of different questions is much smaller than the
+                number of questions
               </li>
               <li>
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.referralReplies)}
                 </span>{" "}
-                replies that only point to an earlier reply,{" "}
+                replies do not answer in their own words. They point at a reply the minister gave
+                earlier, so code fetches that earlier reply and gives the model both. Of those,{" "}
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.referralsUnresolved)}
                 </span>{" "}
-                unresolved
+                could not be found, mostly because they point back to 2023
               </li>
               <li>
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.attachmentOnlyReplies)}
                 </span>{" "}
-                attachment-only replies, not read by the model
+                replies say the answer is in an attached file. We did not open the files, so those
+                questions show no reading
               </li>
               <li>
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.correctedReplies)}
                 </span>{" "}
-                replies marked as corrected
+                replies were sent again as a correction by the minister
               </li>
               <li>
-                Reply length:{" "}
+                Reply length, counted in characters. The middle reply is{" "}
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.replyCharsMedian)}
                 </span>{" "}
-                characters median,{" "}
+                characters long, and{" "}
                 <span className="mono">
                   {formatNumber(findingsState.data.corpus.replyCharsP95)}
                 </span>{" "}
-                at the 95th percentile
+                characters is the length that 95 in 100 replies stay under. Most replies are short:
+                one or two sentences
               </li>
             </ul>
           </section>
 
           <BreakdownTable
-            title="By reply shape"
-            shows="This shows how the model's readings differ between plain-text replies, referrals and attachment-only replies."
+            title="Replies that answer, replies that point elsewhere, replies in a file"
+            shows="Replies come in three kinds. Most answer in their own words. Some only point at a reply the minister gave earlier. Some say the answer is in an attached file, which we did not open. This shows how the readings differ between the three."
             cannotShow="It cannot show why a particular reply took the shape it did."
             rows={findingsState.data.byReplyShape}
           />
 
           <BreakdownTable
-            title="By reply length"
-            shows="This shows how the reading changes as replies get longer."
+            title="Short replies and long replies"
+            shows="Replies are grouped by how many words they contain. This shows how the readings change as replies get longer."
             cannotShow="It cannot show whether a longer reply is a better one."
             rows={findingsState.data.byReplyLength}
           />
 
           <BreakdownTable
-            title="By number of question parts"
-            shows="This shows how the reading changes as a question asks for more separate things."
+            title="Questions that ask one thing, and questions that ask several"
+            shows="Code counts how many separate things a question asks. This shows how the readings change as a question asks for more."
             cannotShow="It cannot show which part, if any, went unanswered."
             rows={findingsState.data.byQuestionParts}
           />
 
           <BreakdownTable
-            title="By month asked"
-            shows="This shows how readings are spread across the two years covered."
+            title="Month by month"
+            shows="This shows how the readings are spread across the twenty-four months covered."
             cannotShow="It cannot show whether any change over time reflects replies, questions, or the model."
             rows={findingsState.data.byMonth}
           />
 
           <BreakdownTable
-            title="By how many ministers were asked"
-            shows="This shows how the reading differs for questions sent to one minister versus sent widely."
+            title="Questions sent to one minister, and questions sent to many"
+            shows="The same question is often posted to many ministers at once. This shows how the readings differ between a question sent to one minister and a question sent to a great many."
             cannotShow="It cannot show whether a wide mailout was itself a reasonable way to ask."
             rows={findingsState.data.byFanOut}
           />
 
           <BreakdownTable
-            title="By stock phrase"
-            shows="This shows how the reading differs when a reply uses one of a small set of common stock phrases."
+            title="Replies that use a stock phrase"
+            shows={`${TERMS.stockPhrase} This shows how the readings differ when a reply uses one of them.`}
             cannotShow="It cannot show whether the phrase was the right or only reason for that reading."
             rows={findingsState.data.byStockPhrase}
           />
 
           <section className="findings-section">
-            <h2>Confidence</h2>
+            <h2>How firmly the model settled on its answer</h2>
             <p>
-              This shows how the model's stated confidence on the "answered" question is spread,
-              split by its choice.
+              {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0 at
+              the bottom, and the four columns count how many readings in that band got each answer.
+              A reading in the last row is one the model settled on very firmly.
             </p>
             <p style={{ color: "var(--muted)" }}>
-              It cannot show whether that confidence is trustworthy; see How we checked for that.
+              It cannot show whether those firm readings are right more often than the unsure ones.
+              That is the check that has not been done yet. See{" "}
+              <Link to="/method">How we checked</Link>.
             </p>
             {findingsState.data.confidenceHistogram.length === 0 ? (
               <EmptyNote>No data yet.</EmptyNote>
@@ -255,18 +333,22 @@ export function Findings() {
           </section>
 
           <section className="findings-section">
-            <h2>Secondary readings</h2>
-            <p>This shows how the four secondary questions were answered across the corpus.</p>
+            <h2>The other four questions asked of every reply</h2>
+            <p>
+              Besides “does the reply give the information asked for”, the model was asked four more
+              questions about every reply. These are the totals for three of them.
+            </p>
             <p style={{ color: "var(--muted)" }}>
-              It cannot show how those readings compare to the primary label.
+              It cannot show how these answers line up with the main reading for the same reply. The
+              cross-checks below do some of that.
             </p>
             <div className="secondary-grid">
               <SecondaryCountList
-                title="Gives the requested figure"
+                title="Does the reply give the figure asked for?"
                 counts={findingsState.data.secondary.givesRequestedFigure}
               />
               <SecondaryCountList
-                title="Addresses every part"
+                title="Does the reply address every part of the question?"
                 counts={findingsState.data.secondary.addressesAllParts}
               />
               <SecondaryCountList
@@ -277,8 +359,11 @@ export function Findings() {
           </section>
 
           <section className="findings-section">
-            <h2>Cross-checks</h2>
-            <p>This shows how the five readings sit together for the same reply.</p>
+            <h2>Do the five readings agree with each other?</h2>
+            <p>
+              Each line below takes a group of replies and asks what a second reading said about the
+              same replies. The five questions are answered independently, so they can disagree.
+            </p>
             <p style={{ color: "var(--muted)" }}>
               It cannot show whether either reading, on its own, is correct.
             </p>
@@ -293,6 +378,7 @@ export function Findings() {
                       {formatNumber(check.numerator)} of {formatNumber(check.denominator)} (
                       {percent(check.numerator, check.denominator)})
                     </span>
+                    , or {aboutOneIn(check.numerator, check.denominator)}.
                   </li>
                 ))}
               </ul>
@@ -302,8 +388,8 @@ export function Findings() {
           <section className="findings-section">
             <h2>Same question, different reading</h2>
             <p>
-              This shows the same question text sent to several ministers and read differently by
-              the model.
+              When one question goes to many ministers, the replies differ, and so do the readings.
+              These are the largest such groups. Follow the link to read one of them.
             </p>
             <p style={{ color: "var(--muted)" }}>
               It cannot show which of the differing readings, if any, is the correct one.
@@ -314,10 +400,15 @@ export function Findings() {
               <ul>
                 {findingsState.data.sameQuestionDifferentReading.map((group) => (
                   <li key={`${group.example.year}-${group.example.number}`}>
-                    “{group.question}” — sent to{" "}
-                    <span className="mono">{formatNumber(group.sentTo)}</span> ministers.{" "}
+                    “{group.question}”. Sent to{" "}
+                    <span className="mono">{formatNumber(group.sentTo)}</span> ministers. Read as
+                    answered <span className="mono">{formatNumber(group.counts.answered)}</span>{" "}
+                    times, partly answered{" "}
+                    <span className="mono">{formatNumber(group.counts.partly_answered)}</span>{" "}
+                    times, not answered{" "}
+                    <span className="mono">{formatNumber(group.counts.not_answered)}</span> times.{" "}
                     <Link to={`/q/${group.example.year}/${group.example.number}`}>
-                      See an example
+                      Read one of these questions and its reply
                     </Link>
                     .
                   </li>
@@ -327,17 +418,6 @@ export function Findings() {
           </section>
         </>
       )}
-
-      <section className="findings-section">
-        <h2>What it cost to read everything</h2>
-        <p>This shows the actual cost and speed of running the full pipeline.</p>
-        <p style={{ color: "var(--muted)" }}>
-          It cannot show whether that cost is worth it; that is a judgement call.
-        </p>
-        {indexState.status === "loading" && <LoadingNote />}
-        {indexState.status === "error" && <ErrorNote />}
-        {indexState.status === "ok" && <RunFacts run={indexState.data.run} />}
-      </section>
     </div>
   );
 }
@@ -359,7 +439,8 @@ function SecondaryCountList({
         <ul className="secondary-count-list">
           {entries.map(([key, value]) => (
             <li key={key}>
-              {key.replaceAll("_", " ")}: <span className="mono">{formatNumber(value)}</span>
+              {SECONDARY_KEY_WORDING[key] ?? key.replaceAll("_", " ")}:{" "}
+              <span className="mono">{formatNumber(value)}</span>
             </li>
           ))}
         </ul>
