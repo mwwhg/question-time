@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+.dev.vars
+.wrangler/
+app/dist/
+data/raw/*
+!data/raw/manifest.json
+data/processed/*
+!data/processed/runs.jsonl
+data/output/

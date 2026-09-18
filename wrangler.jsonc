@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "did-they-answer",
+  "compatibility_date": "2026-09-18",
+  // Static assets only: no `main`, no bindings, no secrets. SPA fallback serves index.html for /browse, /q/:year/:number, /method.
+  "assets": {
+    "directory": "./app/dist",
+    "not_found_handling": "single-page-application"
+  }
+}

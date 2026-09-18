@@ -1,0 +1,53 @@
+{
+  "name": "did-they-answer",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "node --test",
+    "fetch": "node --env-file-if-exists=.env scripts/fetch.ts",
+    "normalise": "node scripts/normalise.ts",
+    "evaluate:rules": "node scripts/evaluate.ts rules",
+    "evaluate:llm": "node --env-file=.env scripts/evaluate.ts llm",
+    "evaluate:jev": "node --env-file=.env scripts/evaluate.ts jev",
+    "benchmark": "node scripts/benchmark.ts",
+    "build:output": "node scripts/build-output.ts",
+    "dev": "vite --config app/vite.config.ts",
+    "build": "tsc -p app/tsconfig.json && vite build --config app/vite.config.ts && rm -rf app/dist/data && (test -d data/output && cp -R data/output app/dist/data || echo 'warning: data/output missing, site will ship with no data directory')",
+    "typecheck": "tsc -p tsconfig.json && tsc -p app/tsconfig.json",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "check:secrets": "! grep -rsniE 'API_KEY|process\\.env' app/src wrangler.jsonc",
+    "check": "npm run lint && npm run typecheck && npm run check:secrets && npm test",
+    "deploy": "wrangler deploy",
+    "sample": "node scripts/sample.ts",
+    "evaluate:controls": "node --env-file-if-exists=.env scripts/evaluate-controls.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": "true",
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.14",
+    "@types/node": "^26.6.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "^7.0.2",
+    "vite": "^7.1.9",
+    "wrangler": "^4.134.0"
+  },
+  "dependencies": {
+    "@fontsource/fraunces": "^5.2.7",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.7",
+    "@typesafe-ai/sdk": "^0.6.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router": "^7.9.5",
+    "zod": "^4.6.5"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
