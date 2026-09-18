@@ -3,10 +3,11 @@ import { portfolioIndexPath } from "@contract";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { LabelKey } from "../components/label-key.tsx";
 import { StackedLabelBar } from "../components/stacked-label-bar.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { BROWSE_COMPARISON_NOTE } from "../lib/copy.ts";
+import { BROWSE_COMPARISON_NOTE, TERMS } from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
 import "./browse.css";
 
@@ -52,7 +53,13 @@ export function Browse() {
   return (
     <div>
       <h1>Browse the results</h1>
-      <p className="prose">{BROWSE_COMPARISON_NOTE}</p>
+      <p className="prose">Pick a portfolio and read the questions sent to it. {TERMS.portfolio}</p>
+      <p className="prose">
+        Each row shows one portfolio, the number of questions it received that year, and a bar
+        splitting those questions by reading. {BROWSE_COMPARISON_NOTE} The bar cannot tell you
+        whether any one reading is right.
+      </p>
+      <LabelKey />
 
       {state.status === "loading" && <LoadingNote />}
       {state.status === "error" && <ErrorNote />}
@@ -60,6 +67,7 @@ export function Browse() {
 
       {state.status === "ok" && activeYear !== null && (
         <>
+          <p className="control-note">{TERMS.distinctQuestion}</p>
           <div className="browse-controls">
             <fieldset className="control-group">
               <legend className="visually-hidden">Year</legend>

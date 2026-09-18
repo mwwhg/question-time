@@ -1,0 +1,55 @@
+.label-key {
+  margin: 12px 0 0;
+  font-size: 14px;
+}
+
+.label-key-row {
+  display: grid;
+  grid-template-columns: minmax(9rem, max-content) 1fr;
+  gap: 4px 14px;
+  padding: 5px 0;
+  border-top: 1px solid var(--line-faint);
+}
+
+.label-key dt {
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label-key dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+.label-key-swatch {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+}
+
+.label-key-answered {
+  background: var(--answered);
+}
+.label-key-partly_answered {
+  background: var(--partly);
+}
+.label-key-not_answered {
+  background: var(--not-answered);
+}
+.label-key-unclear {
+  background: var(--unclear);
+}
+.label-key-noReading {
+  background: var(--track);
+}
+
+@media (max-width: 640px) {
+  .label-key-row {
+    grid-template-columns: 1fr;
+  }
+}

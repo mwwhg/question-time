@@ -6,8 +6,43 @@
   gap: 14px;
 }
 
-.qs-key {
+.qs-exact {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-family: var(--font-mono);
+}
+
+.qs-plain {
   margin: 0;
-  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.qs-answers {
+  margin: 2px 0 6px;
   color: var(--muted);
+}
+
+.question-set-list summary {
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--source-text);
+}
+
+.question-set-list details p {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+
+.worked-example {
+  margin: 28px 0;
+  max-width: none;
+}
+
+.worked-example h2 {
+  margin-top: 0;
+}
+
+.worked-example .section-label {
+  margin-bottom: 2px;
 }

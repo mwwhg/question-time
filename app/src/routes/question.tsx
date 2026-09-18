@@ -1,16 +1,18 @@
 import type { ChoiceReading, QuestionBlock, QuestionDetail } from "@contract";
 import { questionBlockPath } from "@contract";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
 import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import {
   EVASION_TYPE_HEADING,
+  HOW_TO_READ_A_READING,
   LABEL_WORDING,
   NO_READING_REASON_TEXT,
   READING_IT_YOURSELF_CLOSE,
   READING_IT_YOURSELF_INTRO,
+  TERMS,
 } from "../lib/copy.ts";
 import { formatDate, formatNInHundred } from "../lib/format.ts";
 import { QS_V1_INSTRUCTIONS } from "../lib/qs-v1-texts.ts";
@@ -68,11 +70,22 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
 
   return (
     <article>
+      <h1>
+        Written question {item.number} of {item.year}
+      </h1>
       <p className="mono question-header">
-        WQ {item.number} · {item.year} · {formatDate(item.dateAsked)} · {item.portfolio}
+        {formatDate(item.dateAsked)} · {item.portfolio}
       </p>
       <p>
         asked by {item.askedBy} &middot; reply from {item.minister}
+      </p>
+      <p style={{ color: "var(--muted)" }}>
+        {TERMS.wq} {TERMS.portfolio}
+      </p>
+      <p>
+        <Link to={`/browse/${item.portfolioSlug}/${item.year}`}>
+          See the other questions sent to {item.portfolio} in {item.year}
+        </Link>
       </p>
 
       <div className="source-box">
@@ -89,6 +102,7 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
       {item.referredReply !== null && (
         <div className="source-box" style={{ marginTop: 16 }}>
           <p className="section-label">The earlier reply it points to</p>
+          <p style={{ color: "var(--source-text)" }}>{TERMS.referral}</p>
           <p>{item.referredReply}</p>
           {item.referredReplyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
         </div>
@@ -115,30 +129,44 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
             <li key={bullet}>{bullet}</li>
           ))}
         </ul>
+        {item.features.stockPhrases.length > 0 && (
+          <p style={{ fontSize: 13, color: "var(--muted)" }}>{TERMS.stockPhrase}</p>
+        )}
         <p>{READING_IT_YOURSELF_CLOSE}</p>
       </div>
 
-      <div className="mono provenance">
-        <p className="section-label">Provenance</p>
+      <div className="provenance">
+        <p className="section-label">Where this came from</p>
         <p>
           <a href={item.provenance.sourceUrl} target="_blank" rel="noopener noreferrer">
             Read the full text on the official record
           </a>
         </p>
-        <p>Retrieved {formatDate(item.provenance.retrievedAt)}</p>
-        <p>Model {item.provenance.model}</p>
         <p>
-          Question set {item.provenance.questionSetVersion} ({item.provenance.questionSetHash})
+          We copied this question and reply from the official record on{" "}
+          {formatDate(item.provenance.retrievedAt)} and have not changed the words.
         </p>
-        <p>Features {item.provenance.featuresVersion}</p>
         <p>
           {item.provenance.evaluatedAt
-            ? `Evaluated ${item.provenance.evaluatedAt}`
-            : "Not yet evaluated"}
+            ? `The model read it on ${formatDate(item.provenance.evaluatedAt)}.`
+            : "The model has not read this pair."}{" "}
+          The exact version of the model and of the five questions is recorded below, so this
+          reading can be reproduced.
+        </p>
+        <p className="mono">
+          Model {item.provenance.model} · question set {item.provenance.questionSetVersion} (
+          {item.provenance.questionSetHash}) · features {item.provenance.featuresVersion}
         </p>
       </div>
     </article>
   );
+}
+
+/** `referralChain` entries are stored as "{year}-{number}". docs/site-copy.md shows them as "WQ n (year)". */
+function formatPointer(entry: string | undefined): string | null {
+  if (entry === undefined) return null;
+  const [year, number] = entry.split("-");
+  return year && number ? `WQ ${number} (${year})` : entry;
 }
 
 function readingItYourselfBullets(item: QuestionDetail): string[] {
@@ -151,15 +179,12 @@ function readingItYourselfBullets(item: QuestionDetail): string[] {
   bullets.push(`The reply is ${item.features.replyWords} words long.`);
   bullets.push(`The reply ${item.features.hasNumber ? "contains" : "does not contain"} a number.`);
   if (item.replyShape === "referral" && item.referredReply !== null) {
-    const pointer = item.referralChain[0];
+    const pointer = formatPointer(item.referralChain[0]);
     bullets.push(
       pointer
-        ? `The reply points to an earlier reply, ${pointer}. We show that earlier reply below, and the model read both.`
-        : "The reply points to an earlier reply. We show that earlier reply below, and the model read both.",
+        ? `The reply points to an earlier reply, ${pointer}. We show that earlier reply above, and the model read both.`
+        : "The reply points to an earlier reply. We show that earlier reply above, and the model read both.",
     );
-  }
-  if (item.noReadingReason === "attachment_not_read") {
-    bullets.push(NO_READING_REASON_TEXT.attachment_not_read ?? "");
   }
   for (const phrase of item.features.stockPhrases) {
     bullets.push(`The reply uses the phrase “${phrase}”.`);
@@ -182,21 +207,28 @@ function ReadingView({
   return (
     <div className={unsure ? "disabled" : undefined}>
       <p className="reading-label">{wording?.shownAs ?? displayLabel}</p>
+      {wording && <p>{wording.meaning}</p>}
       {unsure && (
         <p style={{ color: "var(--muted)" }}>
           The model was not sure enough to say, so we count this as unclear.
         </p>
       )}
 
+      <p style={{ color: "var(--muted)" }}>{HOW_TO_READ_A_READING}</p>
+
       <ChoiceBars reading={reading.answered} />
 
       <p>
         {checkedAgainstPeople
           ? `How sure: ${formatNInHundred(reading.answered.confidence)}`
-          : `The model's own confidence: ${formatNInHundred(reading.answered.confidence)} (not yet checked against people)`}
+          : `The model settled on that answer at ${formatNInHundred(reading.answered.confidence)}. That is its own number and says nothing about whether the answer is right.`}
       </p>
 
       <div className="secondary-readings">
+        <p className="secondary-intro">
+          Jev was asked four more questions about this reply. Each answer is followed by the share
+          out of 100 the model gave it.
+        </p>
         <SecondaryChoice
           heading={QS_V1_INSTRUCTIONS[1].label}
           reading={reading.givesRequestedFigure}
@@ -207,7 +239,10 @@ function ReadingView({
         />
         <div className="secondary-reading">
           <h3 className="secondary-heading">{QS_V1_INSTRUCTIONS[3].label}</h3>
-          <p className="mono">{formatNInHundred(reading.declinesWithReason)}</p>
+          <p className="mono">
+            Yes: {formatNInHundred(reading.declinesWithReason)}. No:{" "}
+            {formatNInHundred(1 - reading.declinesWithReason)}.
+          </p>
         </div>
         {displayLabel !== "answered" && (
           <SecondaryChoice heading={EVASION_TYPE_HEADING} reading={reading.evasionType} />
