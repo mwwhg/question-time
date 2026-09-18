@@ -1,0 +1,125 @@
+{
+  "seed": 20260919,
+  "gate3": [
+    {
+      "id": "2025-15520",
+      "stratum": "short"
+    },
+    {
+      "id": "2024-10933",
+      "stratum": "short"
+    },
+    {
+      "id": "2024-43604",
+      "stratum": "short"
+    },
+    {
+      "id": "2025-5593",
+      "stratum": "short"
+    },
+    {
+      "id": "2025-10480",
+      "stratum": "short"
+    },
+    {
+      "id": "2025-43421",
+      "stratum": "short"
+    },
+    {
+      "id": "2025-22004",
+      "stratum": "short"
+    },
+    {
+      "id": "2024-4456",
+      "stratum": "short"
+    },
+    {
+      "id": "2024-19922",
+      "stratum": "short"
+    },
+    {
+      "id": "2024-180",
+      "stratum": "short"
+    },
+    {
+      "id": "2025-42200",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-59644",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-57944",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-78984",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-72549",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-52408",
+      "stratum": "long"
+    },
+    {
+      "id": "2025-51915",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-39753",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-4463",
+      "stratum": "long"
+    },
+    {
+      "id": "2025-2014",
+      "stratum": "long"
+    },
+    {
+      "id": "2024-80970",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2025-52745",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-67922",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2025-55212",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-8871",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-7265",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-61471",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-72224",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-80981",
+      "stratum": "multi_part"
+    },
+    {
+      "id": "2024-52515",
+      "stratum": "multi_part"
+    }
+  ]
+}
