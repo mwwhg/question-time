@@ -179,10 +179,10 @@ export const KNOW_BEFORE_YOU_READ = {
 
 export const FOUND_A_MISTAKE = {
   heading: "Found a mistake?",
-  // TODO(owner): real contact address — corrections@example.org is a placeholder.
-  address: "corrections@example.org",
-  body: (address: string) =>
-    `If a reading is wrong, or a question or reply is shown incorrectly, tell us at ${address} and we will correct it and list the correction on the How we checked page.`,
+  contactUrl: "https://www.linkedin.com/in/matthewawood/",
+  contactLabel: "message Matthew Wood on LinkedIn",
+  before: "If a reading is wrong, or a question or reply is shown incorrectly, ",
+  after: " and we will correct it and list the correction on the How we checked page.",
 };
 
 export const ATTRIBUTION_TEXT =
