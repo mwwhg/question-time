@@ -1,0 +1,24 @@
+.stacked-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stacked-bar {
+  display: flex;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--track);
+  border: 1px solid var(--line);
+}
+
+.stacked-bar-segment {
+  height: 100%;
+}
+
+.stacked-bar-text {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
