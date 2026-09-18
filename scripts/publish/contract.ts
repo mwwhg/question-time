@@ -182,6 +182,43 @@ export type Findings = {
     readonly numerator: number;
     readonly denominator: number;
   }[];
+  /**
+   * Plain counts from the official record. No model is involved in `askers`, `portfolioVolumes` or
+   * `mostRepeatedQuestions`, so they hold whatever the readings turn out to be worth.
+   * People are listed only by how many questions they asked. No person is ever listed or ordered
+   * by how replies were read: that would turn an unchecked model's output into a verdict on a named person.
+   */
+  readonly civics: {
+    /** Every member who asked a question, most questions first. Names exactly as the source gives them. */
+    readonly askers: readonly {
+      readonly name: string;
+      readonly questions: number;
+      readonly distinctQuestions: number;
+      readonly portfoliosAsked: number;
+    }[];
+    /** Every portfolio, most questions received first. Answered questions only. */
+    readonly portfolioVolumes: readonly {
+      readonly slug: string;
+      readonly name: string;
+      readonly questions: number;
+      readonly distinctQuestions: number;
+      readonly askers: number;
+    }[];
+    /** The question wordings sent to the most ministers. Top 15. */
+    readonly mostRepeatedQuestions: readonly {
+      readonly question: string;
+      readonly sentTo: number;
+      readonly example: { readonly year: number; readonly number: number };
+    }[];
+    /** The days on which the most questions were lodged. Top 10. */
+    readonly busiestDays: readonly { readonly date: string; readonly questions: number }[];
+  };
+  /**
+   * What kind of question gets what kind of reply. Groups, by how the question opens:
+   * "How many or how much", "What or which", "Yes or no (does, has, is, will, did)", "When or on what date",
+   * "Why or how", "Asks for a list of documents or advice", "Other".
+   */
+  readonly byQuestionOpener: readonly Breakdown[];
   /** Same question text sent to several ministers and read differently: the largest such groups. */
   readonly sameQuestionDifferentReading: readonly {
     readonly question: string;

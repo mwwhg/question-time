@@ -1,14 +1,17 @@
 import type { Breakdown, Findings as FindingsData, LabelCounts, PortfolioIndex } from "@contract";
 import { findingsPath, portfolioIndexPath } from "@contract";
+import { useState } from "react";
 import { Link } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
 import { LabelKey } from "../components/label-key.tsx";
 import { RunFacts } from "../components/run-facts.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { TERMS } from "../lib/copy.ts";
+import { CIVICS, TERMS, WHY_NO_BEST_TABLE } from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
 import "./findings.css";
+
+const ASKERS_SHOWN_BY_DEFAULT = 15;
 
 function totalOf(counts: LabelCounts): number {
   return (
@@ -138,6 +141,155 @@ function BreakdownTable({
   );
 }
 
+function AskersTable({ askers }: { readonly askers: FindingsData["civics"]["askers"] }) {
+  const [expanded, setExpanded] = useState(false);
+  const shown = expanded ? askers : askers.slice(0, ASKERS_SHOWN_BY_DEFAULT);
+  return (
+    <>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Member</th>
+              <th scope="col">Questions</th>
+              <th scope="col">Distinct questions</th>
+              <th scope="col">Portfolios asked</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shown.map((asker) => (
+              <tr key={asker.name}>
+                <td>{asker.name}</td>
+                <td className="mono">{formatNumber(asker.questions)}</td>
+                <td className="mono">{formatNumber(asker.distinctQuestions)}</td>
+                <td className="mono">{formatNumber(asker.portfoliosAsked)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {!expanded && askers.length > ASKERS_SHOWN_BY_DEFAULT && (
+        <button type="button" className="button" onClick={() => setExpanded(true)}>
+          {CIVICS.showAllMembers(formatNumber(askers.length))}
+        </button>
+      )}
+    </>
+  );
+}
+
+function PortfolioVolumesTable({
+  portfolioVolumes,
+  browseYear,
+}: {
+  readonly portfolioVolumes: FindingsData["civics"]["portfolioVolumes"];
+  readonly browseYear: number | null;
+}) {
+  return (
+    <div className="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Portfolio</th>
+            <th scope="col">Questions received</th>
+            <th scope="col">Distinct questions</th>
+            <th scope="col">Members who asked</th>
+          </tr>
+        </thead>
+        <tbody>
+          {portfolioVolumes.map((p) => (
+            <tr key={p.slug}>
+              <td>
+                {browseYear === null ? (
+                  p.name
+                ) : (
+                  <Link to={`/browse/${p.slug}/${browseYear}`}>{p.name}</Link>
+                )}
+              </td>
+              <td className="mono">{formatNumber(p.questions)}</td>
+              <td className="mono">{formatNumber(p.distinctQuestions)}</td>
+              <td className="mono">{formatNumber(p.askers)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function CivicsSection({
+  civics,
+  browseYear,
+}: {
+  readonly civics: FindingsData["civics"];
+  readonly browseYear: number | null;
+}) {
+  return (
+    <section className="findings-section">
+      <h2>{CIVICS.sectionHeading}</h2>
+
+      <h3>{CIVICS.askersHeading}</h3>
+      <p style={{ color: "var(--muted)" }}>{CIVICS.askersNote}</p>
+      {civics.askers.length === 0 ? (
+        <EmptyNote>No data yet.</EmptyNote>
+      ) : (
+        <AskersTable askers={civics.askers} />
+      )}
+
+      <h3>{CIVICS.portfolioVolumesHeading}</h3>
+      <p style={{ color: "var(--muted)" }}>{CIVICS.portfolioVolumesNote}</p>
+      {civics.portfolioVolumes.length === 0 ? (
+        <EmptyNote>No data yet.</EmptyNote>
+      ) : (
+        <PortfolioVolumesTable portfolioVolumes={civics.portfolioVolumes} browseYear={browseYear} />
+      )}
+
+      <div className="card">
+        <h3>{WHY_NO_BEST_TABLE.heading}</h3>
+        <p>
+          {(() => {
+            const [before, after] = WHY_NO_BEST_TABLE.body.split("open any portfolio");
+            return (
+              <>
+                {before}
+                <Link to="/browse">open any portfolio</Link>
+                {after}
+              </>
+            );
+          })()}
+        </p>
+      </div>
+
+      <h3>{CIVICS.mostRepeatedHeading}</h3>
+      {civics.mostRepeatedQuestions.length === 0 ? (
+        <EmptyNote>No data yet.</EmptyNote>
+      ) : (
+        <ul>
+          {civics.mostRepeatedQuestions.map((q) => (
+            <li key={`${q.example.year}-${q.example.number}`}>
+              “{q.question}”. Sent to <span className="mono">{formatNumber(q.sentTo)}</span>{" "}
+              ministers.{" "}
+              <Link to={`/q/${q.example.year}/${q.example.number}`}>Read one example</Link>.
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h3>{CIVICS.busiestDaysHeading}</h3>
+      {civics.busiestDays.length === 0 ? (
+        <EmptyNote>No data yet.</EmptyNote>
+      ) : (
+        <ul>
+          {civics.busiestDays.map((d) => (
+            <li key={d.date}>
+              {d.date}: <span className="mono">{formatNumber(d.questions)}</span> questions lodged
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
 export function Findings() {
   useDocumentTitle("What the data shows");
   const findingsState = useJson<FindingsData>(findingsPath);
@@ -176,6 +328,15 @@ export function Findings() {
 
       {findingsState.status === "ok" && (
         <>
+          <CivicsSection
+            civics={findingsState.data.civics}
+            browseYear={
+              indexState.status === "ok"
+                ? (indexState.data.years[indexState.data.years.length - 1] ?? null)
+                : null
+            }
+          />
+
           <section className="findings-section">
             <h2>What the record looks like</h2>
             <p>
@@ -285,6 +446,13 @@ export function Findings() {
             shows={`${TERMS.stockPhrase} This shows how the readings differ when a reply uses one of them.`}
             cannotShow="It cannot show whether the phrase was the right or only reason for that reading."
             rows={findingsState.data.byStockPhrase}
+          />
+
+          <BreakdownTable
+            title={CIVICS.openerHeading}
+            shows={CIVICS.openerShows}
+            cannotShow={CIVICS.openerCannotShow}
+            rows={findingsState.data.byQuestionOpener}
           />
 
           <section className="findings-section">

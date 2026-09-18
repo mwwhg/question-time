@@ -1,5 +1,5 @@
-import type { PortfolioIndex } from "@contract";
-import { portfolioIndexPath } from "@contract";
+import type { Findings, PortfolioIndex } from "@contract";
+import { findingsPath, portfolioIndexPath } from "@contract";
 import { useState } from "react";
 import { Link } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
@@ -13,14 +13,36 @@ import {
   TERMS,
   WHAT_THIS_IS,
   WHAT_THIS_IS_NOT,
+  WHAT_WE_FOUND_SO_FAR_HEADING,
   WORKED_EXAMPLE,
 } from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
+import type { HeadlineCard } from "../lib/headlines.ts";
+import { buildHeadlines } from "../lib/headlines.ts";
 import "./home.css";
+
+function HeadlineCardView({ card }: { readonly card: HeadlineCard }) {
+  return (
+    <li className="card headline-card">
+      <p className="headline-tag">{card.tag}</p>
+      {card.kind === "number" ? (
+        <p className="headline-value mono">{card.value}</p>
+      ) : (
+        <StackedLabelBar counts={card.counts} label="Every reading" />
+      )}
+      <p>{card.sentence}</p>
+      <p style={{ color: "var(--muted)" }}>{card.cannotTell}</p>
+      <p>
+        <Link to={card.linkTo}>{card.linkText}</Link>
+      </p>
+    </li>
+  );
+}
 
 export function Home() {
   useDocumentTitle("Start here");
   const state = useJson<PortfolioIndex>(portfolioIndexPath);
+  const findingsState = useJson<Findings>(findingsPath);
   const [mode, setMode] = useState<"all" | "distinct">("all");
 
   return (
@@ -31,6 +53,17 @@ export function Home() {
           <p key={p.slice(0, 24)}>{p}</p>
         ))}
       </section>
+
+      {state.status === "ok" && findingsState.status === "ok" && (
+        <section className="card headlines">
+          <h2>{WHAT_WE_FOUND_SO_FAR_HEADING}</h2>
+          <ul className="headline-grid">
+            {buildHeadlines(findingsState.data, state.data).map((card) => (
+              <HeadlineCardView key={card.id} card={card} />
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section className="card headline-bar">
         <p className="section-label">Every written question and reply, 2024 and 2025</p>

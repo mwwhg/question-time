@@ -5,7 +5,7 @@ import type { Answers, Judgement } from "../judgement/vocabulary.ts";
 import { probability } from "../judgement/vocabulary.ts";
 import type { Question } from "../question/question.ts";
 import type { BuildInput } from "./build.ts";
-import { aggregate } from "./build.ts";
+import { aggregate, questionOpenerGroup } from "./build.ts";
 
 function question(overrides: Omit<Partial<Question>, "id"> & { id: string }): Question {
   return {
@@ -116,17 +116,19 @@ function fixture(): BuildInput {
   const longReply = `word${" more"} `.repeat(400); // > 1200 chars, forces replyTruncated
   const longReferred = "y".repeat(1300);
 
-  const q1 = question({ id: "2024-1", number: 1, duplicateGroup: "dup-a" }); // answered, confident
+  const q1 = question({ id: "2024-1", number: 1, duplicateGroup: "dup-a", askedBy: "Alice MP" }); // answered, confident
   const q2 = question({
     id: "2024-2",
     number: 2,
     duplicateGroup: "dup-a", // same group as q1, higher number
     text: "What is the number? (duplicate)",
+    askedBy: "Alice MP",
   });
   const q3 = question({
     id: "2024-3",
     number: 3,
     duplicateGroup: "2024-3",
+    askedBy: "Bob MP",
     reply: {
       kind: "attachment-only",
       text: "See attached table.",
@@ -134,12 +136,26 @@ function fixture(): BuildInput {
       attachment: { id: "att1", name: "table.pdf", size: 100 },
     },
   });
-  const q4 = question({ id: "2024-4", number: 4, duplicateGroup: "2024-4" }); // benchmark hold-out
-  const q5 = question({ id: "2024-5", number: 5, duplicateGroup: "2024-5" }); // never judged
+  const q4 = question({
+    id: "2024-4",
+    number: 4,
+    duplicateGroup: "2024-4",
+    askedBy: "Bob MP",
+    dateAsked: "2024-03-16",
+  }); // benchmark hold-out
+  const q5 = question({
+    id: "2024-5",
+    number: 5,
+    duplicateGroup: "2024-5",
+    askedBy: "", // never judged; also exercises the "skip empty askedBy" rule for civics.askers
+    dateAsked: "2024-03-16",
+  });
   const q6 = question({
     id: "2024-6",
     number: 6,
     duplicateGroup: "2024-6",
+    askedBy: "Alice MP",
+    dateAsked: "2024-03-16",
     reply: {
       kind: "referral",
       text: "See reply 1 (2024).",
@@ -151,6 +167,8 @@ function fixture(): BuildInput {
     id: "2024-7",
     number: 7,
     duplicateGroup: "2024-7",
+    askedBy: "Carol MP",
+    dateAsked: "2024-03-17",
     portfolio: "Minister for ACC",
     reply: { kind: "text", text: longReply, corrected: false },
   });
@@ -158,6 +176,8 @@ function fixture(): BuildInput {
     id: "2024-8",
     number: 8,
     duplicateGroup: "2024-8",
+    askedBy: "Carol MP",
+    dateAsked: "2024-03-17",
     portfolio: "Minister of ACC",
   });
   const qAwaiting = question({
@@ -278,4 +298,102 @@ test("aggregate: deterministic — identical input produces byte-identical JSON,
   const a = aggregate(input);
   const b = aggregate(input);
   assert.equal(JSON.stringify(a), JSON.stringify(b));
+});
+
+test("aggregate: civics.askers counts every answered question, skips empty names, orders by questions desc then name", () => {
+  const result = aggregate(fixture());
+  const { askers } = result.findings.civics;
+  assert.deepEqual(
+    askers.map((a) => a.name),
+    ["Alice MP", "Bob MP", "Carol MP"],
+  );
+  const alice = askers.find((a) => a.name === "Alice MP");
+  assert.deepEqual(alice, {
+    name: "Alice MP",
+    questions: 3, // q1, q2, q6
+    distinctQuestions: 2, // dup-a, 2024-6
+    portfoliosAsked: 1, // all three sit in Finance
+  });
+  const carol = askers.find((a) => a.name === "Carol MP");
+  assert.equal(carol?.portfoliosAsked, 2); // "Minister for ACC" and "Minister of ACC" collide to distinct slugs
+  assert.equal(
+    askers.some((a) => a.name === ""),
+    false,
+  );
+});
+
+test("aggregate: civics.portfolioVolumes reuses the portfolio index's slugs, ordered by questions desc then name", () => {
+  const result = aggregate(fixture());
+  const { portfolioVolumes } = result.findings.civics;
+  const portfolioSlugs = result.portfolioIndex.portfolios.map((p) => p.slug).sort();
+  assert.deepEqual(portfolioVolumes.map((p) => p.slug).sort(), portfolioSlugs);
+  assert.equal(portfolioVolumes[0]?.name, "Minister of Finance");
+  assert.equal(portfolioVolumes[0]?.questions, 6); // q1, q2, q3, q4, q5, q6
+  assert.equal(portfolioVolumes[0]?.distinctQuestions, 5);
+  assert.equal(portfolioVolumes[0]?.askers, 2); // Alice, Bob (q5's empty name does not count)
+  assert.deepEqual(
+    portfolioVolumes.slice(1).map((p) => p.name),
+    ["Minister for ACC", "Minister of ACC"], // tied at 1 question each, ordered by name
+  );
+});
+
+test("aggregate: civics.mostRepeatedQuestions ranks duplicate groups by answered-record count", () => {
+  const result = aggregate(fixture());
+  const { mostRepeatedQuestions } = result.findings.civics;
+  assert.equal(mostRepeatedQuestions.length, 7); // 7 distinct duplicateGroups among the 8 answered questions
+  assert.deepEqual(mostRepeatedQuestions[0], {
+    question: "What is the number?",
+    sentTo: 2, // dup-a: q1 and q2
+    example: { year: 2024, number: 1 }, // lowest-numbered member
+  });
+});
+
+test("aggregate: civics.busiestDays counts answered questions by dateAsked, ties broken by date", () => {
+  const result = aggregate(fixture());
+  assert.deepEqual(result.findings.civics.busiestDays, [
+    { date: "2024-03-15", questions: 3 }, // q1, q2, q3
+    { date: "2024-03-16", questions: 3 }, // q4, q5, q6
+    { date: "2024-03-17", questions: 2 }, // q7, q8
+  ]);
+});
+
+test("aggregate: byQuestionOpener classifies only readable records, others fall under model_error/held_for_human_check", () => {
+  const result = aggregate(fixture());
+  const total = result.findings.byQuestionOpener.reduce(
+    (sum, row) =>
+      sum +
+      row.counts.answered +
+      row.counts.partly_answered +
+      row.counts.not_answered +
+      row.counts.unclear +
+      row.counts.noReading,
+    0,
+  );
+  // Readable = has a published reading: q1, q2, q6, q7, q8 (q3/q4/q5 have no reading).
+  assert.equal(total, 5);
+});
+
+test("questionOpenerGroup: classifies the opening words, first match wins", () => {
+  const cases: readonly [string, string][] = [
+    [
+      "What advice did officials give the Minister about the policy?",
+      "Asks for a list of documents or advice",
+    ],
+    [
+      "Please provide a list of all Government vehicles purchased since 2020.",
+      "Asks for a list of documents or advice",
+    ],
+    ["How many people are employed by the Ministry of Health?", "How many or how much"],
+    ["What is the total number of complaints received in 2024?", "How many or how much"],
+    ["When will the Minister release the report?", "When or on what date"],
+    ["Does the Minister support this initiative?", "Yes or no (does, has, is, will, did)"],
+    ["Why has the wait time increased?", "Why or how"],
+    [
+      "In light of recent events, will the Minister commit to a review?",
+      "Other", // opener doesn't match any recognised pattern; see the `ponytail:` comment on the ceiling
+    ],
+  ];
+  for (const [text, expected] of cases) {
+    assert.equal(questionOpenerGroup(text), expected, text);
+  }
 });

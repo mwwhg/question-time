@@ -112,6 +112,37 @@ export const NOT_GOOD_AT = {
     "The company that makes it says one request can carry up to 64,000 tokens of text and that the text sent costs US$0.042 per million tokens. We have not tested the limit ourselves, and the price on this site is worked out from that listed figure, not from an invoice.",
 };
 
+export const JEV_VENDOR_LIMITS_NOTE =
+  "The company that makes Jev says it reads instructions literally, does not count reliably, is unreliable at comparing dates and doing arithmetic, handles double negatives and indirect instructions poorly, gets less accurate as the text it is given fills with detail unrelated to the question, can be swayed by text that argues with it, and does not write text. We have not tested these claims ourselves. This is why code does the counting, the model is sent only the question, the reply and a few computed facts, and each question we ask it is one narrow thing.";
+
+export const HEADLINE_TAG_MODEL = "Model's reading, not yet checked against people";
+export const HEADLINE_TAG_COUNTED = "Counted from the official record";
+
+export const WHAT_WE_FOUND_SO_FAR_HEADING = "What we found so far";
+
+export const CIVICS = {
+  sectionHeading: "Parliament's written questions in numbers",
+  askersHeading: "Who asked the most questions",
+  askersNote:
+    "Asking many questions is a normal part of an opposition MP's job. The same wording sent to 20 ministers counts as 20 questions here, once for each minister who had to reply.",
+  showAllMembers: (n: string) => `Show all ${n} members`,
+  portfolioVolumesHeading: "Which portfolios were asked the most",
+  portfolioVolumesNote:
+    "How many questions a portfolio receives depends on what is in the news and what the portfolio covers, not on how it replies.",
+  mostRepeatedHeading: "The most repeated questions",
+  busiestDaysHeading: "The busiest days",
+  openerHeading: "What kind of question gets what kind of reply",
+  openerShows:
+    "Code sorts each question by how it opens, such as “How many or how much” or “Yes or no”. This shows how the readings differ by the kind of question asked.",
+  openerCannotShow:
+    "A list-of-documents question is harder to answer in full than a yes/no one, so this compares kinds of question, not people.",
+};
+
+export const WHY_NO_BEST_TABLE = {
+  heading: "Why there is no table of who answered best",
+  body: "You might expect a list here of which minister gave the best answers. We have not made one, for three reasons. First, the readings come from a computer model and have not yet been checked against people, so a league table would present unchecked guesses as a verdict on named people. Second, ministers are not sent the same questions. A minister asked for long lists of documents will look different from one asked yes or no questions, whatever they do. Third, a reply that declines can be a proper reply. What you can do instead is open any portfolio, read the questions and replies yourself, and see the kinds of question that tend to get a full reply in the section below.",
+};
+
 export const NOT_CHECKED_YET_NOTE =
   "Until these are done, the site does not claim the readings are accurate. Every number shown is the model's own, and no wording on the site suggests it has been checked. The preview notice stays at the top of every page.";
 

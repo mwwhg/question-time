@@ -2,6 +2,40 @@
   margin: 28px 0;
 }
 
+.headlines {
+  margin: 8px 0 28px;
+  max-width: none;
+}
+
+.headline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.headline-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.headline-tag {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0;
+}
+
+.headline-value {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+}
+
 .toggle-row {
   display: flex;
   gap: 10px;
