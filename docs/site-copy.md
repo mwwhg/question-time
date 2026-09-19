@@ -43,6 +43,7 @@ It is not from Parliament, the Office of the Clerk, any party, or any member.
 - About one reply in four only points to an earlier reply. We fetched the earlier reply and the model read both together.
 - The same question is often sent to many ministers at once. We show counts both ways: every question, and each distinct question once.
 - Long replies are shortened on this site. The link to the official record always has the full text.
+- One pattern we have already seen: when a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.
 
 ## While `checkedAgainstPeople` is false (How we checked, under "What has not been done yet")
 

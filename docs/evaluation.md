@@ -47,6 +47,10 @@ Jev on draw 2: confidences 0.95 to 1.0, mean 1,312 input tokens per pair, latenc
 
 The rules baseline fails the controls by construction. It looks for phrases in the reply and cannot tell whether a reply is about the question.
 
+### Observed on the full run, before any human check
+
+Spot check by the project lead, 2026-09-19, of short replies read as not answered at confidence 0.9 or more. Most were pointers to another source ("I refer the member to the Summary of Initiatives"), which the labelling guide also calls not answered. One debatable class: "I am not responsible for any departments" in reply to a question about "the Minister's departments, if any", and "I did not receive that briefing". A person could reasonably call those answered. This is a candidate confident-miss category for the benchmark, and it is disclosed on the site.
+
 ### Prototype results
 
 Pending the two labellers' sheets.
