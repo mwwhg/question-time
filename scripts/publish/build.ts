@@ -600,12 +600,16 @@ function monthOf(dateAsked: string): string {
   return dateAsked.slice(0, 7);
 }
 
-function allMonths(): string[] {
+// Every month from January 2024 to the last month asked, so a month with no readings still shows.
+export function monthsThrough(lastMonth: string): string[] {
   const months: string[] = [];
-  for (const year of [2024, 2025]) {
-    for (let m = 1; m <= 12; m++) months.push(`${year}-${String(m).padStart(2, "0")}`);
+  for (let year = 2024; ; year++) {
+    for (let m = 1; m <= 12; m++) {
+      const month = `${year}-${String(m).padStart(2, "0")}`;
+      if (month > lastMonth) return months;
+      months.push(month);
+    }
   }
-  return months;
 }
 
 function breakdownOver(
@@ -950,7 +954,11 @@ function buildFindings(
       })),
     ),
     byMonth: breakdownOver(
-      allMonths(),
+      monthsThrough(
+        readable
+          .reduce((last, r) => (r.detail.dateAsked > last ? r.detail.dateAsked : last), "")
+          .slice(0, 7),
+      ),
       readable.map((r) => ({ group: monthOf(r.detail.dateAsked), label: r.label })),
     ),
     byFanOut: breakdownOver(

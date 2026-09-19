@@ -370,8 +370,8 @@ export function Findings() {
           <section id="corpus" tabIndex={-1} className="findings-section">
             <h2>What the record looks like</h2>
             <p>
-              This is the shape of the whole 2024 and 2025 written-question record, counted by
-              ordinary code before the model read anything.
+              This is the shape of the whole written-question record from 2024 to 18 September 2026,
+              counted by ordinary code before the model read anything.
             </p>
             <p style={{ color: "var(--muted)" }}>
               It cannot show whether any reading of it is correct.
@@ -379,7 +379,7 @@ export function Findings() {
             <ul className="corpus-facts">
               <li>
                 <span className="mono">{formatNumber(findingsState.data.corpus.records)}</span>{" "}
-                written questions were recorded in 2024 and 2025
+                written questions were recorded from 2024 to 18 September 2026
               </li>
               <li>
                 <span className="mono">{formatNumber(findingsState.data.corpus.answered)}</span> of

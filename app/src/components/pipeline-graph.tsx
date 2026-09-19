@@ -52,7 +52,7 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "source",
     title: "The official record",
-    body: "Parliament publishes every written question and its reply. We copied the 141,686 from 2024 and 2025 once, unchanged, and kept a note of when and from where.",
+    body: "Parliament publishes every written question and its reply. We copied the 182,961 from 2024, 2025 and 2026 up to 18 September once, unchanged, and kept a note of when and from where.",
   },
   {
     kind: "code",

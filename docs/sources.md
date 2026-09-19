@@ -17,16 +17,16 @@ Not covered by that licence: MP photographs, party content, official emblems. We
 **API. FACT, 2026-09-18. Undocumented, so it may change.**
 
 - `POST https://questions.parliament.nz/api/data/search` with a JSON body:
-  `searchTab:0, keyword, status, questionNumber, questionNumberYear ("2024", a string), members[], ministers[], portfolios[], parliament, dateFrom, dateTo, datePeriod, restrictedFrom, restrictedTo, column:1, direction:0|1, pageSize, page`.
+  `searchTab:0, keyword, status, questionNumber, questionNumberYear ("2024", a string), members[], ministers[], portfolios[], parliament, dateFrom, dateTo, datePeriod, restrictedFrom, restrictedTo, column:0|1|2, direction:0|1, pageSize, page`. FACT, 2026-09-19: column 0 sorts by question number, 1 by date asked, 2 by something else; 3 and 4 return HTTP 500. Column 1 breaks ties differently on each request, so paging over it can repeat some records and drop others. We page over column 0. The 2024 and 2025 pages were fetched over column 1 and checked afterwards: every question number appears exactly once.
 - Response: `pageSize, page, "@odata.count", value[]`. `pageSize` is silently capped at 1000. About 1.1 MB and 300 ms per full page.
 - Record fields: `id, writtenQuestionsDocumentId, parliamentNumber, documentType, title, statusId, questionNumber, questionYear, questionText, questionReleasedDate, memberId, roleId, portfolioId_PortfolioMinister, replyText, ministerName, ministerialDisplayName, attachmentId, attachmentName, attachmentSize, lastModified`.
 - `statusId`: 1 awaiting reply (`replyText` is "Reply due: ..."), 2 answered, 3 withdrawn (`replyText` is "Question withdrawn").
 - Reply text is inline. Attachments are PDFs referenced by id. We do not read them.
 - There is no reply date. `lastModified` is a re-index time. The asking member's name appears only inside `title`.
 - `GET /api/data/searchFilters` lists parliaments, years, members, ministers and portfolios.
-- Counts: 2024 has 82,423 records and 2025 has 59,263. Total 141,686. The brief's estimate was about 60,000.
+- Counts: 2024 has 82,423 records, 2025 has 59,263 and 2026 has 41,275 up to 18 September. Total 182,961. The brief's estimate was about 60,000.
 
-**Fetch policy.** About 142 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched.
+**Fetch policy.** About 185 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched. FACT, 2026-09-19: 2026 was fetched part-way through the year (41,275 records in 42 pages, 1,859 still awaiting a reply), so it is a snapshot as at its `retrievedAt`. Pages already on disk are never re-fetched, so a later re-run does not pick up replies that arrive after that; refreshing 2026 means fetching the whole year again under a new decision.
 
 ## Party membership, www3.parliament.nz member pages
 
@@ -71,21 +71,21 @@ The installed `cloudflare` and `wrangler` skills prescribe Workers with static a
 
 **FACT, 2026-09-19.** `wrangler 4.134.0` deployed one static file on the free plan, with no Worker script and no bindings, to https://did-they-answer.matt-bdf.workers.dev. `/`, `/q/2024/1` and `/method` all return 200 `text/html`, so the SPA fallback works.
 
-## What the 2024 and 2025 data looks like
+## What the 2024 to 2026 data looks like
 
 **FACT, `npm run normalise`, 2026-09-19.**
 
 | Measure | Count |
 |---|---|
-| Records | 141,686 |
-| Answered / awaiting / withdrawn | 140,085 / 31 / 1,570 |
-| Reply is plain text | 100,543 |
-| Reply only refers to an earlier reply | 37,178 (37,105 resolved, 73 not) |
-| Reply is only a pointer to an attached PDF, which we do not read | 2,364 |
-| Replies marked "Corrected reply:" | 445 |
-| Distinct question texts | 47,961 |
-| Reply length, median / 95th percentile | 101 / 611 characters |
+| Records | 182,961 |
+| Answered / awaiting / withdrawn | 179,225 / 1,890 / 1,846 |
+| Reply is plain text | 127,831 |
+| Reply only refers to an earlier reply | 48,090 (48,017 resolved, 73 not) |
+| Reply is only a pointer to an attached PDF, which we do not read | 3,304 |
+| Replies marked "Corrected reply:" | 602 |
+| Distinct question texts | 65,451 |
+| Reply length, median / 95th percentile | 105 / 638 characters |
 
-Two things shape every number on the site. About a quarter of replies only refer to an earlier reply, so the earlier text is resolved and judged against the new question. And the same question text is often sent to many ministers: 141,686 records hold only 47,961 distinct questions, so aggregates are reported both ways.
+Two things shape every number on the site. About a quarter of replies only refer to an earlier reply, so the earlier text is resolved and judged against the new question. And the same question text is often sent to many ministers: 182,961 records hold only 65,451 distinct questions, so aggregates are reported both ways.
 
 Unresolved referrals mostly point to 2023 questions, outside the fetched range. Other source quirks handled in `normalise`: `memberId` and `portfolioId_PortfolioMinister` are sometimes null; question text contains hard line breaks; referral wording varies ("reply number N (YYYY)", "WPQ N", "Written Parliamentary Question N", "question for written answer N"); "Oral Question No. N" is a different numbering scheme and is not followed. The per-question page is `https://questions.parliament.nz/written-questions/question/{writtenQuestionsDocumentId}`.
