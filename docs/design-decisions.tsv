@@ -1,0 +1,10 @@
+ts	phase	decision	why	evidence	result
+2026-09-19	baseline	Split implementation into separate copy, method and accessibility chunks	Small verified units allow resuming after usage stops	docs/implementation-plan.md	plan saved
+2026-09-19	baseline	Preserve new findings cards and real correction contact	The project advanced since the review	app/src/routes/home.tsx; app/src/lib/copy.ts	baseline inspected
+2026-09-19	baseline	Run required checks before integrating changes	A known green baseline separates regressions from existing faults	package.json	lint, typechecks, secrets check and 68 tests passed
+2026-09-19	integration	Keep the published contract and explain unavailable readings honestly	The current model_error value includes missing judgements and cannot distinguish unfinished work from request failure	scripts/publish/build.ts:216	copy correction selected; no pipeline change
+2026-09-19	integration	Describe headline cost as an estimate for the actual assessed pair count	Cost and complete-record claims must remain accurate while data changes	app/src/lib/headlines.ts	scoped Biome check passed
+2026-09-19	tracking	Create Linear project with BOU-156 to BOU-159 under team Boundfor	Linear is the source of truth and had no entry for this repo	https://linear.app/boundforco/project/did-they-answer-civic-explainer-5a1d76f4fa6e	created with user authorization
+2026-09-19	verification	Suppress the focus ring on whole-section hash targets with one CSS rule instead of moving 16 ids onto headings	Smallest change that removes a ring around thousands of pixels; headings and controls keep theirs	app/src/styles/global.css	retested: outline-style none on section, solid on h1
+2026-09-19	verification	Scroll to top at navigation time and ignore scroll events after history moves	Settle-time scrollTo pulled readers back; unmount clamp overwrote the saved position	app/src/components/route-navigation.tsx	retested: 1757 -> 0 -> back 1757
+2026-09-19	verification	Leave populated role=status regions and hand them to the screen-reader pass	Whether entry announcements are a problem cannot be judged without assistive technology	BOU-158	deferred, not claimed
