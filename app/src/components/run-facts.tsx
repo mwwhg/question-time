@@ -12,8 +12,7 @@ function formatDuration(ms: number): string {
 
 /** The full Jev run in plain numbers. Every figure comes from the run's own records, not from an estimate. */
 export function RunFacts({ run }: { readonly run: RunFactsData }) {
-  const wallMs = Date.parse(run.lastJudgementAt) - Date.parse(run.firstJudgementAt);
-  const perSecond = wallMs > 0 ? run.pairsJudged / (wallMs / 1000) : 0;
+  const perSecond = run.activeSeconds > 0 ? run.pairsJudged / run.activeSeconds : 0;
   const costPerThousand = run.pairsJudged > 0 ? (run.estimatedCostUsd / run.pairsJudged) * 1000 : 0;
 
   return (
@@ -26,9 +25,18 @@ export function RunFacts({ run }: { readonly run: RunFactsData }) {
         readings in all.
       </li>
       <li>
-        Time from the first reading to the last:{" "}
-        <span className="mono">{formatDuration(wallMs)}</span>, on one laptop, about{" "}
-        <span className="mono">{perSecond.toFixed(0)}</span> pairs a second.
+        Time spent reading: <span className="mono">{formatDuration(run.activeSeconds * 1000)}</span>
+        , on one laptop, about <span className="mono">{perSecond.toFixed(0)}</span> pairs a second.
+        {run.pauses > 0 && (
+          <>
+            {" "}
+            The run stopped and restarted <span className="mono">{run.pauses}</span>{" "}
+            {run.pauses === 1 ? "time" : "times"}, for{" "}
+            <span className="mono">{formatDuration(run.pausedSeconds * 1000)}</span> in all. The
+            longest stop was when the account ran out of credit partway through. Nothing was lost:
+            the run picked up where it left off.
+          </>
+        )}
       </li>
       <li>
         Time for one pair: median <span className="mono">{formatNumber(run.latencyMsP50)} ms</span>,

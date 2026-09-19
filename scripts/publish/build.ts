@@ -436,6 +436,33 @@ function buildBrowseShards(records: readonly Rec[]): BrowseShard[] {
 
 // ----- portfolio index -----------------------------------------------------------------------
 
+const PAUSE_THRESHOLD_MS = 60_000;
+
+/** Splits elapsed time into working time and pauses. A run that was stopped and resumed has a long gap that is not reading time. */
+export function activeAndPaused(sortedMs: readonly number[]): {
+  activeSeconds: number;
+  pauses: number;
+  pausedSeconds: number;
+} {
+  let active = 0;
+  let paused = 0;
+  let pauses = 0;
+  for (let i = 1; i < sortedMs.length; i++) {
+    const gap = (sortedMs[i] ?? 0) - (sortedMs[i - 1] ?? 0);
+    if (gap > PAUSE_THRESHOLD_MS) {
+      paused += gap;
+      pauses++;
+    } else {
+      active += gap;
+    }
+  }
+  return {
+    activeSeconds: Math.round(active / 1000),
+    pauses,
+    pausedSeconds: Math.round(paused / 1000),
+  };
+}
+
 function buildRunFacts(runHeader: Run, judgements: readonly Judgement[]): RunFacts {
   const judged = judgements.filter((j): j is JudgedRecord => j.kind === "judged");
   const failed = judgements.filter((j) => j.kind === "failed");
@@ -443,6 +470,7 @@ function buildRunFacts(runHeader: Run, judgements: readonly Judgement[]): RunFac
   const outputTokens = judged.reduce((s, j) => s + j.usage.outputTokens, 0);
   const latencies = judged.map((j) => j.usage.latencyMs).sort((a, b) => a - b);
   const timestamps = judged.map((j) => j.at).sort();
+  const timing = activeAndPaused(timestamps.map((t) => Date.parse(t)));
 
   return {
     model: runHeader.methodVersion,
@@ -458,6 +486,9 @@ function buildRunFacts(runHeader: Run, judgements: readonly Judgement[]): RunFac
     estimatedCostUsd: round2((inputTokens / 1e6) * USD_PER_MILLION_INPUT_TOKENS),
     latencyMsP50: percentile(latencies, 0.5),
     latencyMsP95: percentile(latencies, 0.95),
+    activeSeconds: timing.activeSeconds,
+    pauses: timing.pauses,
+    pausedSeconds: timing.pausedSeconds,
     firstJudgementAt: timestamps[0] ?? "",
     lastJudgementAt: timestamps[timestamps.length - 1] ?? "",
   };

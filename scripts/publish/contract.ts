@@ -119,6 +119,11 @@ export type RunFacts = {
   readonly estimatedCostUsd: number;
   readonly latencyMsP50: number;
   readonly latencyMsP95: number;
+  /** Time the run was actually reading: the sum of gaps between consecutive readings, leaving out any gap over a minute. */
+  readonly activeSeconds: number;
+  /** Gaps over a minute, such as a stop and restart. Reported so the elapsed time is not mistaken for working time. */
+  readonly pauses: number;
+  readonly pausedSeconds: number;
   readonly firstJudgementAt: string;
   readonly lastJudgementAt: string;
 };

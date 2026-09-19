@@ -5,7 +5,7 @@ import type { Answers, Judgement } from "../judgement/vocabulary.ts";
 import { probability } from "../judgement/vocabulary.ts";
 import type { Question } from "../question/question.ts";
 import type { BuildInput } from "./build.ts";
-import { aggregate, questionOpenerGroup } from "./build.ts";
+import { activeAndPaused, aggregate, questionOpenerGroup } from "./build.ts";
 
 function question(overrides: Omit<Partial<Question>, "id"> & { id: string }): Question {
   return {
@@ -396,4 +396,12 @@ test("questionOpenerGroup: classifies the opening words, first match wins", () =
   for (const [text, expected] of cases) {
     assert.equal(questionOpenerGroup(text), expected, text);
   }
+});
+
+test("activeAndPaused: gaps over a minute count as pauses, not reading time", () => {
+  assert.deepEqual(activeAndPaused([0, 10_000, 20_000, 3_620_000, 3_630_000]), {
+    activeSeconds: 30,
+    pauses: 1,
+    pausedSeconds: 3600,
+  });
 });
