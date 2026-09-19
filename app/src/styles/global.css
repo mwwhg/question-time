@@ -449,6 +449,11 @@ td.mono {
   max-width: 100%;
 }
 
+/* On a phone, auto layout crushes text columns to one word a line before the wrapper ever scrolls. */
+.table-scroll table {
+  min-width: 36rem;
+}
+
 /* Controls */
 
 fieldset.control-group,
