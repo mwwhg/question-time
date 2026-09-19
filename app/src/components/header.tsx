@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { PILL_TEXT } from "../lib/copy.ts";
 import "./header.css";
 
@@ -13,9 +13,9 @@ export function Header() {
   return (
     <header className="site-header on-dark">
       <div className="wrap site-header-inner">
-        <a href="/" className="site-name">
+        <Link to="/" className="site-name">
           Did they answer<span className="site-name-mark">?</span>
-        </a>
+        </Link>
         <nav aria-label="Main">
           <ul className="nav-list">
             {NAV_ITEMS.map((item) => (
