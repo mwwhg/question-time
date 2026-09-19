@@ -81,7 +81,7 @@ function BreakdownTable({
   readonly rows: readonly Breakdown[];
 }) {
   return (
-    <section id={id} tabIndex={-1} className="findings-section">
+    <section id={id} tabIndex={-1} className="card findings-section">
       <h2>{title}</h2>
       <p>{shows}</p>
       {rows[0] !== undefined && totalOf(rows[0].counts) > 0 && (
@@ -236,7 +236,7 @@ function CivicsSection({
   readonly browseYear: number | null;
 }) {
   return (
-    <section id="civic-record" tabIndex={-1} className="findings-section">
+    <section id="civic-record" tabIndex={-1} className="card findings-section">
       <h2>{CIVICS.sectionHeading}</h2>
       <p>
         These counts describe who asked questions and where they sent them. They come from the
@@ -349,7 +349,7 @@ export function Findings() {
           </>
         }
       >
-        <section id="run" tabIndex={-1} className="findings-section">
+        <section id="run" tabIndex={-1} className="card findings-section">
           <h2>Time and estimated model cost</h2>
           <p>
             These are the recorded time and usage for pairs processed in this run. Asking the same
@@ -378,7 +378,7 @@ export function Findings() {
               }
             />
 
-            <section id="corpus" tabIndex={-1} className="findings-section">
+            <section id="corpus" tabIndex={-1} className="card findings-section">
               <h2>What the record looks like</h2>
               <p>
                 This is the shape of the whole written-question record from 2024 to 18 September
@@ -501,7 +501,7 @@ export function Findings() {
               rows={findingsState.data.byQuestionOpener}
             />
 
-            <section id="confidence" tabIndex={-1} className="findings-section">
+            <section id="confidence" tabIndex={-1} className="card findings-section">
               <h2>How firmly the model settled on its answer</h2>
               <p>
                 {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0 at
@@ -552,7 +552,7 @@ export function Findings() {
               )}
             </section>
 
-            <section id="secondary" tabIndex={-1} className="findings-section">
+            <section id="secondary" tabIndex={-1} className="card findings-section">
               <h2>Other assessment questions</h2>
               <p>
                 Besides “does the reply give the information asked for”, the model was asked four
@@ -578,7 +578,7 @@ export function Findings() {
               </div>
             </section>
 
-            <section id="cross-checks" tabIndex={-1} className="findings-section">
+            <section id="cross-checks" tabIndex={-1} className="card findings-section">
               <h2>Do the five readings agree with each other?</h2>
               <p>
                 Each line below takes a group of replies and asks what a second reading said about
@@ -606,7 +606,7 @@ export function Findings() {
               )}
             </section>
 
-            <section id="same-question" tabIndex={-1} className="findings-section">
+            <section id="same-question" tabIndex={-1} className="card findings-section">
               <h2>Same question, different reading</h2>
               <p>
                 When one question goes to many ministers, the replies differ, and so do the

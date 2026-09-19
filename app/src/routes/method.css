@@ -1,20 +1,3 @@
-.method-main > section {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  padding: var(--card-padding) 24px;
-}
-
-.method-main > section.cream-section {
-  background: var(--cream);
-  border-color: var(--cream-line);
-  --muted: var(--cream-muted);
-}
-
-.method-main > section > :last-child {
-  margin-bottom: 0;
-}
-
 .method-main > section > p,
 .method-main li {
   max-width: 70ch;
@@ -77,8 +60,4 @@
 
 #checks th[scope="row"] {
   font-weight: 400;
-}
-
-#checks tbody tr:nth-child(odd) {
-  background: var(--ground);
 }
