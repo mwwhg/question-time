@@ -1,8 +1,6 @@
 .pipeline {
-  margin: 24px 0 8px;
-  /* The graph needs more room than the 70ch prose column, so it runs wider than its parent. */
-  width: min(980px, calc(100vw - 2 * var(--gutter)));
-  max-width: none;
+  margin: 0 0 28px;
+  max-width: 980px;
 }
 
 .pipeline-svg {
@@ -47,7 +45,7 @@
 }
 
 .pipeline-node-model {
-  fill: var(--partly-tint);
+  fill: var(--model-bg);
   stroke: var(--partly);
   stroke-width: 1.5;
 }
@@ -127,7 +125,7 @@
 
 .pipeline-step-model {
   border-left-color: var(--partly);
-  background: var(--partly-tint);
+  background: var(--model-bg);
 }
 
 .pipeline-step-people {
@@ -159,7 +157,7 @@
   color: var(--body-dark);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   /* Node text would be unreadably small on a phone; the numbered steps carry the same content. */
   .pipeline-svg,
   .pipeline-caption {

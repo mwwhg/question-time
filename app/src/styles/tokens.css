@@ -1,37 +1,83 @@
 :root {
-  --ground: #f4f1ea;
-  --surface: #fbfaf6;
-  --line: #d9d3c6;
-  --line-faint: #ece8df;
-  --ink: #1b1a17;
-  --body-dark: #3a3733;
-  --muted: #5c5850;
-  --disabled: #b8b1a2;
+  --ground: #edf1ea;
+  --surface: #fcfbf7;
+  --line: #d3dacf;
+  --line-faint: #e8e1d4;
+  --ink: #1e2420;
+  --body-dark: #3b433d;
+  --muted: #5f675f;
+  --disabled: #a9b0a8;
 
-  --answered: #2e6b4f;
-  --partly: #b99a3a;
-  --partly-text: #5e4a12;
-  --partly-tint: #f1e7cb;
-  --not-answered: #b5482a;
-  --not-answered-text: #8e3620;
+  --answered: #2f6b45;
+  --answered-tint: #dbe8df;
+  --partly: #a8791e;
+  --partly-text: #6b4c0e;
+  --partly-tint: #f2e6c6;
+  --not-answered: #b23a2e;
+  --not-answered-text: #8a2a20;
   --not-answered-tint: #f6e3db;
-  --unclear: #b8b1a2;
-  --source: #2a6f6b;
-  --source-text: #1f5f5b;
-  --source-tint: #dce9e8;
-  --track: #e9e5da;
+  --unclear: #a9b0a8;
+  --track: #e8dcc0;
 
+  /* Two channels that never mix: teal holds text copied from the official record,
+     gold holds anything the model produced. */
+  --source: #1f6e7a;
+  --source-text: #17414b;
+  --source-tint: #e4eff0;
+  --source-line: #b9d3d8;
+  --model-bg: #f6eeda;
+  --model-line: #dccfb3;
+
+  --cream: #f1e9d8;
+  --cream-line: #e2d6bc;
+  --cream-muted: #6b5e3f;
+
+  --chrome: #1b3a2a;
+  --banner: #24493a;
+  --chrome-line: #3a6a52;
+  --on-dark: #fbf8f2;
+  --on-dark-body: #d9e4db;
+  --on-dark-muted: #b9cbbf;
+  --accent: #e0b34a;
+  --rule: #e6d9be;
+  --hill: #6e7b76;
+
+  --footer: #17414b;
+  --footer-text: #b9d3d8;
+  --footer-link: #e4f0f2;
+
+  --radius-chip: 4px;
   --radius-control: 6px;
-  --radius-card: 8px;
+  --radius-card: 10px;
   --radius-pill: 999px;
 
   --header-height: 64px;
+  --page-max: 1360px;
   --gutter: 40px;
   --card-padding: 22px;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* Inside dark chrome the reading colours switch to a lighter set so bars and swatches
+   keep their contrast. Components read the same token names and need no dark variant. */
+.on-dark {
+  --answered: #6fb08a;
+  --partly: #e0b34a;
+  --not-answered: #e06a5c;
+  --unclear: #8c948b;
+  --track: #3a6a52;
+  --ink: var(--on-dark);
+  --body-dark: var(--on-dark-body);
+  --muted: var(--on-dark-muted);
+  --line: var(--chrome-line);
+  --line-faint: var(--chrome-line);
+  --surface: var(--chrome);
+  --source: var(--accent);
+  --source-text: var(--on-dark);
+  color: var(--on-dark-body);
 }
 
 @media (max-width: 640px) {

@@ -25,11 +25,7 @@ export function StackedLabelBar({
     counts.unclear +
     counts.noReading;
   if (total === 0) {
-    return (
-      <p className="mono" style={{ color: "var(--muted)" }}>
-        No data yet.
-      </p>
-    );
+    return <p className="mono muted">No data yet.</p>;
   }
   const segments = [
     ...SEGMENTS.map((s) => ({ ...s, count: counts[s.key] })),

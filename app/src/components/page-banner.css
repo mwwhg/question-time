@@ -1,0 +1,30 @@
+.page-banner {
+  background: var(--banner);
+  border-bottom: 6px solid var(--rule);
+  padding: 32px 0 28px;
+}
+
+.page-banner h1 {
+  color: var(--on-dark);
+}
+
+/* :where keeps this at element specificity, so .banner-back and .question-header can override it. */
+:where(.page-banner) p {
+  margin: 0 0 8px;
+  max-width: 880px;
+  font-size: 16px;
+}
+
+.page-banner :last-child {
+  margin-bottom: 0;
+}
+
+.page-banner .banner-meta {
+  font-size: 13px;
+  color: var(--on-dark-muted);
+}
+
+.banner-back {
+  font-weight: 500;
+  font-size: 14px;
+}
