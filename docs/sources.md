@@ -28,6 +28,18 @@ Not covered by that licence: MP photographs, party content, official emblems. We
 
 **Fetch policy.** About 142 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched.
 
+## Party membership, www3.parliament.nz member pages
+
+**Source. FACT, read 2026-09-19.** `/en/mps-and-electorates/members-of-parliament/` lists 122 current members with today's party only. Each member's own page has a table of `Member for / List, Party, Start, End` with dd/mm/yyyy dates. `/en/mps-and-electorates/former-members-of-parliament/` gives former members as "Party, start - end; Party, start - end".
+
+**Why dated rows.** Today's party is wrong for past questions. FACT, 2026-09-19: Mariameno Kapa-Kingi is listed as "Independent - not party affiliated" but sat with Te Pāti Māori for every question she asks in our data; Darleen Tana moved from Green Party to Independent on 6 July 2024, partway through hers.
+
+**What we keep.** `data/labels/party-membership.tsv`: one row per unbroken spell in one party, for the 57 askers and 31 ministers in our data, keyed by the name exactly as the questions API gives it. Party names are spelled as the member pages spell them. Consecutive rows that differ only by electorate are merged. Read once by hand in a browser at one page per second; there is no fetcher, and the table is corrected by hand when a member changes party.
+
+**Licence.** The copyright page excludes "party content" from CC BY 4.0. We read that as material the parties wrote. Which party a member sat with on a date is a fact of the public record, and we copy no text beyond the party's name. HYPOTHESIS, not legal advice. Party logos are the parties' trademarks and are not used without each party's written permission.
+
+**Contempt.** A party label beside a model reading invites "party X does not answer". The site therefore labels individual questions and the askers count only, and never totals, scores or ranks readings by party.
+
 ## Jev, TypeSafe AI
 
 The installed skill (`typesafe:typesafe-ai` 0.5.7) defers to the live docs at docs.typesafe.ai. Where the project brief and the docs disagree, we follow the docs.
