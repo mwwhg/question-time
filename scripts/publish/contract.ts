@@ -164,7 +164,7 @@ export type Findings = {
   readonly byReplyLength: readonly Breakdown[];
   /** Groups: "1", "2", "3 or more". */
   readonly byQuestionParts: readonly Breakdown[];
-  /** Groups: "2024-01" ... "2025-12", by date asked. */
+  /** Groups: "2024-01" to the last month asked, by date asked. */
   readonly byMonth: readonly Breakdown[];
   /** Groups: "sent to 1 minister", "2 to 9", "10 or more". */
   readonly byFanOut: readonly Breakdown[];
