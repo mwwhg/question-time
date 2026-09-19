@@ -64,6 +64,20 @@ const benchmarkIds = drawBenchmark(
   benchmarkSeed,
   gate3.map((g) => g.id),
 );
+// The other 270 get their own pair of blind sheets, so the 30 Gate 3 sheets are never rewritten.
+const gate3Ids = new Set(gate3.map((g) => g.id));
+const restRows = shuffledRows(
+  benchmarkIds.filter((id) => !gate3Ids.has(id)).map((id) => ({ id })),
+  byId,
+  benchmarkSeed,
+);
+const restCsv = `${[HEADER, ...restRows].map(csvRow).join("\n")}\n`;
+for (const labeller of ["a", "b"]) {
+  const path = `data/labels/benchmark-labeller-${labeller}.csv`;
+  refuseIfLabelled(path);
+  writeFileSync(path, restCsv);
+}
+
 writeFileSync(
   "data/labels/benchmark-sample.json",
   `${JSON.stringify({ seed: benchmarkSeed, ids: benchmarkIds }, null, 2)}\n`,
