@@ -26,7 +26,7 @@ Not covered by that licence: MP photographs, party content, official emblems. We
 - `GET /api/data/searchFilters` lists parliaments, years, members, ministers and portfolios.
 - Counts: 2024 has 82,423 records and 2025 has 59,263. Total 141,686. The brief's estimate was about 60,000.
 
-**Fetch policy.** About 142 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched.
+**Fetch policy.** About 142 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched. FACT, 2026-09-19: 2026 was fetched part-way through the year (41,275 records in 42 pages, 1,859 still awaiting a reply), so it is a snapshot as at its `retrievedAt`. Page order is not stable as questions are added, so a later re-run cannot top the year up; refreshing 2026 means fetching the whole year again under a new decision.
 
 ## Party membership, www3.parliament.nz member pages
 
