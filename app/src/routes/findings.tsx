@@ -6,6 +6,7 @@ import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx"
 import { LabelKey } from "../components/label-key.tsx";
 import { PageBanner } from "../components/page-banner.tsx";
 import { RunFacts } from "../components/run-facts.tsx";
+import { TwoPane } from "../components/two-pane.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import { CIVICS, TERMS, WHY_NO_BEST_TABLE } from "../lib/copy.ts";
@@ -325,9 +326,9 @@ export function Findings() {
           <Link to="/browse">Browse the results</Link> and pick one.
         </p>
       </PageBanner>
-      <div className="two-pane">
-        <aside className="pane-side">
-          <div className="pane-side-inner">
+      <TwoPane
+        side={
+          <>
             <nav className="contents-nav findings-contents" aria-label="On this page">
               <a href="#run">Time and estimated cost</a>
               {findingsState.status === "ok" && (
@@ -345,306 +346,300 @@ export function Findings() {
             <div className="card">
               <LabelKey />
             </div>
-          </div>
-        </aside>
-        <div className="pane-main">
-          <section id="run" tabIndex={-1} className="findings-section">
-            <h2>Time and estimated model cost</h2>
-            <p>
-              These are the recorded time and usage for pairs processed in this run. Asking the same
-              questions repeatedly makes large-scale comparison possible. This does not mean every
-              record has a published reading.
-            </p>
-            <p className="muted">
-              It cannot show whether that cost is worth it. That is a judgement call. {TERMS.token}
-            </p>
-            {indexState.status === "loading" && <LoadingNote />}
-            {indexState.status === "error" && <ErrorNote />}
-            {indexState.status === "ok" && <RunFacts run={indexState.data.run} />}
-          </section>
+          </>
+        }
+      >
+        <section id="run" tabIndex={-1} className="findings-section">
+          <h2>Time and estimated model cost</h2>
+          <p>
+            These are the recorded time and usage for pairs processed in this run. Asking the same
+            questions repeatedly makes large-scale comparison possible. This does not mean every
+            record has a published reading.
+          </p>
+          <p className="muted">
+            It cannot show whether that cost is worth it. That is a judgement call. {TERMS.token}
+          </p>
+          {indexState.status === "loading" && <LoadingNote />}
+          {indexState.status === "error" && <ErrorNote />}
+          {indexState.status === "ok" && <RunFacts run={indexState.data.run} />}
+        </section>
 
-          {findingsState.status === "loading" && <LoadingNote />}
-          {findingsState.status === "error" && <ErrorNote />}
+        {findingsState.status === "loading" && <LoadingNote />}
+        {findingsState.status === "error" && <ErrorNote />}
 
-          {findingsState.status === "ok" && (
-            <>
-              <CivicsSection
-                civics={findingsState.data.civics}
-                browseYear={
-                  indexState.status === "ok"
-                    ? (indexState.data.years[indexState.data.years.length - 1] ?? null)
-                    : null
-                }
-              />
+        {findingsState.status === "ok" && (
+          <>
+            <CivicsSection
+              civics={findingsState.data.civics}
+              browseYear={
+                indexState.status === "ok"
+                  ? (indexState.data.years[indexState.data.years.length - 1] ?? null)
+                  : null
+              }
+            />
 
-              <section id="corpus" tabIndex={-1} className="findings-section">
-                <h2>What the record looks like</h2>
-                <p>
-                  This is the shape of the whole written-question record from 2024 to 18 September
-                  2026, counted by ordinary code before the model read anything.
-                </p>
-                <p className="muted">It cannot show whether any reading of it is correct.</p>
-                <ul className="corpus-facts">
-                  <li>
-                    <span className="mono">{formatNumber(findingsState.data.corpus.records)}</span>{" "}
-                    written questions were recorded from 2024 to 18 September 2026
-                  </li>
-                  <li>
-                    <span className="mono">{formatNumber(findingsState.data.corpus.answered)}</span>{" "}
-                    of them had a reply by the time we copied the record,{" "}
-                    <span className="mono">{formatNumber(findingsState.data.corpus.awaiting)}</span>{" "}
-                    were still waiting for one, and{" "}
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.withdrawn)}
-                    </span>{" "}
-                    were taken back by the MP who asked
-                  </li>
-                  <li>
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.distinctQuestionTexts)}
-                    </span>{" "}
-                    of those are different wordings. The same question is often sent to many
-                    ministers on the same day, so the number of different questions is much smaller
-                    than the number of questions
-                  </li>
-                  <li>
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.referralReplies)}
-                    </span>{" "}
-                    replies do not answer in their own words. They point at a reply the minister
-                    gave earlier, so code fetches that earlier reply and gives the model both. Of
-                    those,{" "}
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.referralsUnresolved)}
-                    </span>{" "}
-                    could not be found, mostly because they point back to 2023
-                  </li>
-                  <li>
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.attachmentOnlyReplies)}
-                    </span>{" "}
-                    replies say the answer is in an attached file. We did not open the files, so
-                    those questions show no reading
-                  </li>
-                  <li>
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.correctedReplies)}
-                    </span>{" "}
-                    replies were sent again as a correction by the minister
-                  </li>
-                  <li>
-                    Reply length, counted in characters. The middle reply is{" "}
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.replyCharsMedian)}
-                    </span>{" "}
-                    characters long, and{" "}
-                    <span className="mono">
-                      {formatNumber(findingsState.data.corpus.replyCharsP95)}
-                    </span>{" "}
-                    characters is the length that 95 in 100 replies stay under. Most replies are
-                    short: one or two sentences
-                  </li>
-                </ul>
-              </section>
+            <section id="corpus" tabIndex={-1} className="findings-section">
+              <h2>What the record looks like</h2>
+              <p>
+                This is the shape of the whole written-question record from 2024 to 18 September
+                2026, counted by ordinary code before the model read anything.
+              </p>
+              <p className="muted">It cannot show whether any reading of it is correct.</p>
+              <ul className="corpus-facts">
+                <li>
+                  <span className="mono">{formatNumber(findingsState.data.corpus.records)}</span>{" "}
+                  written questions were recorded from 2024 to 18 September 2026
+                </li>
+                <li>
+                  <span className="mono">{formatNumber(findingsState.data.corpus.answered)}</span>{" "}
+                  of them had a reply by the time we copied the record,{" "}
+                  <span className="mono">{formatNumber(findingsState.data.corpus.awaiting)}</span>{" "}
+                  were still waiting for one, and{" "}
+                  <span className="mono">{formatNumber(findingsState.data.corpus.withdrawn)}</span>{" "}
+                  were taken back by the MP who asked
+                </li>
+                <li>
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.distinctQuestionTexts)}
+                  </span>{" "}
+                  of those are different wordings. The same question is often sent to many ministers
+                  on the same day, so the number of different questions is much smaller than the
+                  number of questions
+                </li>
+                <li>
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.referralReplies)}
+                  </span>{" "}
+                  replies do not answer in their own words. They point at a reply the minister gave
+                  earlier, so code fetches that earlier reply and gives the model both. Of those,{" "}
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.referralsUnresolved)}
+                  </span>{" "}
+                  could not be found, mostly because they point back to 2023
+                </li>
+                <li>
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.attachmentOnlyReplies)}
+                  </span>{" "}
+                  replies say the answer is in an attached file. We did not open the files, so those
+                  questions show no reading
+                </li>
+                <li>
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.correctedReplies)}
+                  </span>{" "}
+                  replies were sent again as a correction by the minister
+                </li>
+                <li>
+                  Reply length, counted in characters. The middle reply is{" "}
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.replyCharsMedian)}
+                  </span>{" "}
+                  characters long, and{" "}
+                  <span className="mono">
+                    {formatNumber(findingsState.data.corpus.replyCharsP95)}
+                  </span>{" "}
+                  characters is the length that 95 in 100 replies stay under. Most replies are
+                  short: one or two sentences
+                </li>
+              </ul>
+            </section>
 
-              <BreakdownTable
-                id="reply-shape"
-                title="Replies that answer, replies that point elsewhere, replies in a file"
-                shows="Replies come in three kinds. Most answer in their own words. Some only point at a reply the minister gave earlier. Some say the answer is in an attached file, which we did not open. This shows how the readings differ between the three."
-                cannotShow="It cannot show why a particular reply took the shape it did."
-                rows={findingsState.data.byReplyShape}
-              />
+            <BreakdownTable
+              id="reply-shape"
+              title="Replies that answer, replies that point elsewhere, replies in a file"
+              shows="Replies come in three kinds. Most answer in their own words. Some only point at a reply the minister gave earlier. Some say the answer is in an attached file, which we did not open. This shows how the readings differ between the three."
+              cannotShow="It cannot show why a particular reply took the shape it did."
+              rows={findingsState.data.byReplyShape}
+            />
 
-              <BreakdownTable
-                id="reply-length"
-                title="Short replies and long replies"
-                shows="Replies are grouped by how many words they contain. This shows how the readings change as replies get longer."
-                cannotShow="It cannot show whether a longer reply is a better one."
-                rows={findingsState.data.byReplyLength}
-              />
+            <BreakdownTable
+              id="reply-length"
+              title="Short replies and long replies"
+              shows="Replies are grouped by how many words they contain. This shows how the readings change as replies get longer."
+              cannotShow="It cannot show whether a longer reply is a better one."
+              rows={findingsState.data.byReplyLength}
+            />
 
-              <BreakdownTable
-                id="question-parts"
-                title="Questions that ask one thing, and questions that ask several"
-                shows="Code estimates how many separate things a question asks using text rules. These groups may include miscounts, so use them to explore patterns rather than as exact measures."
-                cannotShow="It cannot show which part, if any, went unanswered."
-                rows={findingsState.data.byQuestionParts}
-              />
+            <BreakdownTable
+              id="question-parts"
+              title="Questions that ask one thing, and questions that ask several"
+              shows="Code estimates how many separate things a question asks using text rules. These groups may include miscounts, so use them to explore patterns rather than as exact measures."
+              cannotShow="It cannot show which part, if any, went unanswered."
+              rows={findingsState.data.byQuestionParts}
+            />
 
-              <BreakdownTable
-                id="months"
-                title="Month by month"
-                shows="This shows how the readings are spread across the twenty-four months covered."
-                cannotShow="It cannot show whether any change over time reflects replies, questions, or the model."
-                rows={findingsState.data.byMonth}
-              />
+            <BreakdownTable
+              id="months"
+              title="Month by month"
+              shows="This shows how the readings are spread across the twenty-four months covered."
+              cannotShow="It cannot show whether any change over time reflects replies, questions, or the model."
+              rows={findingsState.data.byMonth}
+            />
 
-              <BreakdownTable
-                id="fan-out"
-                title="Questions sent to one minister, and questions sent to many"
-                shows="The same question is often posted to many ministers at once. This shows how the readings differ between a question sent to one minister and a question sent to a great many."
-                cannotShow="It cannot show whether a wide mailout was itself a reasonable way to ask."
-                rows={findingsState.data.byFanOut}
-              />
+            <BreakdownTable
+              id="fan-out"
+              title="Questions sent to one minister, and questions sent to many"
+              shows="The same question is often posted to many ministers at once. This shows how the readings differ between a question sent to one minister and a question sent to a great many."
+              cannotShow="It cannot show whether a wide mailout was itself a reasonable way to ask."
+              rows={findingsState.data.byFanOut}
+            />
 
-              <BreakdownTable
-                id="stock-phrases"
-                title="Replies that use a stock phrase"
-                shows={`${TERMS.stockPhrase} This shows how the readings differ when a reply uses one of them.`}
-                cannotShow="It cannot show whether the phrase was the right or only reason for that reading."
-                rows={findingsState.data.byStockPhrase}
-              />
+            <BreakdownTable
+              id="stock-phrases"
+              title="Replies that use a stock phrase"
+              shows={`${TERMS.stockPhrase} This shows how the readings differ when a reply uses one of them.`}
+              cannotShow="It cannot show whether the phrase was the right or only reason for that reading."
+              rows={findingsState.data.byStockPhrase}
+            />
 
-              <BreakdownTable
-                id="question-openers"
-                title={CIVICS.openerHeading}
-                shows={CIVICS.openerShows}
-                cannotShow={CIVICS.openerCannotShow}
-                rows={findingsState.data.byQuestionOpener}
-              />
+            <BreakdownTable
+              id="question-openers"
+              title={CIVICS.openerHeading}
+              shows={CIVICS.openerShows}
+              cannotShow={CIVICS.openerCannotShow}
+              rows={findingsState.data.byQuestionOpener}
+            />
 
-              <section id="confidence" tabIndex={-1} className="findings-section">
-                <h2>How firmly the model settled on its answer</h2>
-                <p>
-                  {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0
-                  at the bottom. The four columns count how many readings in that band got each
-                  answer. A reading in the last row is one the model settled on very firmly.
-                </p>
-                <p className="muted">
-                  It cannot show whether those firm readings are right more often than the unsure
-                  ones. That check is not done yet. See{" "}
-                  <Link to="/method">How Jev works and how we check it</Link>.
-                </p>
-                {findingsState.data.confidenceHistogram.length === 0 ? (
-                  <EmptyNote>No data yet.</EmptyNote>
-                ) : (
-                  <section
-                    className="table-scroll"
-                    aria-label="Model confidence bands"
-                    // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region.
-                    tabIndex={0}
-                  >
-                    <table>
-                      <caption>Readings grouped by model confidence, not measured accuracy</caption>
-                      <thead>
-                        <tr>
-                          <th scope="col">Confidence</th>
-                          {LABEL_HEADS.slice(0, 4).map((h) => (
-                            <th scope="col" key={h}>
-                              {h}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {findingsState.data.confidenceHistogram.map((bin) => (
-                          <tr key={bin.from}>
-                            <th scope="row" className="mono">
-                              {bin.from.toFixed(1)} to {bin.to.toFixed(1)}
-                            </th>
-                            <td className="mono">{formatNumber(bin.byChoice.answered)}</td>
-                            <td className="mono">{formatNumber(bin.byChoice.partly_answered)}</td>
-                            <td className="mono">{formatNumber(bin.byChoice.not_answered)}</td>
-                            <td className="mono">{formatNumber(bin.byChoice.unclear)}</td>
-                          </tr>
+            <section id="confidence" tabIndex={-1} className="findings-section">
+              <h2>How firmly the model settled on its answer</h2>
+              <p>
+                {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0 at
+                the bottom. The four columns count how many readings in that band got each answer. A
+                reading in the last row is one the model settled on very firmly.
+              </p>
+              <p className="muted">
+                It cannot show whether those firm readings are right more often than the unsure
+                ones. That check is not done yet. See{" "}
+                <Link to="/method">How Jev works and how we check it</Link>.
+              </p>
+              {findingsState.data.confidenceHistogram.length === 0 ? (
+                <EmptyNote>No data yet.</EmptyNote>
+              ) : (
+                <section
+                  className="table-scroll"
+                  aria-label="Model confidence bands"
+                  // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region.
+                  tabIndex={0}
+                >
+                  <table>
+                    <caption>Readings grouped by model confidence, not measured accuracy</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Confidence</th>
+                        {LABEL_HEADS.slice(0, 4).map((h) => (
+                          <th scope="col" key={h}>
+                            {h}
+                          </th>
                         ))}
-                      </tbody>
-                    </table>
-                  </section>
-                )}
-              </section>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {findingsState.data.confidenceHistogram.map((bin) => (
+                        <tr key={bin.from}>
+                          <th scope="row" className="mono">
+                            {bin.from.toFixed(1)} to {bin.to.toFixed(1)}
+                          </th>
+                          <td className="mono">{formatNumber(bin.byChoice.answered)}</td>
+                          <td className="mono">{formatNumber(bin.byChoice.partly_answered)}</td>
+                          <td className="mono">{formatNumber(bin.byChoice.not_answered)}</td>
+                          <td className="mono">{formatNumber(bin.byChoice.unclear)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
+              )}
+            </section>
 
-              <section id="secondary" tabIndex={-1} className="findings-section">
-                <h2>Other assessment questions</h2>
-                <p>
-                  Besides “does the reply give the information asked for”, the model was asked four
-                  more questions about each processed pair. These are the totals for three of them.
-                </p>
-                <p className="muted">
-                  It cannot show how these answers line up with the main reading for the same reply.
-                  The cross-checks below do some of that.
-                </p>
-                <div className="secondary-grid">
-                  <SecondaryCountList
-                    title="Does the reply give the figure asked for?"
-                    counts={findingsState.data.secondary.givesRequestedFigure}
-                  />
-                  <SecondaryCountList
-                    title="Does the reply address every part of the question?"
-                    counts={findingsState.data.secondary.addressesAllParts}
-                  />
-                  <SecondaryCountList
-                    title="What the reply does instead"
-                    counts={findingsState.data.secondary.evasionType}
-                  />
-                </div>
-              </section>
+            <section id="secondary" tabIndex={-1} className="findings-section">
+              <h2>Other assessment questions</h2>
+              <p>
+                Besides “does the reply give the information asked for”, the model was asked four
+                more questions about each processed pair. These are the totals for three of them.
+              </p>
+              <p className="muted">
+                It cannot show how these answers line up with the main reading for the same reply.
+                The cross-checks below do some of that.
+              </p>
+              <div className="secondary-grid">
+                <SecondaryCountList
+                  title="Does the reply give the figure asked for?"
+                  counts={findingsState.data.secondary.givesRequestedFigure}
+                />
+                <SecondaryCountList
+                  title="Does the reply address every part of the question?"
+                  counts={findingsState.data.secondary.addressesAllParts}
+                />
+                <SecondaryCountList
+                  title="What the reply does instead"
+                  counts={findingsState.data.secondary.evasionType}
+                />
+              </div>
+            </section>
 
-              <section id="cross-checks" tabIndex={-1} className="findings-section">
-                <h2>Do the five readings agree with each other?</h2>
-                <p>
-                  Each line below takes a group of replies and asks what a second reading said about
-                  the same replies. The five questions are answered independently, so they can
-                  disagree.
-                </p>
-                <p className="muted">
-                  It cannot show whether either reading, on its own, is correct.
-                </p>
-                {findingsState.data.crossChecks.length === 0 ? (
-                  <EmptyNote>No data yet.</EmptyNote>
-                ) : (
-                  <ul>
-                    {findingsState.data.crossChecks.map((check) => (
-                      <li key={check.statement}>
-                        {check.statement}:{" "}
-                        <span className="mono">
-                          {formatNumber(check.numerator)} of {formatNumber(check.denominator)} (
-                          {percent(check.numerator, check.denominator)})
-                        </span>
-                        , or {aboutOneIn(check.numerator, check.denominator)}.
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </section>
+            <section id="cross-checks" tabIndex={-1} className="findings-section">
+              <h2>Do the five readings agree with each other?</h2>
+              <p>
+                Each line below takes a group of replies and asks what a second reading said about
+                the same replies. The five questions are answered independently, so they can
+                disagree.
+              </p>
+              <p className="muted">
+                It cannot show whether either reading, on its own, is correct.
+              </p>
+              {findingsState.data.crossChecks.length === 0 ? (
+                <EmptyNote>No data yet.</EmptyNote>
+              ) : (
+                <ul>
+                  {findingsState.data.crossChecks.map((check) => (
+                    <li key={check.statement}>
+                      {check.statement}:{" "}
+                      <span className="mono">
+                        {formatNumber(check.numerator)} of {formatNumber(check.denominator)} (
+                        {percent(check.numerator, check.denominator)})
+                      </span>
+                      , or {aboutOneIn(check.numerator, check.denominator)}.
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
 
-              <section id="same-question" tabIndex={-1} className="findings-section">
-                <h2>Same question, different reading</h2>
-                <p>
-                  When one question goes to many ministers, the replies differ, and so do the
-                  readings. These are the largest such groups. Follow the link to read one of them.
-                </p>
-                <p className="muted">
-                  It cannot show which of the differing readings, if any, is the correct one.
-                </p>
-                {findingsState.data.sameQuestionDifferentReading.length === 0 ? (
-                  <EmptyNote>No data yet.</EmptyNote>
-                ) : (
-                  <ul>
-                    {findingsState.data.sameQuestionDifferentReading.map((group) => (
-                      <li key={`${group.example.year}-${group.example.number}`}>
-                        “{group.question}”. Sent to{" "}
-                        <span className="mono">{formatNumber(group.sentTo)}</span> ministers. Read
-                        as answered{" "}
-                        <span className="mono">{formatNumber(group.counts.answered)}</span> times,
-                        partly answered{" "}
-                        <span className="mono">{formatNumber(group.counts.partly_answered)}</span>{" "}
-                        times, not answered{" "}
-                        <span className="mono">{formatNumber(group.counts.not_answered)}</span>{" "}
-                        times.{" "}
-                        <Link to={`/q/${group.example.year}/${group.example.number}`}>
-                          Read one of these questions and its reply
-                        </Link>
-                        .
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </section>
-            </>
-          )}
-        </div>
-      </div>
+            <section id="same-question" tabIndex={-1} className="findings-section">
+              <h2>Same question, different reading</h2>
+              <p>
+                When one question goes to many ministers, the replies differ, and so do the
+                readings. These are the largest such groups. Follow the link to read one of them.
+              </p>
+              <p className="muted">
+                It cannot show which of the differing readings, if any, is the correct one.
+              </p>
+              {findingsState.data.sameQuestionDifferentReading.length === 0 ? (
+                <EmptyNote>No data yet.</EmptyNote>
+              ) : (
+                <ul>
+                  {findingsState.data.sameQuestionDifferentReading.map((group) => (
+                    <li key={`${group.example.year}-${group.example.number}`}>
+                      “{group.question}”. Sent to{" "}
+                      <span className="mono">{formatNumber(group.sentTo)}</span> ministers. Read as
+                      answered <span className="mono">{formatNumber(group.counts.answered)}</span>{" "}
+                      times, partly answered{" "}
+                      <span className="mono">{formatNumber(group.counts.partly_answered)}</span>{" "}
+                      times, not answered{" "}
+                      <span className="mono">{formatNumber(group.counts.not_answered)}</span> times.{" "}
+                      <Link to={`/q/${group.example.year}/${group.example.number}`}>
+                        Read one of these questions and its reply
+                      </Link>
+                      .
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </>
+        )}
+      </TwoPane>
     </>
   );
 }

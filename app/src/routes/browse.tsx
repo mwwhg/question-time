@@ -6,6 +6,7 @@ import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx"
 import { LabelKey } from "../components/label-key.tsx";
 import { PageBanner } from "../components/page-banner.tsx";
 import { StackedLabelBar } from "../components/stacked-label-bar.tsx";
+import { TwoPane } from "../components/two-pane.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import { BROWSE_COMPARISON_NOTE, TERMS } from "../lib/copy.ts";
@@ -57,9 +58,9 @@ export function Browse() {
         <h1>Browse the results</h1>
         <p>Pick a portfolio and read the questions sent to it. {TERMS.portfolio}</p>
       </PageBanner>
-      <div className="two-pane">
-        <aside className="pane-side">
-          <div className="pane-side-inner">
+      <TwoPane
+        side={
+          <>
             {state.status === "ok" && activeYear !== null && (
               <div className="browse-controls">
                 <fieldset className="control-group control-row">
@@ -129,47 +130,45 @@ export function Browse() {
             {state.status === "ok" && activeYear !== null && (
               <p className="muted">{TERMS.distinctQuestion}</p>
             )}
-          </div>
-        </aside>
+          </>
+        }
+      >
+        {state.status === "loading" && <LoadingNote />}
+        {state.status === "error" && <ErrorNote />}
+        {state.status === "ok" && years.length === 0 && <EmptyNote>No data yet.</EmptyNote>}
 
-        <div className="pane-main">
-          {state.status === "loading" && <LoadingNote />}
-          {state.status === "error" && <ErrorNote />}
-          {state.status === "ok" && years.length === 0 && <EmptyNote>No data yet.</EmptyNote>}
+        {state.status === "ok" && activeYear !== null && (
+          <>
+            <p role="status" aria-atomic="true" className="results-summary">
+              {sorted.length} portfolios for {activeYear}. Counting{" "}
+              {mode === "all" ? "every question" : "each distinct question once"}, sorted by{" "}
+              {sort === "name" ? "name" : "number of questions"}.
+            </p>
 
-          {state.status === "ok" && activeYear !== null && (
-            <>
-              <p role="status" aria-atomic="true" className="results-summary">
-                {sorted.length} portfolios for {activeYear}. Counting{" "}
-                {mode === "all" ? "every question" : "each distinct question once"}, sorted by{" "}
-                {sort === "name" ? "name" : "number of questions"}.
-              </p>
+            {sorted.length === 0 && <EmptyNote>No portfolios for this year.</EmptyNote>}
 
-              {sorted.length === 0 && <EmptyNote>No portfolios for this year.</EmptyNote>}
-
-              <ul className="portfolio-list">
-                {sorted.map(({ portfolio, counts }) => (
-                  <li key={portfolio.slug} className="portfolio-row">
-                    <Link to={`/browse/${portfolio.slug}/${activeYear}`} className="portfolio-link">
-                      {portfolio.name}
-                    </Link>
-                    {counts ? (
-                      <>
-                        <p className="mono portfolio-total">
-                          {formatNumber(totalOf(counts))} questions
-                        </p>
-                        <StackedLabelBar counts={counts} label={portfolio.name} />
-                      </>
-                    ) : (
-                      <EmptyNote>No data for {activeYear}.</EmptyNote>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-        </div>
-      </div>
+            <ul className="portfolio-list">
+              {sorted.map(({ portfolio, counts }) => (
+                <li key={portfolio.slug} className="portfolio-row">
+                  <Link to={`/browse/${portfolio.slug}/${activeYear}`} className="portfolio-link">
+                    {portfolio.name}
+                  </Link>
+                  {counts ? (
+                    <>
+                      <p className="mono portfolio-total">
+                        {formatNumber(totalOf(counts))} questions
+                      </p>
+                      <StackedLabelBar counts={counts} label={portfolio.name} />
+                    </>
+                  ) : (
+                    <EmptyNote>No data for {activeYear}.</EmptyNote>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </TwoPane>
     </>
   );
 }
