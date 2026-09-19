@@ -1,10 +1,13 @@
 // Pure: turns findings.json + portfolios.json into the Start page's headline cards. No fetching,
 // no formatting side effects beyond string templates, so it is easy to point a test at directly.
 import type { Findings, LabelCounts, PortfolioIndex } from "@contract";
-import { HEADLINE_TAG_COUNTED, HEADLINE_TAG_MODEL } from "./copy.ts";
+import { HEADLINE_TAG_COUNTED, HEADLINE_TAG_MODEL, HEADLINE_TAG_RUN } from "./copy.ts";
 import { formatNInHundred, formatNumber } from "./format.ts";
 
-export type HeadlineTag = typeof HEADLINE_TAG_MODEL | typeof HEADLINE_TAG_COUNTED;
+export type HeadlineTag =
+  | typeof HEADLINE_TAG_MODEL
+  | typeof HEADLINE_TAG_COUNTED
+  | typeof HEADLINE_TAG_RUN;
 
 export type NumberCard = {
   readonly kind: "number";
@@ -41,15 +44,16 @@ function shareInHundred(numerator: number, denominator: number): string {
   return denominator === 0 ? "0 in 100" : formatNInHundred(numerator / denominator);
 }
 
-/** "over about 3 days" once it's at least one day; under that, hours read better than "0 days". */
+/** Working time only. A stop and restart in the middle is not reading time, and the method page reports it separately. */
 function runDurationPhrase(index: PortfolioIndex): string {
-  const first = Date.parse(index.run.firstJudgementAt);
-  const last = Date.parse(index.run.lastJudgementAt);
-  if (Number.isNaN(first) || Number.isNaN(last) || last <= first) return "in under an hour";
-  const hours = (last - first) / (1000 * 60 * 60);
-  if (hours < 1) return "in under an hour";
-  if (hours < 24) return `over about ${formatNumber(Math.round(hours))} hours`;
-  return `over about ${formatNumber(Math.round(hours / 24))} days`;
+  const minutes = Math.round(index.run.activeSeconds / 60);
+  if (minutes < 60) return `in about ${formatNumber(minutes)} minutes of reading`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const hourWord = hours === 1 ? "hour" : "hours";
+  return rest === 0
+    ? `in about ${hours} ${hourWord} of reading`
+    : `in about ${hours} ${hourWord} ${rest} minutes of reading`;
 }
 
 /** Builds the 5-7 Start page headline cards. Every value is read live; none is hard-coded. */
@@ -149,7 +153,7 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     value: `$${index.run.estimatedCostUsd.toFixed(2)}`,
     sentence: `is what it cost to have a model read every one of these replies, ${runDurationPhrase(index)}.`,
     cannotTell: "This can't tell you whether that cost is worth it. That is a judgement call.",
-    tag: HEADLINE_TAG_COUNTED,
+    tag: HEADLINE_TAG_RUN,
     linkTo: "/method",
     linkText: "See the run in numbers",
   });
