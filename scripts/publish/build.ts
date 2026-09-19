@@ -17,6 +17,8 @@ import {
 } from "../judgement/vocabulary.ts";
 import { readJsonl } from "../lib/jsonl.ts";
 import { STOCK_PHRASES } from "../question/features.ts";
+import type { Memberships } from "../question/party.ts";
+import { PARTY_FILE, parseMemberships, partyOn } from "../question/party.ts";
 import type { Question } from "../question/question.ts";
 import { readQuestions } from "../question/question.ts";
 import type {
@@ -266,6 +268,7 @@ function buildDetail(
   sentTo: number,
   runHeader: Run,
   slugFor: ReadonlyMap<string, { slug: string; name: string }>,
+  memberships: Memberships,
 ): { detail: QuestionDetail; rawAnsweredChoice: AnsweredLabel | null; label: Label | null } {
   const fields = replyFieldsOf(q.reply);
   const replyTrunc = truncateAtWord(fields.text, REPLY_TRUNCATE_CHARS);
@@ -284,9 +287,11 @@ function buildDetail(
     number: q.number,
     dateAsked: q.dateAsked,
     askedBy: q.askedBy,
+    askedByParty: partyOn({ memberships, name: q.askedBy, date: q.dateAsked }),
     portfolio: portfolioInfo.name,
     portfolioSlug: portfolioInfo.slug,
     minister: q.minister,
+    ministerParty: partyOn({ memberships, name: q.minister, date: q.dateAsked }),
     question: q.text,
     reply: replyTrunc.text,
     replyTruncated: replyTrunc.truncated,
@@ -328,6 +333,7 @@ export type BuildInput = {
   readonly questions: readonly Question[]; // every status
   readonly judgements: readonly Judgement[]; // last record per id
   readonly benchmarkIds: readonly string[]; // the held-out ids
+  readonly memberships: Memberships;
   readonly runHeader: Run;
   readonly generatedAt: string;
 };
@@ -342,7 +348,7 @@ export type BuildResult = {
 };
 
 export function aggregate(input: BuildInput): BuildResult {
-  const { questions, judgements, benchmarkIds, runHeader, generatedAt } = input;
+  const { questions, judgements, benchmarkIds, memberships, runHeader, generatedAt } = input;
   const answered = questions.filter((q) => q.status === "answered");
   const excludedCount = questions.length - answered.length;
 
@@ -361,7 +367,7 @@ export function aggregate(input: BuildInput): BuildResult {
     const judged = judgedById.get(q.id);
     const reason = noReadingReasonFor(q, judged, benchmarkIdSet);
     const sentTo = dupCount.get(q.duplicateGroup) ?? 1;
-    const built = buildDetail(q, judged, reason, sentTo, runHeader, slugFor);
+    const built = buildDetail(q, judged, reason, sentTo, runHeader, slugFor, memberships);
     return {
       question: q,
       detail: built.detail,
@@ -734,16 +740,18 @@ function crossChecks(readable: readonly Rec[]): Findings["crossChecks"] {
 function askersBreakdown(records: readonly Rec[]): Findings["civics"]["askers"] {
   const byName = new Map<
     string,
-    { questions: number; groups: Set<string>; portfolios: Set<string> }
+    { questions: number; groups: Set<string>; portfolios: Set<string>; parties: Set<string> }
   >();
   for (const r of records) {
     const name = r.detail.askedBy.trim();
     if (name === "") continue;
     let entry = byName.get(name);
     if (entry === undefined) {
-      entry = { questions: 0, groups: new Set(), portfolios: new Set() };
+      entry = { questions: 0, groups: new Set(), portfolios: new Set(), parties: new Set() };
       byName.set(name, entry);
     }
+    // Records arrive in year and number order, so a Set keeps parties earliest first.
+    if (r.detail.askedByParty !== null) entry.parties.add(r.detail.askedByParty);
     entry.questions++;
     entry.groups.add(r.question.duplicateGroup);
     entry.portfolios.add(r.detail.portfolioSlug);
@@ -751,6 +759,7 @@ function askersBreakdown(records: readonly Rec[]): Findings["civics"]["askers"] 
   return Array.from(byName.entries())
     .map(([name, e]) => ({
       name,
+      parties: Array.from(e.parties),
       questions: e.questions,
       distinctQuestions: e.groups.size,
       portfoliosAsked: e.portfolios.size,
@@ -1060,10 +1069,18 @@ export function buildAndWrite(): BuildSummary {
   const questions = Array.from(readQuestions(QUESTIONS_STATUS_FILTER));
   const judgements = readJudgements(JUDGEMENTS_PATH);
   const benchmarkIds = readBenchmarkIds(BENCHMARK_SAMPLE_PATH);
+  const memberships = parseMemberships(readFileSync(PARTY_FILE, "utf8"));
   const runHeader = readRunHeader(JUDGEMENTS_PATH);
   const generatedAt = new Date().toISOString();
 
-  const result = aggregate({ questions, judgements, benchmarkIds, runHeader, generatedAt });
+  const result = aggregate({
+    questions,
+    judgements,
+    benchmarkIds,
+    memberships,
+    runHeader,
+    generatedAt,
+  });
   const writeSummary = writeOutput(result);
 
   const eligible = questions.filter((q) => q.status === "answered").length;
