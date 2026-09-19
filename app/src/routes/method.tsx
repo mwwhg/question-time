@@ -81,7 +81,7 @@ export function Method() {
           </nav>
         }
       >
-        <section id="workflow" tabIndex={-1}>
+        <section id="workflow" tabIndex={-1} className="card">
           <h2>How it works</h2>
           <p>{TERMS.writtenQuestion}</p>
           <p>
@@ -91,7 +91,7 @@ export function Method() {
         </section>
         <PipelineGraph />
 
-        <section id="example" tabIndex={-1} className="worked-example card">
+        <section id="example" tabIndex={-1} className="card">
           <h2>{WORKED_EXAMPLE.heading}</h2>
           <p>{WORKED_EXAMPLE.standfirst}</p>
           <div className="worked-grid">
@@ -138,7 +138,7 @@ export function Method() {
           </p>
         </section>
 
-        <section id="run" tabIndex={-1}>
+        <section id="run" tabIndex={-1} className="card">
           <h2>The run, in numbers</h2>
           <p>
             These figures come from the run's own records. Those records are the time stamped on
@@ -152,14 +152,14 @@ export function Method() {
           {indexState.status === "ok" && <RunFacts run={indexState.data.run} />}
         </section>
 
-        <section id="value" tabIndex={-1}>
+        <section id="value" tabIndex={-1} className="card">
           <h2>{WHY_READ_EVERY_REPLY.heading}</h2>
           {WHY_READ_EVERY_REPLY.paragraphs.map((p) => (
             <p key={p.slice(0, 24)}>{p}</p>
           ))}
         </section>
 
-        <section>
+        <section className="card">
           <h2>What Jev is</h2>
           <p>
             Jev is a small, fast computer model. You hand it a piece of text and a question about
@@ -172,7 +172,7 @@ export function Method() {
           <p className="muted">{TERMS.confidence}</p>
         </section>
 
-        <section id="questions" tabIndex={-1}>
+        <section id="questions" tabIndex={-1} className="card">
           <h2>The five questions asked of each processed pair</h2>
           <p>
             Jev receives the same five assessment questions for each pair, in the same words each
@@ -194,7 +194,7 @@ export function Method() {
           </ol>
         </section>
 
-        <section id="limits" tabIndex={-1} className="cream-section">
+        <section id="limits" tabIndex={-1} className="cream-panel">
           <h2>{NOT_GOOD_AT.heading}</h2>
           <ul className="bullets">
             {NOT_GOOD_AT.items.map((item) => (
@@ -207,7 +207,7 @@ export function Method() {
           <p>{JEV_VENDOR_LIMITS_NOTE}</p>
         </section>
 
-        <section>
+        <section className="card">
           <h2>What is computed by code, not the model</h2>
           <ul className="bullets">
             <li>
@@ -237,7 +237,7 @@ export function Method() {
           </ul>
         </section>
 
-        <section id="checks" tabIndex={-1}>
+        <section id="checks" tabIndex={-1} className="card">
           <h2>Trick pairs, and what the phrase rules got wrong</h2>
           <p>{TERMS.controls}</p>
           <p>
@@ -290,7 +290,7 @@ export function Method() {
           <p>{DISCARD_EXPLANATION}</p>
         </section>
 
-        <section id="validation" tabIndex={-1} className="cream-section">
+        <section id="validation" tabIndex={-1} className="cream-panel">
           <h2>Validation and remaining work</h2>
           <ul className="bullets">
             {NOT_DONE_YET.filter((item) => !checkedAgainstPeople || item.id !== "human-check").map(
@@ -306,12 +306,12 @@ export function Method() {
           </p>
         </section>
 
-        <section>
+        <section className="card">
           <h2>Corrections</h2>
           <p>No corrections yet.</p>
         </section>
 
-        <section>
+        <section className="card">
           <h2>Licence</h2>
           <p>{ATTRIBUTION_TEXT}</p>
           <p>

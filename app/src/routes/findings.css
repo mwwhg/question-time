@@ -1,13 +1,5 @@
 .findings-section {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  padding: var(--card-padding) 24px;
   max-width: 100%;
-}
-
-.findings-section > :last-child {
-  margin-bottom: 0;
 }
 
 .findings-section > p,
@@ -21,10 +13,6 @@
 
 .findings-section .cream-panel h3 {
   margin-top: 0;
-}
-
-.findings-section tbody tr:nth-child(odd) {
-  background: var(--ground);
 }
 
 .findings-section td .mono,
