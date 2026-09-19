@@ -38,6 +38,10 @@ const CHOICE_LABELS: Readonly<Record<string, string>> = {
   none: "None of the above",
 };
 
+function withParty(name: string, party: string | null): string {
+  return party === null ? name : `${name}, ${party}`;
+}
+
 function prettyChoice(choice: string): string {
   return CHOICE_LABELS[choice] ?? choice.replaceAll("_", " ");
 }
@@ -77,7 +81,8 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
         {formatDate(item.dateAsked)} · {item.portfolio}
       </p>
       <p>
-        asked by {item.askedBy} &middot; reply from {item.minister}
+        asked by {withParty(item.askedBy, item.askedByParty)} &middot; reply from{" "}
+        {withParty(item.minister, item.ministerParty)}
       </p>
       <p style={{ color: "var(--muted)" }}>
         {TERMS.wq} {TERMS.portfolio}

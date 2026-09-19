@@ -205,6 +205,7 @@ export const KNOW_BEFORE_YOU_READ = {
     "The model read text only. When a reply says the answer is in an attached file, we did not read the file, and we show no reading.",
     "Some replies point to an earlier reply. Where we could fetch it, the model gets both texts.",
     "The same question is often sent to many ministers at once. We show counts both ways: every question, and each distinct question once.",
+    "The party beside a name is the party that person sat with on the day the question was asked, as Parliament's member pages record it. It says who asked and who replied. We never add up readings by party.",
     "Long replies are shortened on this site. The link to the official record always has the full text.",
     `We already see one pattern. When a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.`,
   ],

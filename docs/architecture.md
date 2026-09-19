@@ -37,6 +37,7 @@ Code is grouped by what it knows, not by when it runs. The brief's stage names s
 | `scripts/question/fetch.ts` | Polite paged fetch, raw pages byte-for-byte, `manifest.json`, skip pages already saved. |
 | `scripts/question/question.ts` | `QuestionId`, `Question`, the `Reply` union, `normalise`, read and write `questions.jsonl`. |
 | `scripts/question/referral.ts` | Parse "reply number N (YYYY)", follow chains, cycle guard, depth cap 5. |
+| `scripts/question/party.ts` | Parse the hand-checked party table, `partyOn` a date. Pure; `build.ts` reads the file. |
 | `scripts/question/features.ts` | `FEATURES_VERSION`, `computeFeatures`. Everything exactly computable. |
 | `scripts/judgement/vocabulary.ts` | `Probability`, `Noul`, `Choice`, `Answers`, `Judgement`, the 0.5 "unsure" rule. |
 | `scripts/judgement/qs-v1.ts` | The five question texts and option definitions, plus `questionSetHash`. |

@@ -64,9 +64,12 @@ export type QuestionDetail = {
   readonly number: number;
   readonly dateAsked: string;
   readonly askedBy: string;
+  /** Party as at `dateAsked`, spelled as Parliament's member pages give it. Null when not known. */
+  readonly askedByParty: string | null;
   readonly portfolio: string;
   readonly portfolioSlug: string;
   readonly minister: string;
+  readonly ministerParty: string | null;
   readonly question: string;
   readonly reply: string;
   readonly replyTruncated: boolean;
@@ -197,6 +200,8 @@ export type Findings = {
     /** Every member who asked a question, most questions first. Names exactly as the source gives them. */
     readonly askers: readonly {
       readonly name: string;
+      /** Every party the member asked under in this period, earliest first. Usually one. */
+      readonly parties: readonly string[];
       readonly questions: number;
       readonly distinctQuestions: number;
       readonly portfoliosAsked: number;
