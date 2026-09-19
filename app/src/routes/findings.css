@@ -48,7 +48,7 @@
 
 .secondary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -57,4 +57,35 @@
   padding: 0;
   margin: 0;
   font-size: 14px;
+}
+
+.findings-contents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 24px 0;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.findings-contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.findings-section > p {
+  max-width: 70ch;
+}
+
+.findings-section caption {
+  text-align: left;
+  padding: 0 0 12px;
+  color: var(--muted);
+}
+
+.findings-section th[scope="row"] {
+  font-weight: 400;
 }
