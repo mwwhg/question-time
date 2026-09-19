@@ -1,13 +1,27 @@
 .site-footer {
-  border-top: 1px solid var(--line);
-  background: var(--surface);
-  margin-top: 48px;
-  padding: 32px 0 48px;
-  font-size: 13px;
-  color: var(--muted);
+  background: var(--footer);
+  color: var(--footer-text);
+  padding: 28px 0 36px;
+  font-size: 12px;
+  --ink: var(--footer-link);
+}
+
+.site-footer-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 16px 56px;
+}
+
+.site-footer p {
+  margin: 0 0 8px;
+}
+
+.site-footer a:hover {
+  color: var(--on-dark);
 }
 
 .footer-heading {
-  font-size: 15px;
-  margin-top: 24px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  margin: 0 0 6px;
 }

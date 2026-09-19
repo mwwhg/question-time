@@ -1,21 +1,16 @@
-.control-group {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
 .pagination {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
 }
 
 .results-heading {
-  margin-bottom: 8px;
-  font-size: 22px;
+  margin-bottom: 4px;
 }
 
 .table-scroll tbody th {

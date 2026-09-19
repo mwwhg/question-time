@@ -1,7 +1,10 @@
 import type { ChoiceReading, QuestionBlock, QuestionDetail } from "@contract";
 import { questionBlockPath } from "@contract";
+import type { ReactNode } from "react";
 import { Link, useParams } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
+import { PageBanner } from "../components/page-banner.tsx";
+import { PreviewNotice } from "../components/preview-notice.tsx";
 import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
@@ -57,11 +60,36 @@ export function Question() {
 
   useDocumentTitle(item ? `WQ ${item.number} (${item.year})` : `WQ ${number}`);
 
-  if (state.status === "loading") return <LoadingNote />;
-  if (state.status === "error") return <ErrorNote />;
-  if (!item) return <EmptyNote>That question could not be found.</EmptyNote>;
+  if (state.status === "loading")
+    return (
+      <Bare>
+        <LoadingNote />
+      </Bare>
+    );
+  if (state.status === "error")
+    return (
+      <Bare>
+        <ErrorNote />
+      </Bare>
+    );
+  if (!item)
+    return (
+      <Bare>
+        <EmptyNote>That question could not be found.</EmptyNote>
+      </Bare>
+    );
 
   return <QuestionView item={item} />;
+}
+
+/** States with no question to show have no banner, so they carry the preview notice themselves. */
+function Bare({ children }: { readonly children: ReactNode }) {
+  return (
+    <>
+      <PreviewNotice />
+      <div className="wrap page-body">{children}</div>
+    </>
+  );
 }
 
 function QuestionView({ item }: { readonly item: QuestionDetail }) {
@@ -74,94 +102,104 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
 
   return (
     <article>
-      <h1>
-        Written question {item.number} of {item.year}
-      </h1>
-      <p className="mono question-header">
-        {formatDate(item.dateAsked)} · {item.portfolio}
-      </p>
-      <p>
-        asked by {withParty(item.askedBy, item.askedByParty)} &middot; reply from{" "}
-        {withParty(item.minister, item.ministerParty)}
-      </p>
-      <p style={{ color: "var(--muted)" }}>
-        {TERMS.wq} {TERMS.portfolio}
-      </p>
-      <p>
-        <Link to={`/browse/${item.portfolioSlug}/${item.year}`}>
-          See the other questions sent to {item.portfolio} in {item.year}
-        </Link>
-      </p>
+      <PageBanner>
+        <p className="banner-back">
+          <Link to={`/browse/${item.portfolioSlug}/${item.year}`}>
+            See the other questions sent to {item.portfolio} in {item.year}
+          </Link>
+        </p>
+        <h1>
+          Written question {item.number} of {item.year}
+        </h1>
+        <p className="mono question-header">
+          {formatDate(item.dateAsked)} · {item.portfolio}
+        </p>
+        <p>
+          asked by {withParty(item.askedBy, item.askedByParty)} &middot; reply from{" "}
+          {withParty(item.minister, item.ministerParty)}
+        </p>
+        <p className="banner-meta">
+          {TERMS.wq} {TERMS.portfolio}
+        </p>
+      </PageBanner>
 
-      <div className="source-box">
-        <h2 className="section-label">The question</h2>
-        <p className="question-text">{item.question}</p>
-      </div>
+      <div className="wrap page-body question-grid">
+        <div className="question-col">
+          <div className="source-box">
+            <h2 className="section-label">The question</h2>
+            <p className="question-text">{item.question}</p>
+          </div>
 
-      <div className="source-box" style={{ marginTop: 16 }}>
-        <h2 className="section-label">The reply</h2>
-        <p>{item.reply}</p>
-        {item.replyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
-      </div>
+          <div className="source-box">
+            <h2 className="section-label">The reply</h2>
+            <p className="reply-text">{item.reply}</p>
+            {item.replyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
+          </div>
 
-      {item.referredReply !== null && (
-        <div className="source-box" style={{ marginTop: 16 }}>
-          <h2 className="section-label">The earlier reply it points to</h2>
-          <p style={{ color: "var(--source-text)" }}>{TERMS.referral}</p>
-          <p>{item.referredReply}</p>
-          {item.referredReplyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
+          {item.referredReply !== null && (
+            <div className="source-box">
+              <h2 className="section-label">The earlier reply it points to</h2>
+              <p className="small">{TERMS.referral}</p>
+              <p className="reply-text">{item.referredReply}</p>
+              {item.referredReplyTruncated && (
+                <p className="mono shortened-note">{SHORTENED_NOTE}</p>
+              )}
+            </div>
+          )}
+
+          <div className="card reading-yourself">
+            <h2 className="section-label">Reading it yourself</h2>
+            <p className="small muted">{READING_IT_YOURSELF_INTRO}</p>
+            <ul className="bullets">
+              {readingItYourselfBullets(item).map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+            {item.features.stockPhrases.length > 0 && (
+              <p className="small muted">{TERMS.stockPhrase}</p>
+            )}
+            <p>{READING_IT_YOURSELF_CLOSE}</p>
+          </div>
         </div>
-      )}
 
-      <div className="gold-box" style={{ marginTop: 24 }}>
-        <h2 className="section-label">The model's reading</h2>
-        {item.reading === null ? (
-          <p>{item.noReadingReason ? NO_READING_REASON_TEXT[item.noReadingReason] : null}</p>
-        ) : (
-          <ReadingView
-            reading={item.reading}
-            displayLabel={displayLabel}
-            checkedAgainstPeople={checkedAgainstPeople}
-          />
-        )}
-      </div>
+        <div className="question-col">
+          {item.reading === null ? (
+            <div className="gold-box">
+              <h2 className="section-label">The model's reading</h2>
+              <p>{item.noReadingReason ? NO_READING_REASON_TEXT[item.noReadingReason] : null}</p>
+            </div>
+          ) : (
+            <ReadingView
+              reading={item.reading}
+              displayLabel={displayLabel}
+              checkedAgainstPeople={checkedAgainstPeople}
+            />
+          )}
 
-      <div className="prose reading-yourself">
-        <h2 className="section-label">Reading it yourself</h2>
-        <p style={{ fontSize: 13, color: "var(--muted)" }}>{READING_IT_YOURSELF_INTRO}</p>
-        <ul>
-          {readingItYourselfBullets(item).map((bullet) => (
-            <li key={bullet}>{bullet}</li>
-          ))}
-        </ul>
-        {item.features.stockPhrases.length > 0 && (
-          <p style={{ fontSize: 13, color: "var(--muted)" }}>{TERMS.stockPhrase}</p>
-        )}
-        <p>{READING_IT_YOURSELF_CLOSE}</p>
-      </div>
-
-      <div className="provenance">
-        <h2 className="section-label">Where this came from</h2>
-        <p>
-          <a href={item.provenance.sourceUrl} target="_blank" rel="noopener noreferrer">
-            Read the full text on the official record
-          </a>
-        </p>
-        <p>
-          We copied this question and reply from the official record on{" "}
-          {formatDate(item.provenance.retrievedAt)} and did not change the words.
-        </p>
-        <p>
-          {item.provenance.evaluatedAt
-            ? `The model read it on ${formatDate(item.provenance.evaluatedAt)}.`
-            : "No reading date is published for this pair."}{" "}
-          The exact version of the model and of the five questions is recorded below, so this
-          reading can be reproduced.
-        </p>
-        <p className="mono">
-          Model {item.provenance.model} · question set {item.provenance.questionSetVersion} (
-          {item.provenance.questionSetHash}) · features {item.provenance.featuresVersion}
-        </p>
+          <div className="provenance">
+            <h2 className="section-label">Where this came from</h2>
+            <p>
+              <a href={item.provenance.sourceUrl} target="_blank" rel="noopener noreferrer">
+                Read the full text on the official record
+              </a>
+            </p>
+            <p>
+              We copied this question and reply from the official record on{" "}
+              {formatDate(item.provenance.retrievedAt)} and did not change the words.
+            </p>
+            <p>
+              {item.provenance.evaluatedAt
+                ? `The model read it on ${formatDate(item.provenance.evaluatedAt)}.`
+                : "No reading date is published for this pair."}{" "}
+              The exact version of the model and of the five questions is recorded below, so this
+              reading can be reproduced.
+            </p>
+            <p className="mono provenance-versions">
+              Model {item.provenance.model} · question set {item.provenance.questionSetVersion} (
+              {item.provenance.questionSetHash}) · features {item.provenance.featuresVersion}
+            </p>
+          </div>
+        </div>
       </div>
     </article>
   );
@@ -211,27 +249,36 @@ function ReadingView({
   const unsure = reading.answered.unsure;
   const wording = displayLabel ? LABEL_WORDING[displayLabel] : undefined;
 
+  const boxClass = unsure ? "gold-box disabled" : "gold-box";
+
   return (
-    <div className={unsure ? "disabled" : undefined}>
-      <p className="reading-label">{wording?.shownAs ?? displayLabel}</p>
-      {wording && <p>{wording.meaning}</p>}
-      {unsure && (
-        <p style={{ color: "var(--muted)" }}>
-          The model was not sure enough to say, so we count this as unclear.
+    <>
+      <div className={boxClass}>
+        <h2 className="section-label">The model's reading</h2>
+        <p className="reading-label">
+          <span className="chip chip-large" data-label={displayLabel ?? undefined}>
+            {wording?.shownAs ?? displayLabel}
+          </span>
         </p>
-      )}
+        {wording && <p>{wording.meaning}</p>}
+        {unsure && (
+          <p className="muted">
+            The model was not sure enough to say, so we count this as unclear.
+          </p>
+        )}
 
-      <p style={{ color: "var(--muted)" }}>{HOW_TO_READ_A_READING}</p>
+        <p className="small muted">{HOW_TO_READ_A_READING}</p>
 
-      <ChoiceBars reading={reading.answered} />
+        <ChoiceBars reading={reading.answered} />
 
-      <p>
-        {checkedAgainstPeople
-          ? `How sure: ${formatNInHundred(reading.answered.confidence)}`
-          : `The model settled on that answer at ${formatNInHundred(reading.answered.confidence)}. That is its own number and says nothing about whether the answer is right.`}
-      </p>
+        <p className="reading-confidence">
+          {checkedAgainstPeople
+            ? `How sure: ${formatNInHundred(reading.answered.confidence)}`
+            : `The model settled on that answer at ${formatNInHundred(reading.answered.confidence)}. That is its own number and says nothing about whether the answer is right.`}
+        </p>
+      </div>
 
-      <div className="secondary-readings">
+      <div className={`${boxClass} secondary-readings`}>
         <p className="secondary-intro">
           Jev was asked four more questions about this reply. Each answer is followed by the share
           out of 100 the model gave it.
@@ -255,7 +302,7 @@ function ReadingView({
           <SecondaryChoice heading={EVASION_TYPE_HEADING} reading={reading.evasionType} />
         )}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -263,7 +310,7 @@ function ChoiceBars({ reading }: { readonly reading: ChoiceReading }) {
   return (
     <ul className="choice-bars">
       {Object.entries(reading.probabilities).map(([choice, probability]) => (
-        <li key={choice} className="choice-bar-row">
+        <li key={choice} className="choice-bar-row" data-choice={choice}>
           <span className="choice-bar-label">{prettyChoice(choice)}</span>
           <span className="choice-bar-track" aria-hidden="true">
             <span

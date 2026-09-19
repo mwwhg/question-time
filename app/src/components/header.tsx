@@ -11,10 +11,10 @@ const NAV_ITEMS = [
 
 export function Header() {
   return (
-    <header className="site-header">
-      <div className="page-shell site-header-inner">
+    <header className="site-header on-dark">
+      <div className="wrap site-header-inner">
         <a href="/" className="site-name">
-          Did they answer?
+          Did they answer<span className="site-name-mark">?</span>
         </a>
         <nav aria-label="Main">
           <ul className="nav-list">

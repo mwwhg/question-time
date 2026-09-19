@@ -19,7 +19,7 @@ export function ErrorNote() {
 
 export function EmptyNote({ children }: { readonly children: ReactNode }) {
   return (
-    <p data-empty="true" style={{ color: "var(--muted)" }}>
+    <p data-empty="true" className="muted">
       {children}
     </p>
   );

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
 import { LabelKey } from "../components/label-key.tsx";
+import { PageBanner } from "../components/page-banner.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import { LABEL_WORDING, NO_READING_WORDING, TERMS } from "../lib/copy.ts";
@@ -51,64 +52,80 @@ export function BrowsePortfolio() {
     setPage(1);
   }
 
+  const hasRows = state.status === "ok" && state.data.rows.length > 0;
+
   return (
-    <div>
-      <p>
-        <Link to="/browse">&larr; Browse the results</Link>
-      </p>
-
-      {state.status === "loading" && <LoadingNote />}
-      {state.status === "error" && <ErrorNote />}
-
-      {state.status === "ok" && (
-        <>
-          <h1>{state.data.portfolio}</h1>
-          <p>Written questions sent to this portfolio in {year}.</p>
-          <p style={{ color: "var(--muted)", maxWidth: "70ch" }}>
-            {TERMS.wq} Each row is one question. Open a number to read the question, the reply and
-            the reading side by side. The table cannot tell you whether a reading is right, and it
-            is not a score for the minister who replied.
-          </p>
-          <LabelKey />
-
-          {state.data.rows.length === 0 ? (
-            <EmptyNote>No questions for this portfolio in {year}.</EmptyNote>
-          ) : (
-            <>
-              <p className="control-note" id="filter-note">
-                Show only questions with this reading:
-              </p>
-              <fieldset className="control-group" aria-describedby="filter-note">
-                <legend className="visually-hidden">Filter by reading</legend>
-                <button
-                  type="button"
-                  className="button"
-                  aria-pressed={filter === "all"}
-                  onClick={() => setFilterAndResetPage("all")}
-                >
-                  All
-                </button>
-                {LABELS.map((l) => (
+    <>
+      <PageBanner>
+        <p className="banner-back">
+          <Link to="/browse">&larr; Browse the results</Link>
+        </p>
+        {state.status === "ok" && (
+          <>
+            <h1>{state.data.portfolio}</h1>
+            <p>Written questions sent to this portfolio in {year}.</p>
+          </>
+        )}
+      </PageBanner>
+      <div className="two-pane">
+        <aside className="pane-side">
+          <div className="pane-side-inner">
+            {hasRows && (
+              <div>
+                <p className="control-note" id="filter-note">
+                  Show only questions with this reading:
+                </p>
+                <fieldset className="control-group" aria-describedby="filter-note">
+                  <legend className="visually-hidden">Filter by reading</legend>
                   <button
-                    key={l}
                     type="button"
                     className="button"
-                    aria-pressed={filter === l}
-                    onClick={() => setFilterAndResetPage(l)}
+                    aria-pressed={filter === "all"}
+                    onClick={() => setFilterAndResetPage("all")}
                   >
-                    {LABEL_WORDING[l]?.shownAs}
+                    All
                   </button>
-                ))}
-                <button
-                  type="button"
-                  className="button"
-                  aria-pressed={filter === "no_reading"}
-                  onClick={() => setFilterAndResetPage("no_reading")}
-                >
-                  {NO_READING_WORDING.shownAs}
-                </button>
-              </fieldset>
+                  {LABELS.map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      className="button"
+                      aria-pressed={filter === l}
+                      onClick={() => setFilterAndResetPage(l)}
+                    >
+                      {LABEL_WORDING[l]?.shownAs}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    className="button"
+                    aria-pressed={filter === "no_reading"}
+                    onClick={() => setFilterAndResetPage("no_reading")}
+                  >
+                    {NO_READING_WORDING.shownAs}
+                  </button>
+                </fieldset>
+              </div>
+            )}
+            <div className="card">
+              <LabelKey />
+            </div>
+            <p className="muted">
+              {TERMS.wq} Each row is one question. Open a number to read the question, the reply and
+              the reading side by side. The table cannot tell you whether a reading is right, and it
+              is not a score for the minister who replied.
+            </p>
+          </div>
+        </aside>
 
+        <div className="pane-main">
+          {state.status === "loading" && <LoadingNote />}
+          {state.status === "error" && <ErrorNote />}
+          {state.status === "ok" && !hasRows && (
+            <EmptyNote>No questions for this portfolio in {year}.</EmptyNote>
+          )}
+          {state.status === "ok" && hasRows && (
+            <>
               <h2
                 ref={resultsHeading}
                 tabIndex={-1}
@@ -150,7 +167,11 @@ export function BrowsePortfolio() {
                               </th>
                               <td className="mono">{formatDate(row.dateAsked)}</td>
                               <td>{row.question}</td>
-                              <td>{wording?.shownAs}</td>
+                              <td>
+                                <span className="chip" data-label={row.label ?? undefined}>
+                                  {wording?.shownAs}
+                                </span>
+                              </td>
                             </tr>
                           );
                         })}
@@ -185,8 +206,8 @@ export function BrowsePortfolio() {
               )}
             </>
           )}
-        </>
-      )}
-    </div>
+        </div>
+      </div>
+    </>
   );
 }
