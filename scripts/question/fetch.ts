@@ -2,7 +2,7 @@
 // byte-for-byte so `normalise` always replays exactly what the API sent. Resumable:
 // a page already on disk is never re-fetched, and the manifest keeps its old retrievedAt.
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import { z } from "zod";
 import { SourcePage } from "./source.ts";
 
@@ -136,11 +136,15 @@ async function fetchPage(
   if (existsSync(file)) {
     const text = readFileSync(file, "utf8");
     const parsed = SourcePage.parse(JSON.parse(text));
+    // Raw pages are written once. A changed page must stop the run, not get a fresh hash.
+    if (existing !== undefined && existing.sha256 !== sha256(text))
+      throw new Error(`${file} no longer matches the sha256 in ${MANIFEST_PATH}`);
     return {
       file,
       // The manifest records the request that produced the bytes on disk, not today's request.
+      // A page with no entry was left by an interrupted run: its mtime is when it was retrieved.
       requestBody: existing?.requestBody ?? requestBody,
-      retrievedAt: existing?.retrievedAt ?? new Date().toISOString(),
+      retrievedAt: existing?.retrievedAt ?? statSync(file).mtime.toISOString(),
       sha256: sha256(text),
       recordCount: parsed.value.length,
     };
@@ -169,6 +173,24 @@ export function listManifestPages(): readonly ManifestPage[] {
   return manifest.pages.map(({ file, retrievedAt }) => ({ file, retrievedAt }));
 }
 
+/**
+ * Says what is wrong when a year's pages do not hold every question exactly once, or null.
+ * Record counts still match when a record lands on two pages and another on none, so this
+ * counts distinct question numbers instead.
+ */
+export function pagingProblem(args: {
+  readonly year: number;
+  readonly odataCount: number;
+  readonly questionNumbers: readonly number[];
+}): string | null {
+  const distinct = new Set(args.questionNumbers).size;
+  if (distinct === args.odataCount && args.questionNumbers.length === args.odataCount) return null;
+  const counts = `${args.year}: expected ${args.odataCount} questions, got ${args.questionNumbers.length} records with ${distinct} distinct numbers`;
+  return distinct < args.questionNumbers.length
+    ? `${counts}. Records repeat across pages: remove ${RAW_DIR}/search-${args.year}-*.json and re-run.`
+    : `${counts}. The source count and its pages disagree; read docs/sources.md before re-fetching.`;
+}
+
 export type FetchSummary = {
   readonly years: Readonly<Record<string, { odataCount: number; recordCount: number }>>;
   readonly pagesFetched: number;
@@ -179,10 +201,10 @@ export async function fetchAll(years: readonly number[]): Promise<FetchSummary> 
   mkdirSync(RAW_DIR, { recursive: true });
   const previous = readManifest();
   const previousByFile = new Map(previous?.pages.map((p) => [p.file, p]) ?? []);
-  const pagesBefore = new Set(previous?.pages.map((p) => p.file) ?? []);
 
   const pages: ManifestPageEntry[] = [];
   const yearSummaries: Record<string, { odataCount: number; recordCount: number }> = {};
+  const problems: string[] = [];
 
   for (const year of years) {
     const first = await fetchPage(
@@ -203,19 +225,15 @@ export async function fetchAll(years: readonly number[]): Promise<FetchSummary> 
       pages.push(entry);
       recordCount += entry.recordCount;
     }
-    // Fail loudly if a record landed on two pages and another on none. The record counts still
-    // match when that happens, so count distinct question numbers instead.
-    const numbers = new Set(
-      pages
+    const problem = pagingProblem({
+      year,
+      odataCount,
+      questionNumbers: pages
         .filter((p) => p.file.startsWith(`${RAW_DIR}/search-${year}-`))
         .flatMap((p) => SourcePage.parse(JSON.parse(readFileSync(p.file, "utf8"))).value)
         .map((r) => r.questionNumber),
-    );
-    if (numbers.size !== odataCount)
-      throw new Error(
-        `${year}: ${numbers.size} distinct question numbers for an odata count of ${odataCount}; ` +
-          `records repeat across pages. Remove ${RAW_DIR}/search-${year}-*.json and re-run.`,
-      );
+    });
+    if (problem !== null) problems.push(problem);
     yearSummaries[String(year)] = { odataCount, recordCount };
   }
 
@@ -228,6 +246,11 @@ export async function fetchAll(years: readonly number[]): Promise<FetchSummary> 
     pages,
   });
 
-  const pagesFetched = pages.filter((p) => !pagesBefore.has(p.file)).length;
+  // Thrown after the manifest is written, so every page on disk keeps its true retrievedAt.
+  if (problems.length > 0) throw new Error(problems.join("\n"));
+
+  const pagesFetched = pages.filter(
+    (p) => previousByFile.get(p.file)?.retrievedAt !== p.retrievedAt,
+  ).length;
   return { years: yearSummaries, pagesFetched, pagesSkipped: pages.length - pagesFetched };
 }
