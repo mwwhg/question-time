@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve, sep } from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
 
@@ -14,9 +14,13 @@ function serveData(): Plugin {
       server.middlewares.use((req, res, next) => {
         if (!req.url?.startsWith("/data/")) return next();
         const relative = req.url.slice("/data/".length).split("?")[0] ?? "";
-        const real = join(outputDir, relative);
-        const fixture = join(fixturesDir, relative);
-        const path = existsSync(real) ? real : existsSync(fixture) ? fixture : null;
+        // This runs before Vite's own fs.deny guard, so a raw `/data/../../.env` would
+        // otherwise be read straight off disk. Serve only paths that stay inside each root.
+        const within = (dir: string) => {
+          const candidate = resolve(dir, relative);
+          return candidate.startsWith(dir + sep) && existsSync(candidate) ? candidate : null;
+        };
+        const path = within(outputDir) ?? within(fixturesDir);
         if (!path) return next();
         res.setHeader("Content-Type", "application/json");
         res.end(readFileSync(path));
