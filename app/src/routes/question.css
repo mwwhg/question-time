@@ -1,44 +1,74 @@
 .question-header {
-  margin-bottom: 4px;
+  font-size: 13px;
 }
 
-.question-text {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 500;
+/* Source text on the left, the model's reading on the right. They never share a box. */
+.question-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px 32px;
+  align-items: start;
+}
+
+.question-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .question-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.reply-text {
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0;
 }
 
 .shortened-note {
-  color: var(--muted);
   font-size: 12px;
-  margin-top: 8px;
+  margin: 10px 0 0;
+}
+
+.reading-yourself p {
+  margin: 0 0 10px;
+}
+
+.reading-yourself .bullets {
+  margin-bottom: 12px;
 }
 
 .reading-label {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 20px;
-  margin: 4px 0 12px;
+  margin: 0 0 10px;
+}
+
+.gold-box p {
+  margin: 0 0 10px;
 }
 
 .choice-bars {
   list-style: none;
-  margin: 0 0 12px;
+  margin: 14px 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .choice-bar-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(24px, 2fr) auto;
-  align-items: center;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 10px;
 }
 
 .choice-bar-track {
-  height: 10px;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  height: 8px;
   background: var(--track);
   border-radius: 4px;
   overflow: hidden;
@@ -47,7 +77,20 @@
 .choice-bar-fill {
   display: block;
   height: 100%;
-  background: var(--partly-text);
+  border-radius: 4px;
+  background: var(--partly);
+}
+
+.choice-bar-row[data-choice="answered"] .choice-bar-fill {
+  background: var(--answered);
+}
+
+.choice-bar-row[data-choice="not_answered"] .choice-bar-fill {
+  background: var(--not-answered);
+}
+
+.choice-bar-row[data-choice="unclear"] .choice-bar-fill {
+  background: var(--unclear);
 }
 
 .choice-bar-value {
@@ -56,59 +99,47 @@
 }
 
 .secondary-readings {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.secondary-intro {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.secondary-reading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--model-line);
+}
+
+.secondary-reading p {
+  margin: 0;
+  font-size: 13px;
 }
 
 .secondary-heading {
   font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--body-dark);
-  margin: 0 0 4px;
-}
-
-.reading-yourself {
-  margin-top: 28px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
 }
 
 .provenance {
-  margin-top: 28px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .provenance p {
   margin: 2px 0;
 }
 
-.secondary-intro {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 14px;
-}
-
-@media (max-width: 480px) {
-  .choice-bar-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 4px 10px;
-  }
-
-  .choice-bar-label {
-    grid-column: 1;
-    grid-row: 1;
-    overflow-wrap: normal;
-  }
-
-  .choice-bar-value {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .choice-bar-track {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
+.provenance-versions {
+  font-size: 11px;
+  line-height: 1.6;
 }

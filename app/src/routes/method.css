@@ -1,21 +1,35 @@
-.question-set-list {
-  list-style: decimal;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.method-main > section > p,
+.method-main li {
+  max-width: 70ch;
 }
 
-.qs-exact {
-  margin: 6px 0 0;
-  font-size: 14px;
-  font-family: var(--font-mono);
+.method-main .bullets {
+  margin-bottom: 1em;
+}
+
+.question-set-list {
+  list-style: decimal;
+  padding-left: 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-set-list li {
+  padding: 14px 0 14px 6px;
+  border-top: 1px solid var(--line-faint);
+}
+
+.question-set-list li::marker {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--answered);
 }
 
 .qs-plain {
   margin: 0;
   font-weight: 600;
-  color: var(--ink);
 }
 
 .qs-answers {
@@ -26,50 +40,16 @@
 .question-set-list summary {
   cursor: pointer;
   font-size: 14px;
-  color: var(--source-text);
+  font-weight: 500;
 }
 
-.question-set-list details p {
-  margin: 6px 0 0;
-  font-size: 14px;
-}
-
-.worked-example {
-  margin: 28px 0;
-  max-width: none;
-}
-
-.worked-example h2 {
-  margin-top: 0;
-}
-
-.worked-example .section-label {
-  margin-bottom: 2px;
-}
-
-.method-contents {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-  margin: 24px 0;
-  padding: 16px 20px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  background: var(--surface);
-}
-
-.method-contents a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-}
-
-.worked-example h3.section-label {
-  font-family: var(--font-body);
-  font-size: 14px;
-  margin-top: 20px;
-  text-transform: none;
-  letter-spacing: normal;
+.qs-exact {
+  margin: 8px 0 0;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  background: var(--ground);
+  border-radius: var(--radius-control);
 }
 
 #checks caption {

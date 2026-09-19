@@ -48,6 +48,21 @@
   background: var(--track);
 }
 
+/* The sidebar has no room for two columns. */
+.pane-side .label-key {
+  margin: 0;
+  font-size: 13px;
+}
+
+.pane-side .label-key-row {
+  grid-template-columns: 1fr;
+}
+
+.pane-side .label-key-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
 @media (max-width: 640px) {
   .label-key-row {
     grid-template-columns: 1fr;

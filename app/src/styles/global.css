@@ -4,6 +4,7 @@
 @import "@fontsource/ibm-plex-sans/500.css";
 @import "@fontsource/ibm-plex-sans/600.css";
 @import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
 @import "./tokens.css";
 
 * {
@@ -18,11 +19,21 @@ body {
 
 body {
   background: var(--ground);
-  color: var(--body-dark);
+  color: var(--ink);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.5;
   overflow-wrap: anywhere;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
 }
 
 h1,
@@ -34,8 +45,28 @@ h3 {
   line-height: 1.2;
 }
 
+h1 {
+  font-size: clamp(26px, 3vw, 32px);
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+h3 {
+  font-size: 17px;
+  margin: 20px 0 6px;
+}
+
 a {
-  color: var(--source-text);
+  color: var(--ink);
+}
+
+a:hover {
+  color: var(--answered);
 }
 
 a:not(.pill):not(.nav-link) {
@@ -44,6 +75,7 @@ a:not(.pill):not(.nav-link) {
 
 button {
   font-family: inherit;
+  font-size: inherit;
 }
 
 :focus-visible {
@@ -55,8 +87,8 @@ button {
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--on-dark);
+  color: var(--ink);
   padding: 10px 16px;
   z-index: 100;
   border-radius: 0 0 var(--radius-control) 0;
@@ -78,25 +110,86 @@ button {
   border: 0;
 }
 
-fieldset.control-group,
-fieldset.toggle-row {
-  border: none;
-  padding: 0;
+/* Layout */
+
+.wrap {
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.page-body {
+  padding-top: 28px;
+  padding-bottom: 40px;
+}
+
+.page-body > section,
+.pane-main > section {
+  margin: 0 0 28px;
+}
+
+/* Cream sidebar beside the content. The sidebar comes first in the DOM, so on a narrow
+   screen the controls and the label key stack above what they control. */
+.two-pane {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  max-width: calc(var(--page-max) + 2 * var(--gutter));
+  margin: 0 auto;
+}
+
+.pane-side {
+  background: var(--cream);
+  border-right: 1px solid var(--cream-line);
+  padding: 24px;
+  font-size: 13px;
+  --muted: var(--cream-muted);
+  --line-faint: var(--cream-line);
+}
+
+.pane-side-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  /* A scroll container clips outlines. The padding holds the 5px focus ring; the margin cancels it. */
+  padding: 5px;
+  margin: -5px;
+}
+
+:where(.pane-side) p {
   margin: 0;
+}
+
+.pane-main {
+  padding: 28px var(--gutter) 40px;
   min-width: 0;
 }
 
-.control-note {
-  margin: 0 0 6px;
-  font-size: 13px;
-  color: var(--muted);
-  max-width: 70ch;
+@media (min-width: 1441px) {
+  .pane-side {
+    border-left: 1px solid var(--cream-line);
+  }
 }
 
-.page-shell {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 0 var(--gutter);
+@media (max-width: 900px) {
+  .two-pane {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pane-side {
+    border-right: none;
+    border-bottom: 1px solid var(--cream-line);
+    padding: 20px var(--gutter);
+  }
+
+  .pane-side-inner {
+    position: static;
+    max-height: none;
+  }
 }
 
 .prose {
@@ -107,54 +200,113 @@ fieldset.toggle-row {
   margin: 0 0 1em;
 }
 
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 13px;
+}
+
 .section-label {
+  font-family: var(--font-body);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
   font-weight: 600;
+  margin: 0 0 8px;
 }
 
 .mono {
   font-family: var(--font-mono);
 }
 
+/* Quoted question text, the one place body copy is set in the display face. */
+.question-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.6vw, 21px);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Surfaces */
+
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
-  padding: var(--card-padding);
+  padding: var(--card-padding) 24px;
+}
+
+.card > :first-child,
+.cream-panel > :first-child,
+.source-box > :first-child,
+.gold-box > :first-child {
+  margin-top: 0;
+}
+
+.card > :last-child,
+.cream-panel > :last-child,
+.source-box > :last-child,
+.gold-box > :last-child {
+  margin-bottom: 0;
+}
+
+.cream-panel {
+  background: var(--cream);
+  border: 1px solid var(--cream-line);
+  border-radius: var(--radius-card);
+  padding: 20px 22px;
+  --muted: var(--cream-muted);
+}
+
+.pane-side .card {
+  padding: 16px 18px;
 }
 
 .pill {
   display: inline-block;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
-  padding: 4px 14px;
-  font-size: 13px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--muted);
-  background: var(--surface);
   text-decoration: none;
 }
 
+/* Full-width strip under the banner, in the model's gold because it is about the readings. */
 .notice {
-  background: var(--partly-tint);
+  background: var(--model-bg);
   color: var(--partly-text);
-  border: 1px solid var(--partly);
-  border-radius: var(--radius-card);
-  padding: 16px var(--card-padding);
-  margin: 20px 0;
+  border-bottom: 1px solid var(--model-line);
+  padding: 12px 0;
+  font-size: 14px;
 }
 
-.notice strong {
+.notice p {
+  margin: 0 0 4px;
+  max-width: 90ch;
+}
+
+.notice strong,
+.notice a {
   color: var(--partly-text);
+}
+
+.notice summary {
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .source-box {
   background: var(--source-tint);
-  border: 1px solid var(--source);
+  border: 1px solid var(--source-line);
   border-radius: var(--radius-card);
-  padding: var(--card-padding);
+  padding: var(--card-padding) 26px;
+  color: var(--source-text);
 }
 
 .source-box .section-label {
@@ -162,10 +314,11 @@ fieldset.toggle-row {
 }
 
 .gold-box {
-  background: var(--partly-tint);
-  border: 1px solid var(--partly);
+  background: var(--model-bg);
+  border: 1px solid var(--model-line);
   border-radius: var(--radius-card);
-  padding: var(--card-padding);
+  padding: var(--card-padding) 26px;
+  --muted: var(--cream-muted);
 }
 
 .gold-box .section-label {
@@ -176,6 +329,79 @@ fieldset.toggle-row {
 .disabled {
   color: var(--muted);
 }
+
+/* The reading word as a chip. Always dark text on a tint: a column of saturated red
+   would read as a verdict, and the site describes replies without scoring them. */
+.chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius-chip);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--line-faint);
+  color: var(--body-dark);
+}
+
+.chip[data-label="answered"] {
+  background: var(--answered-tint);
+  color: var(--answered);
+}
+
+.chip[data-label="partly_answered"] {
+  background: var(--partly-tint);
+  color: var(--partly-text);
+}
+
+.chip[data-label="not_answered"] {
+  background: var(--not-answered-tint);
+  color: var(--not-answered-text);
+}
+
+.chip-large {
+  padding: 6px 12px;
+  border-radius: var(--radius-control);
+  font-size: 16px;
+}
+
+/* Gold markers keep native list semantics, which list-style: none would drop in Safari. */
+.bullets {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bullets li::marker {
+  color: var(--partly);
+}
+
+/* The worked example, shown on Home and on Method: source text left, the rest right. */
+.worked-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: 16px 32px;
+  margin-top: 16px;
+}
+
+.worked-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.worked-col p {
+  margin: 0;
+}
+
+.worked-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Tables */
 
 table {
   border-collapse: collapse;
@@ -191,8 +417,31 @@ table caption {
 th,
 td {
   text-align: left;
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--line-faint);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+thead th {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  vertical-align: bottom;
+}
+
+tbody tr:nth-child(odd) {
+  background: var(--surface);
+}
+
+.card tbody tr:nth-child(odd) {
+  background: var(--ground);
+}
+
+td.mono {
+  white-space: nowrap;
+  font-size: 13px;
 }
 
 .table-scroll {
@@ -200,21 +449,100 @@ td {
   max-width: 100%;
 }
 
+/* Controls */
+
+fieldset.control-group,
+fieldset.toggle-row {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.control-group,
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pane-side .control-group {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-note {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
 .button {
-  border: 1px solid var(--line);
-  background: var(--surface);
+  display: inline-block;
+  border: 1px solid var(--answered);
+  background: transparent;
   border-radius: var(--radius-control);
-  padding: 6px 12px;
+  padding: 8px 12px;
   min-height: 36px;
   max-width: 100%;
   cursor: pointer;
-  color: var(--body-dark);
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
 }
 
-.button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--surface);
-  border-color: var(--ink);
+.button:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.button[aria-pressed="true"],
+.button-primary,
+.button-primary:hover:not(:disabled) {
+  background: var(--answered);
+  color: var(--on-dark);
+  border-color: var(--answered);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.on-dark .button {
+  border-color: var(--accent);
+  color: var(--partly-tint);
+}
+
+.on-dark .button:hover:not(:disabled) {
+  background: var(--chrome);
+  color: var(--on-dark);
+}
+
+.on-dark .button[aria-pressed="true"] {
+  background: var(--partly-tint);
+  border-color: var(--partly-tint);
+  color: var(--chrome);
+}
+
+.pane-side .control-group .button {
+  text-align: left;
+  width: 100%;
+}
+
+.pane-side .control-row {
+  flex-direction: row;
+}
+
+.pane-side .control-row .button {
+  width: auto;
+  flex: 1 1 0;
+  text-align: center;
+}
+
+fieldset legend.section-label {
+  padding: 0;
 }
 
 .results-summary {
@@ -222,12 +550,26 @@ td {
   font-size: 14px;
 }
 
-h2.section-label {
-  font-family: var(--font-body);
-  font-size: 15px;
-  text-transform: none;
-  letter-spacing: normal;
-  margin: 0 0 12px;
+/* In-page contents list, shown in the sidebar of the long pages. */
+.contents-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contents-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 10px;
+  border-radius: var(--radius-control);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.contents-nav a:hover {
+  background: var(--surface);
 }
 
 [tabindex="-1"] {
