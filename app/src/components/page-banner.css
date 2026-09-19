@@ -8,7 +8,8 @@
   color: var(--on-dark);
 }
 
-.page-banner p {
+/* :where keeps this at element specificity, so .banner-back and .question-header can override it. */
+:where(.page-banner) p {
   margin: 0 0 8px;
   max-width: 880px;
   font-size: 16px;
