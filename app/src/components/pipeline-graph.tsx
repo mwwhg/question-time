@@ -57,7 +57,7 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "code",
     title: "Tidy and link replies",
-    body: "Ordinary code, no model. About one reply in four does not answer in its own words. It just says “see my earlier reply”. The code goes and finds that earlier reply and puts the two together, so the model reads both.",
+    body: "Ordinary code, no model. About one reply in four does not answer in its own words. It only says “see my earlier reply”. The code goes and finds that earlier reply and puts the two together, so the model reads both.",
   },
   {
     kind: "code",
@@ -82,7 +82,7 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "code",
     title: "Add up the readings",
-    body: "Code adds the readings up by portfolio, by month, by how long the reply was, and more, then writes the totals out as plain data files. The arithmetic is ordinary code; counts of readings still depend on the model’s judgements.",
+    body: "Code adds the readings up by portfolio, by month, by how long the reply was, and more, then writes the totals out as plain data files. The arithmetic is ordinary code. Counts of readings still depend on the model’s judgements.",
   },
   {
     kind: "site",

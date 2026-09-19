@@ -64,7 +64,7 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "number",
     id: "askers",
     value: formatNumber(findings.corpus.answered),
-    sentence: `written questions got a reply. They were asked by ${formatNumber(findings.civics.askers.length)} different MPs.`,
+    sentence: `written questions got a reply. ${formatNumber(findings.civics.askers.length)} different MPs asked them.`,
     cannotTell: "This counts questions asked, not whether the replies were any good.",
     tag: HEADLINE_TAG_COUNTED,
     linkTo: "/findings",
@@ -98,7 +98,7 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     sentence:
       "of replies do not answer in their own words. They only point to a reply the minister gave earlier.",
     cannotTell:
-      "This can't tell you whether the earlier reply, once read together with the question, actually answered it.",
+      "This can't tell you whether the earlier reply, once read together with the question, answered it.",
     tag: HEADLINE_TAG_COUNTED,
     linkTo: "/findings",
     linkText: "See how replies are shaped",
@@ -110,7 +110,7 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     counts: index.totals.all,
     sentence:
       "Published model readings, with replies that have no published reading shown separately.",
-    cannotTell: "This is the model's own reading. It has not yet been checked against people.",
+    cannotTell: "This is the model's own reading. It is not yet checked against people.",
     tag: HEADLINE_TAG_MODEL,
     linkTo: "/findings",
     linkText: "See the breakdowns",
