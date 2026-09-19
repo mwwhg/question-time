@@ -37,7 +37,10 @@
   color: var(--muted);
   font-size: 14px;
   font-weight: 500;
-  padding: 4px 2px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 2px;
   border-bottom: 2px solid transparent;
 }
 
