@@ -144,7 +144,7 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
         </p>
         <p>
           We copied this question and reply from the official record on{" "}
-          {formatDate(item.provenance.retrievedAt)} and have not changed the words.
+          {formatDate(item.provenance.retrievedAt)} and did not change the words.
         </p>
         <p>
           {item.provenance.evaluatedAt
