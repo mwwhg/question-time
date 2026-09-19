@@ -157,6 +157,7 @@ function ensureReferralFloor(
   }
 }
 
+// The benchmark sample is frozen (docs/evaluation.md), so later years are not added here.
 const YEARS = [2024, 2025] as const;
 const REPLY_LENGTH_TERCILES = ["short", "mid", "long"] as const;
 const REFERRAL_CELLS = ["referral", "not"] as const;
