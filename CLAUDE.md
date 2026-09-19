@@ -31,7 +31,7 @@ Node 24+ runs `.ts` directly. There is no build step for `scripts/`, and no `tsx
 
 ## Site copy and safety rules
 
-The site describes the text of replies, never anyone's honesty, effort or competence. Portfolios only, never a ranking of named ministers. Names appear exactly as the source gives them, with no adjectives. Probability reads "N in 100". Confidence reads "how sure". No party colours, no partisan wording. Confident misses get published.
+The site describes the text of replies, never anyone's honesty, effort or competence. Portfolios only, never a ranking of named ministers. A party appears only as a label beside a name, as at the date asked; readings are never totalled, scored or ranked by party. Names appear exactly as the source gives them, with no adjectives. Probability reads "N in 100". Confidence reads "how sure". No party colours, no partisan wording. Confident misses get published.
 
 ## Tests
 

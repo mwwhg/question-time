@@ -157,6 +157,7 @@ function AskersTable({ askers }: { readonly askers: FindingsData["civics"]["aske
           <thead>
             <tr>
               <th scope="col">Member</th>
+              <th scope="col">Party when asking</th>
               <th scope="col">Questions</th>
               <th scope="col">Distinct questions</th>
               <th scope="col">Portfolios asked</th>
@@ -166,6 +167,7 @@ function AskersTable({ askers }: { readonly askers: FindingsData["civics"]["aske
             {shown.map((asker) => (
               <tr key={asker.name}>
                 <th scope="row">{asker.name}</th>
+                <td>{asker.parties.join(", then ")}</td>
                 <td className="mono">{formatNumber(asker.questions)}</td>
                 <td className="mono">{formatNumber(asker.distinctQuestions)}</td>
                 <td className="mono">{formatNumber(asker.portfoliosAsked)}</td>

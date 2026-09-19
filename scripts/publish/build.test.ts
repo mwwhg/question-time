@@ -3,6 +3,7 @@ import { test } from "node:test";
 import type { Run } from "../judgement/run.ts";
 import type { Answers, Judgement } from "../judgement/vocabulary.ts";
 import { probability } from "../judgement/vocabulary.ts";
+import { parseMemberships } from "../question/party.ts";
 import type { Question } from "../question/question.ts";
 import type { BuildInput } from "./build.ts";
 import { activeAndPaused, aggregate, questionOpenerGroup } from "./build.ts";
@@ -212,6 +213,15 @@ function fixture(): BuildInput {
     questions: [q1, q2, q3, q4, q5, q6, q7, q8, qAwaiting, qWithdrawn],
     judgements,
     benchmarkIds: ["2024-4"],
+    // Alice changes party between q1/q2 (15 March) and q6 (16 March). Bob and Carol are not in the table.
+    memberships: parseMemberships(
+      [
+        "name\tparty\tfrom\tto",
+        "Alice MP\tParty A\t2023-10-14\t2024-03-16",
+        "Alice MP\tParty B\t2024-03-16\t",
+        "Minister Name\tParty C\t2023-10-14\t",
+      ].join("\n"),
+    ),
     runHeader: RUN_HEADER,
     generatedAt: "2026-01-01T00:00:00.000Z",
   };
@@ -300,6 +310,17 @@ test("aggregate: deterministic — identical input produces byte-identical JSON,
   assert.equal(JSON.stringify(a), JSON.stringify(b));
 });
 
+test("aggregate: party is resolved as at the date asked, for the asker and the minister", () => {
+  const details = aggregate(fixture()).questionBlocks.flatMap((b) => b.items);
+  const party = (n: number) => {
+    const d = details.find((x) => x.number === n);
+    return [d?.askedByParty, d?.ministerParty];
+  };
+  assert.deepEqual(party(1), ["Party A", "Party C"]);
+  assert.deepEqual(party(6), ["Party B", "Party C"]);
+  assert.deepEqual(party(3), [null, "Party C"]); // Bob MP is not in the table
+});
+
 test("aggregate: civics.askers counts every answered question, skips empty names, orders by questions desc then name", () => {
   const result = aggregate(fixture());
   const { askers } = result.findings.civics;
@@ -310,11 +331,13 @@ test("aggregate: civics.askers counts every answered question, skips empty names
   const alice = askers.find((a) => a.name === "Alice MP");
   assert.deepEqual(alice, {
     name: "Alice MP",
+    parties: ["Party A", "Party B"], // changed party on 16 March, earliest first
     questions: 3, // q1, q2, q6
     distinctQuestions: 2, // dup-a, 2024-6
     portfoliosAsked: 1, // all three sit in Finance
   });
   const carol = askers.find((a) => a.name === "Carol MP");
+  assert.deepEqual(carol?.parties, []); // not in the table: no label, never a guess
   assert.equal(carol?.portfoliosAsked, 2); // "Minister for ACC" and "Minister of ACC" collide to distinct slugs
   assert.equal(
     askers.some((a) => a.name === ""),
