@@ -17,7 +17,7 @@ Not covered by that licence: MP photographs, party content, official emblems. We
 **API. FACT, 2026-09-18. Undocumented, so it may change.**
 
 - `POST https://questions.parliament.nz/api/data/search` with a JSON body:
-  `searchTab:0, keyword, status, questionNumber, questionNumberYear ("2024", a string), members[], ministers[], portfolios[], parliament, dateFrom, dateTo, datePeriod, restrictedFrom, restrictedTo, column:1, direction:0|1, pageSize, page`.
+  `searchTab:0, keyword, status, questionNumber, questionNumberYear ("2024", a string), members[], ministers[], portfolios[], parliament, dateFrom, dateTo, datePeriod, restrictedFrom, restrictedTo, column:0|1|2, direction:0|1, pageSize, page`. FACT, 2026-09-19: column 0 sorts by question number, 1 by date asked, 2 by something else; 3 and 4 return HTTP 500. Column 1 breaks ties differently on each request, so paging over it can repeat some records and drop others. We page over column 0. The 2024 and 2025 pages were fetched over column 1 and checked afterwards: every question number appears exactly once.
 - Response: `pageSize, page, "@odata.count", value[]`. `pageSize` is silently capped at 1000. About 1.1 MB and 300 ms per full page.
 - Record fields: `id, writtenQuestionsDocumentId, parliamentNumber, documentType, title, statusId, questionNumber, questionYear, questionText, questionReleasedDate, memberId, roleId, portfolioId_PortfolioMinister, replyText, ministerName, ministerialDisplayName, attachmentId, attachmentName, attachmentSize, lastModified`.
 - `statusId`: 1 awaiting reply (`replyText` is "Reply due: ..."), 2 answered, 3 withdrawn (`replyText` is "Question withdrawn").
@@ -26,7 +26,7 @@ Not covered by that licence: MP photographs, party content, official emblems. We
 - `GET /api/data/searchFilters` lists parliaments, years, members, ministers and portfolios.
 - Counts: 2024 has 82,423 records, 2025 has 59,263 and 2026 has 41,275 up to 18 September. Total 182,961. The brief's estimate was about 60,000.
 
-**Fetch policy.** About 142 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched. FACT, 2026-09-19: 2026 was fetched part-way through the year (41,275 records in 42 pages, 1,859 still awaiting a reply), so it is a snapshot as at its `retrievedAt`. Page order is not stable as questions are added, so a later re-run cannot top the year up; refreshing 2026 means fetching the whole year again under a new decision.
+**Fetch policy.** About 142 requests, one per second, with an identifying User-Agent. Pages are saved byte-for-byte and never re-fetched. FACT, 2026-09-19: 2026 was fetched part-way through the year (41,275 records in 42 pages, 1,859 still awaiting a reply), so it is a snapshot as at its `retrievedAt`. Pages already on disk are never re-fetched, so a later re-run does not pick up replies that arrive after that; refreshing 2026 means fetching the whole year again under a new decision.
 
 ## Party membership, www3.parliament.nz member pages
 
@@ -79,8 +79,8 @@ The installed `cloudflare` and `wrangler` skills prescribe Workers with static a
 |---|---|
 | Records | 182,961 |
 | Answered / awaiting / withdrawn | 179,225 / 1,890 / 1,846 |
-| Reply is plain text | 127,836 |
-| Reply only refers to an earlier reply | 48,085 (48,011 resolved, 74 not) |
+| Reply is plain text | 127,831 |
+| Reply only refers to an earlier reply | 48,090 (48,017 resolved, 73 not) |
 | Reply is only a pointer to an attached PDF, which we do not read | 3,304 |
 | Replies marked "Corrected reply:" | 602 |
 | Distinct question texts | 65,451 |

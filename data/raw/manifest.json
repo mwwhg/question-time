@@ -3748,13 +3748,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 1
       },
-      "retrievedAt": "2026-09-19T03:28:55.916Z",
-      "sha256": "9bf72513a9ceeb1c3131f9c8c41edf7598ebb110a69d505f2acbba0ed5ee9e95",
+      "retrievedAt": "2026-09-19T03:58:01.366Z",
+      "sha256": "e4b5b4ded7365a2d8141104e479f552a1f4828a2cce129b9335b145d13411f04",
       "recordCount": 1000
     },
     {
@@ -3774,13 +3774,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 2
       },
-      "retrievedAt": "2026-09-19T03:28:57.287Z",
-      "sha256": "98b2e68f70e6b42b5b4449c7607c62fa55d7d56867e4e5924bb476167f22ff14",
+      "retrievedAt": "2026-09-19T03:58:02.676Z",
+      "sha256": "7848d1a3bbed1c35bd5245189617d904578b766741234692beb3d3fa1766ccea",
       "recordCount": 1000
     },
     {
@@ -3800,13 +3800,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 3
       },
-      "retrievedAt": "2026-09-19T03:28:58.691Z",
-      "sha256": "5194e61040379fc5cf8e03b30cab42a94f659eef02a45975bc881fabd37e1a03",
+      "retrievedAt": "2026-09-19T03:58:04.003Z",
+      "sha256": "26f5c8d8bbb24f4ef941f9e6ab6b58f75a6830d8823f30ac7562b37a6f41c797",
       "recordCount": 1000
     },
     {
@@ -3826,13 +3826,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 4
       },
-      "retrievedAt": "2026-09-19T03:29:00.004Z",
-      "sha256": "db43475f01b1d4553fa7ed67e8b85441315bc5accf11b603c53b19ecbb2a5fd4",
+      "retrievedAt": "2026-09-19T03:58:05.331Z",
+      "sha256": "c3483592ae95060bfbef4c22107d72a54ea7ba793ef9da89a8f40099fce9d9bd",
       "recordCount": 1000
     },
     {
@@ -3852,13 +3852,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 5
       },
-      "retrievedAt": "2026-09-19T03:29:01.396Z",
-      "sha256": "30b4c468a13197866fa2ef863a4635637d3fb5385395f88b749d746df7da9a03",
+      "retrievedAt": "2026-09-19T03:58:06.639Z",
+      "sha256": "0d75354b3b17578bcd889de0f0e4432e0f9073ac91a3475afd9f16677765ed25",
       "recordCount": 1000
     },
     {
@@ -3878,13 +3878,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 6
       },
-      "retrievedAt": "2026-09-19T03:29:02.783Z",
-      "sha256": "aecf3af798374788c7167bbd3c495a19734537342c0d673d8a95a46213233c88",
+      "retrievedAt": "2026-09-19T03:58:07.985Z",
+      "sha256": "832a5f7bbc7105acbbf7ff2d636284d7a5c4869859733ea0252407830e477b93",
       "recordCount": 1000
     },
     {
@@ -3904,13 +3904,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 7
       },
-      "retrievedAt": "2026-09-19T03:29:04.128Z",
-      "sha256": "6d770362e378033956a0668ce020e01b32c4a4011e131d2ca93de42632af29fd",
+      "retrievedAt": "2026-09-19T03:58:09.304Z",
+      "sha256": "fc5efa24aac372e7526ab1cf5eba98933695f8c150f48e62117c8cc375a2ee46",
       "recordCount": 1000
     },
     {
@@ -3930,13 +3930,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 8
       },
-      "retrievedAt": "2026-09-19T03:29:05.545Z",
-      "sha256": "6053e91f71d403a567e0415f17baa7d2f4b2616e1c9479a9e75c95df196191db",
+      "retrievedAt": "2026-09-19T03:58:10.689Z",
+      "sha256": "3e2318ec3ce694b9b798c2306b351168abcbaa794e754a4b2566cfca35e5152c",
       "recordCount": 1000
     },
     {
@@ -3956,13 +3956,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 9
       },
-      "retrievedAt": "2026-09-19T03:29:06.979Z",
-      "sha256": "bf5fdcbf6f174898ae252b5055df260d5ea67c3d6349ff1973d8f1a8a2fe4b1b",
+      "retrievedAt": "2026-09-19T03:58:12.018Z",
+      "sha256": "9b73101dca333c062ae1d68558f69e128f71f64c8eef6391aabe4515bcb2d807",
       "recordCount": 1000
     },
     {
@@ -3982,13 +3982,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 10
       },
-      "retrievedAt": "2026-09-19T03:29:08.407Z",
-      "sha256": "d87e8400a901854905298e5dba00aa3c8d91bf5286575cdd383f23bc2a30a171",
+      "retrievedAt": "2026-09-19T03:58:13.379Z",
+      "sha256": "9664291c4d31d6914c0903f6589a6fc6048a69304ec713f499d1fb5e7d38e94a",
       "recordCount": 1000
     },
     {
@@ -4008,13 +4008,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 11
       },
-      "retrievedAt": "2026-09-19T03:29:09.807Z",
-      "sha256": "42105ffe8ccaae461348d0b64c493da5332d3d908d220196e2ebb6b67f602efb",
+      "retrievedAt": "2026-09-19T03:58:14.670Z",
+      "sha256": "9bf0f6a6b5117e596f0a8ccc2b7b24f0ae438b39af128a5a3fdb8cc724d552ee",
       "recordCount": 1000
     },
     {
@@ -4034,13 +4034,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 12
       },
-      "retrievedAt": "2026-09-19T03:29:11.166Z",
-      "sha256": "8311ceee09112ddf18f0505bd2365870d6a1e5e63bbd8ea5957ecc20f11e7d8e",
+      "retrievedAt": "2026-09-19T03:58:16.018Z",
+      "sha256": "b1df44550929bb28be9c79c294fb3e2bd5b15566cba437dfafa9d9549428e1d2",
       "recordCount": 1000
     },
     {
@@ -4060,13 +4060,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 13
       },
-      "retrievedAt": "2026-09-19T03:29:12.573Z",
-      "sha256": "ac585e788a794321618e01f663d9e840a565942924600c97a22f789f58a61a31",
+      "retrievedAt": "2026-09-19T03:58:17.352Z",
+      "sha256": "2699df812a9d587031b283e7c30630799d9d1331cc1f9e3c50fb54a3e7bf81e5",
       "recordCount": 1000
     },
     {
@@ -4086,13 +4086,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 14
       },
-      "retrievedAt": "2026-09-19T03:29:13.947Z",
-      "sha256": "5ba111b1bf02e606a8b718e147b2074a8212860dcca27aecfc68dfcad76c2c6b",
+      "retrievedAt": "2026-09-19T03:58:18.691Z",
+      "sha256": "cae61bbcd6cd757e41065788b7e9e108f230c98af83eb23528f0bd95de93fe6b",
       "recordCount": 1000
     },
     {
@@ -4112,13 +4112,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 15
       },
-      "retrievedAt": "2026-09-19T03:29:15.253Z",
-      "sha256": "08a9f000fe78027d988c7fed7588950155cdd8c9d7f807c29973ecc3fc03d88b",
+      "retrievedAt": "2026-09-19T03:58:20.020Z",
+      "sha256": "6d36d71ac5eb0b15b2679454cea1f8b463a6a1c1d8d3a471049aab3225aa5993",
       "recordCount": 1000
     },
     {
@@ -4138,13 +4138,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 16
       },
-      "retrievedAt": "2026-09-19T03:29:16.572Z",
-      "sha256": "40617f699031f4b6a4bb53fb3fa1e7b1c4e5a06387a36634d98eda39965fa900",
+      "retrievedAt": "2026-09-19T03:58:21.368Z",
+      "sha256": "5ca0bb04da9a7609062a8010f16cb437d3d6467954f3ba2b41cfaa94fc669de7",
       "recordCount": 1000
     },
     {
@@ -4164,13 +4164,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 17
       },
-      "retrievedAt": "2026-09-19T03:29:17.968Z",
-      "sha256": "093776f71bae03bc9b78ed6abe7ede0c6e28cc877a13ead4b2273e74df32cce3",
+      "retrievedAt": "2026-09-19T03:58:22.697Z",
+      "sha256": "efe26368299b24bde9c84f44526b38ed78e4074ab56caa0ea4f9485d50674039",
       "recordCount": 1000
     },
     {
@@ -4190,13 +4190,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 18
       },
-      "retrievedAt": "2026-09-19T03:29:19.387Z",
-      "sha256": "be94d5bfbfa0e73884982a434caf491fa1f1d945985d351efc5b7a0708ad6060",
+      "retrievedAt": "2026-09-19T03:58:24.028Z",
+      "sha256": "b99d7a20d855254d98beb11aa0ff0e9c9868cd2d976c6c1610d6986ab3fd9f9a",
       "recordCount": 1000
     },
     {
@@ -4216,13 +4216,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 19
       },
-      "retrievedAt": "2026-09-19T03:29:20.862Z",
-      "sha256": "6cc807ff7ea59decb44f6cd1104ed5e625f8ca5a07daa86f36a3fca8f86c62cf",
+      "retrievedAt": "2026-09-19T03:58:25.363Z",
+      "sha256": "cdceed156fa01e22ec4ea8b63a44199bb793daf5037094b91bf7a62b58b7dbf0",
       "recordCount": 1000
     },
     {
@@ -4242,13 +4242,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 20
       },
-      "retrievedAt": "2026-09-19T03:29:22.312Z",
-      "sha256": "000b127cdc791bcd8975ea871d526f0f5b1e587569a651e8dfad7ac884dcb7af",
+      "retrievedAt": "2026-09-19T03:58:26.702Z",
+      "sha256": "ede5bb2b1d1ff59286246a1a0fd689067587c59ebd0d4856b96d76f1bc32d793",
       "recordCount": 1000
     },
     {
@@ -4268,13 +4268,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 21
       },
-      "retrievedAt": "2026-09-19T03:29:23.784Z",
-      "sha256": "4d4d0be29088a802b4118093848f0511de901f079f9b6b03eb1382ecba107cb2",
+      "retrievedAt": "2026-09-19T03:58:28.041Z",
+      "sha256": "6198cd41dd93b8465024ece8cc8f9efc18ac804231e13ea22ad84861080fccbc",
       "recordCount": 1000
     },
     {
@@ -4294,13 +4294,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 22
       },
-      "retrievedAt": "2026-09-19T03:29:25.132Z",
-      "sha256": "8e0371c8673ace82bb89407183a96019f6c0247d7ff621809b3e4de1a494a0a0",
+      "retrievedAt": "2026-09-19T03:58:29.319Z",
+      "sha256": "b57ebb43c0686a54496e3502caa3e2f7bd2a7dcafdcc88cd63ac116ca4f48c57",
       "recordCount": 1000
     },
     {
@@ -4320,13 +4320,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 23
       },
-      "retrievedAt": "2026-09-19T03:29:26.481Z",
-      "sha256": "eea59c1105e5cec1e2f5c5bcf9091341bc6ae3482905ff0ad8852db3580e7fd3",
+      "retrievedAt": "2026-09-19T03:58:30.607Z",
+      "sha256": "acd9d27dc4f803a59a94738d1b13e23a582beaa49fa916cb42568e8a4b1512cd",
       "recordCount": 1000
     },
     {
@@ -4346,13 +4346,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 24
       },
-      "retrievedAt": "2026-09-19T03:29:27.842Z",
-      "sha256": "a377d32603893e0c52046e9edd014e7688438b7ac4cde2022340de472bec9378",
+      "retrievedAt": "2026-09-19T03:58:31.890Z",
+      "sha256": "370381d92495fa199e736fe20320b9f1827842671c9be73f89c418d9be276dc4",
       "recordCount": 1000
     },
     {
@@ -4372,13 +4372,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 25
       },
-      "retrievedAt": "2026-09-19T03:29:29.255Z",
-      "sha256": "47f7fef70289b93354c851bb706e935a108d1831831ac3cc3d72bf2f847d81c9",
+      "retrievedAt": "2026-09-19T03:58:33.256Z",
+      "sha256": "4cd488e9dae36a4d3e0fa737aa88026f6c941e4afae22484a63cf1582e17b118",
       "recordCount": 1000
     },
     {
@@ -4398,13 +4398,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 26
       },
-      "retrievedAt": "2026-09-19T03:29:30.650Z",
-      "sha256": "6dee7b9e73dfac4330641088dc41312aba00284b2eb83237a968cf440c89e4fb",
+      "retrievedAt": "2026-09-19T03:58:34.552Z",
+      "sha256": "c3f90bfab4e19455cc027effc82ae7612d73821b70debb0fa9bb83f6522daaee",
       "recordCount": 1000
     },
     {
@@ -4424,13 +4424,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 27
       },
-      "retrievedAt": "2026-09-19T03:29:32.044Z",
-      "sha256": "8a72bc80733ee2102bff3ac93512329f55f4b5ab7b0ee0cc7eeb2b3fbf59ca18",
+      "retrievedAt": "2026-09-19T03:58:35.906Z",
+      "sha256": "345104009b493ac9be5bea61b3d67165188ec238632e4b31f762ea2e012beabe",
       "recordCount": 1000
     },
     {
@@ -4450,13 +4450,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 28
       },
-      "retrievedAt": "2026-09-19T03:29:33.425Z",
-      "sha256": "82d980b67706cebc3de1129fb11845d3f7ef9ab1561f2b87f6ab458d8de0363f",
+      "retrievedAt": "2026-09-19T03:58:37.304Z",
+      "sha256": "acc2217fcbc6c32fa4e047aab3ab27f1fc2597f7b0bf94c393f72ee4334089d2",
       "recordCount": 1000
     },
     {
@@ -4476,13 +4476,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 29
       },
-      "retrievedAt": "2026-09-19T03:29:34.821Z",
-      "sha256": "aeeeb42db8726216d0b850f42f5f451f17a3310c41167efd964687d8415eba9a",
+      "retrievedAt": "2026-09-19T03:58:38.630Z",
+      "sha256": "b3eff3592d797d0f744af70090706b393621b69a845f4a9de4c1c97efa29398a",
       "recordCount": 1000
     },
     {
@@ -4502,13 +4502,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 30
       },
-      "retrievedAt": "2026-09-19T03:29:36.199Z",
-      "sha256": "095244c90b596158e982363f31e1bf2c5d9d22224b657591ede103d3da795453",
+      "retrievedAt": "2026-09-19T03:58:39.970Z",
+      "sha256": "93fc96e39f33d06a4fcfd96d3c02db4bfe80da2fc83694994e0c4b75ec9d2547",
       "recordCount": 1000
     },
     {
@@ -4528,13 +4528,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 31
       },
-      "retrievedAt": "2026-09-19T03:29:37.540Z",
-      "sha256": "c8e6208fe4a568d109a800833ee7a00dc8752e90f7c344a29f886ba6d9a76e25",
+      "retrievedAt": "2026-09-19T03:58:41.321Z",
+      "sha256": "6db49a0c1d49e850f900520b04773c2d3bc3f16a0cff7deb78ed53bfdef28cda",
       "recordCount": 1000
     },
     {
@@ -4554,13 +4554,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 32
       },
-      "retrievedAt": "2026-09-19T03:29:38.884Z",
-      "sha256": "fc2da2dc53994628212d6d374c03e2f3be7bbfa9115f17a3f0c3404c968db1f2",
+      "retrievedAt": "2026-09-19T03:58:42.660Z",
+      "sha256": "132e8881502e10cfcb3c9189d519d706a5f02a4b8f7050670a128b601f05a0c2",
       "recordCount": 1000
     },
     {
@@ -4580,13 +4580,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 33
       },
-      "retrievedAt": "2026-09-19T03:29:40.175Z",
-      "sha256": "ba7f0e37c59c443c4c588a8b569c11478e370d7c66889dfab823b3685f762be6",
+      "retrievedAt": "2026-09-19T03:58:43.948Z",
+      "sha256": "3513ea41658356910ffe964ee193bc85e5dec137c0a7546cf1a1c3eb110c405a",
       "recordCount": 1000
     },
     {
@@ -4606,13 +4606,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 34
       },
-      "retrievedAt": "2026-09-19T03:29:41.577Z",
-      "sha256": "d1613254e4596eb0474f5f1e251fb7e18c4ef0f846e83cad51e273f62e3c0f95",
+      "retrievedAt": "2026-09-19T03:58:45.296Z",
+      "sha256": "10874d25ef5a757fe250a8d0c478129c450f32ad97acd577fb8f2606d4275506",
       "recordCount": 1000
     },
     {
@@ -4632,13 +4632,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 35
       },
-      "retrievedAt": "2026-09-19T03:29:42.927Z",
-      "sha256": "ad8ada0d0332d4d86204dc480a926239b01e64f5d0396a64d5c740a7d5f469eb",
+      "retrievedAt": "2026-09-19T03:58:46.624Z",
+      "sha256": "d8cf4d25094eba99037fede9925938c96ddf893ee4e2b0b7277fb2a7c9464d7e",
       "recordCount": 1000
     },
     {
@@ -4658,13 +4658,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 36
       },
-      "retrievedAt": "2026-09-19T03:29:44.272Z",
-      "sha256": "988b8bd50a4712e976592fa1b073bc5b44e8396ff09961253d8dc0b2624a29d6",
+      "retrievedAt": "2026-09-19T03:58:48.004Z",
+      "sha256": "72db4a2c6049eed5afb88473317e793d0ec58fc7030d10f20873f9385517fd2d",
       "recordCount": 1000
     },
     {
@@ -4684,13 +4684,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 37
       },
-      "retrievedAt": "2026-09-19T03:29:45.598Z",
-      "sha256": "51e9d72d4838679862493c28ebf16a1acf8691d2e83bca1704fdf8eb05144569",
+      "retrievedAt": "2026-09-19T03:58:49.351Z",
+      "sha256": "019717b4d7bae38f2b152aa886d13af1ce3bd6d957fdf7b0623755a90bcbcbc0",
       "recordCount": 1000
     },
     {
@@ -4710,13 +4710,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 38
       },
-      "retrievedAt": "2026-09-19T03:29:46.935Z",
-      "sha256": "8e85968c849b34234bd28ee441f677c65bc67f9797c5e3def366ff48c39adaba",
+      "retrievedAt": "2026-09-19T03:58:50.696Z",
+      "sha256": "eac9a2256b3e81f135c895608cfeed3e5c1754036a4786dee762b52e22e89590",
       "recordCount": 1000
     },
     {
@@ -4736,13 +4736,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 39
       },
-      "retrievedAt": "2026-09-19T03:29:48.277Z",
-      "sha256": "080dd890b389ca933bd4042ce328c78ad46795b485f39d9b50123e11d1ee6bc2",
+      "retrievedAt": "2026-09-19T03:58:52.003Z",
+      "sha256": "928e7a8f9ce2dfd5dc90e8a21c1b2cfd9ba1c1db35cab23654db3d98264180a9",
       "recordCount": 1000
     },
     {
@@ -4762,13 +4762,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 40
       },
-      "retrievedAt": "2026-09-19T03:29:49.577Z",
-      "sha256": "dbd0057dafe6f749a2bdbadd4ab54163ee9623b5842b69eb37dde143961915e6",
+      "retrievedAt": "2026-09-19T03:58:53.319Z",
+      "sha256": "2b40c06d42a0b4110ba7c0bda8fec2c0c1639865dc2799a8da1764182087fa0b",
       "recordCount": 1000
     },
     {
@@ -4788,13 +4788,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 41
       },
-      "retrievedAt": "2026-09-19T03:29:50.873Z",
-      "sha256": "d1f619f05cb3731c743b8c3560c3bfac2528ab900a05de3634020a231456ff52",
+      "retrievedAt": "2026-09-19T03:58:54.608Z",
+      "sha256": "d9ac26ce1fadc28e7abfaca3f4618c9804769c7959e1a0f96d44970347713797",
       "recordCount": 1000
     },
     {
@@ -4814,13 +4814,13 @@
         "datePeriod": null,
         "restrictedFrom": null,
         "restrictedTo": null,
-        "column": 1,
+        "column": 0,
         "direction": 0,
         "pageSize": 1000,
         "page": 42
       },
-      "retrievedAt": "2026-09-19T03:29:52.027Z",
-      "sha256": "d06411707c3cd9bd15ee9ffc4ce09f80326d3968cadb97dcc529e33527422e38",
+      "retrievedAt": "2026-09-19T03:58:55.752Z",
+      "sha256": "3736717b67e471d7ee68be4b909ededa183085e2c8cda0e646e186fc8f6bbb3d",
       "recordCount": 275
     }
   ]

@@ -30,7 +30,7 @@ type SearchRequestBody = {
   readonly datePeriod: null;
   readonly restrictedFrom: null;
   readonly restrictedTo: null;
-  readonly column: 1;
+  readonly column: 0;
   readonly direction: 0;
   readonly pageSize: typeof PAGE_SIZE;
   readonly page: number;
@@ -52,7 +52,10 @@ function buildRequestBody(year: number, page: number): SearchRequestBody {
     datePeriod: null,
     restrictedFrom: null,
     restrictedTo: null,
-    column: 1,
+    // Column 0 sorts by question number, a total order that only grows. Column 1 sorts by date
+    // asked, and the API breaks ties differently on each request, so records straddling a page
+    // boundary came back twice or not at all (2026, pages 22 and 23).
+    column: 0,
     direction: 0,
     pageSize: PAGE_SIZE,
     page,
@@ -135,7 +138,8 @@ async function fetchPage(
     const parsed = SourcePage.parse(JSON.parse(text));
     return {
       file,
-      requestBody,
+      // The manifest records the request that produced the bytes on disk, not today's request.
+      requestBody: existing?.requestBody ?? requestBody,
       retrievedAt: existing?.retrievedAt ?? new Date().toISOString(),
       sha256: sha256(text),
       recordCount: parsed.value.length,
@@ -199,6 +203,19 @@ export async function fetchAll(years: readonly number[]): Promise<FetchSummary> 
       pages.push(entry);
       recordCount += entry.recordCount;
     }
+    // Fail loudly if a record landed on two pages and another on none. The record counts still
+    // match when that happens, so count distinct question numbers instead.
+    const numbers = new Set(
+      pages
+        .filter((p) => p.file.startsWith(`${RAW_DIR}/search-${year}-`))
+        .flatMap((p) => SourcePage.parse(JSON.parse(readFileSync(p.file, "utf8"))).value)
+        .map((r) => r.questionNumber),
+    );
+    if (numbers.size !== odataCount)
+      throw new Error(
+        `${year}: ${numbers.size} distinct question numbers for an odata count of ${odataCount}; ` +
+          `records repeat across pages. Remove ${RAW_DIR}/search-${year}-*.json and re-run.`,
+      );
     yearSummaries[String(year)] = { odataCount, recordCount };
   }
 
