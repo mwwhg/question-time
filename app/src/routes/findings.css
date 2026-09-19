@@ -84,4 +84,6 @@
 
 .findings-section th[scope="row"] {
   font-weight: 400;
+  /* Number cells never wrap, so without a floor this label column is the one squeezed. */
+  min-width: 10em;
 }
