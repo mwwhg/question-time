@@ -66,18 +66,20 @@ const LABEL_KEYS = ["answered", "partly_answered", "not_answered", "unclear", "n
 const LABEL_HEADS = ["Answered", "Partly answered", "Not answered", "Unclear", "No reading"];
 
 function BreakdownTable({
+  id,
   title,
   shows,
   cannotShow,
   rows,
 }: {
+  readonly id: string;
   readonly title: string;
   readonly shows: string;
   readonly cannotShow: string;
   readonly rows: readonly Breakdown[];
 }) {
   return (
-    <section className="findings-section">
+    <section id={id} tabIndex={-1} className="findings-section">
       <h2>{title}</h2>
       <p>{shows}</p>
       {rows[0] !== undefined && totalOf(rows[0].counts) > 0 && (
@@ -93,8 +95,10 @@ function BreakdownTable({
       {rows.length === 0 ? (
         <EmptyNote>No data yet.</EmptyNote>
       ) : (
-        <div className="table-scroll">
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region.
+        <section className="table-scroll" aria-label={title} tabIndex={0}>
           <table>
+            <caption>{title}: counts and shares within each group</caption>
             <thead>
               <tr>
                 <th scope="col">Group</th>
@@ -111,7 +115,7 @@ function BreakdownTable({
                 const total = totalOf(row.counts);
                 return (
                   <tr key={row.group}>
-                    <td>{groupWording(row.group)}</td>
+                    <th scope="row">{groupWording(row.group)}</th>
                     {LABEL_KEYS.map((key) => (
                       <td key={key} className="mono">
                         {formatNumber(row.counts[key])} ({percent(row.counts[key], total)})
@@ -135,7 +139,7 @@ function BreakdownTable({
               })}
             </tbody>
           </table>
-        </div>
+        </section>
       )}
     </section>
   );
@@ -146,8 +150,10 @@ function AskersTable({ askers }: { readonly askers: FindingsData["civics"]["aske
   const shown = expanded ? askers : askers.slice(0, ASKERS_SHOWN_BY_DEFAULT);
   return (
     <>
-      <div className="table-scroll">
+      {/* biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region. */}
+      <section className="table-scroll" aria-label="Questions by member" tabIndex={0}>
         <table>
+          <caption>Question volumes by member, not a measure of effectiveness</caption>
           <thead>
             <tr>
               <th scope="col">Member</th>
@@ -159,7 +165,7 @@ function AskersTable({ askers }: { readonly askers: FindingsData["civics"]["aske
           <tbody>
             {shown.map((asker) => (
               <tr key={asker.name}>
-                <td>{asker.name}</td>
+                <th scope="row">{asker.name}</th>
                 <td className="mono">{formatNumber(asker.questions)}</td>
                 <td className="mono">{formatNumber(asker.distinctQuestions)}</td>
                 <td className="mono">{formatNumber(asker.portfoliosAsked)}</td>
@@ -167,7 +173,7 @@ function AskersTable({ askers }: { readonly askers: FindingsData["civics"]["aske
             ))}
           </tbody>
         </table>
-      </div>
+      </section>
       {!expanded && askers.length > ASKERS_SHOWN_BY_DEFAULT && (
         <button type="button" className="button" onClick={() => setExpanded(true)}>
           {CIVICS.showAllMembers(formatNumber(askers.length))}
@@ -185,8 +191,10 @@ function PortfolioVolumesTable({
   readonly browseYear: number | null;
 }) {
   return (
-    <div className="table-scroll">
+    // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region.
+    <section className="table-scroll" aria-label="Questions by portfolio" tabIndex={0}>
       <table>
+        <caption>Question volumes received by portfolio</caption>
         <thead>
           <tr>
             <th scope="col">Portfolio</th>
@@ -198,13 +206,13 @@ function PortfolioVolumesTable({
         <tbody>
           {portfolioVolumes.map((p) => (
             <tr key={p.slug}>
-              <td>
+              <th scope="row">
                 {browseYear === null ? (
                   p.name
                 ) : (
                   <Link to={`/browse/${p.slug}/${browseYear}`}>{p.name}</Link>
                 )}
-              </td>
+              </th>
               <td className="mono">{formatNumber(p.questions)}</td>
               <td className="mono">{formatNumber(p.distinctQuestions)}</td>
               <td className="mono">{formatNumber(p.askers)}</td>
@@ -212,7 +220,7 @@ function PortfolioVolumesTable({
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }
 
@@ -224,8 +232,12 @@ function CivicsSection({
   readonly browseYear: number | null;
 }) {
   return (
-    <section className="findings-section">
+    <section id="civic-record" tabIndex={-1} className="findings-section">
       <h2>{CIVICS.sectionHeading}</h2>
+      <p>
+        These counts describe who asked questions and where they sent them. They come from the
+        public record, not Jev’s judgements about replies.
+      </p>
 
       <h3>{CIVICS.askersHeading}</h3>
       <p style={{ color: "var(--muted)" }}>{CIVICS.askersNote}</p>
@@ -299,21 +311,37 @@ export function Findings() {
     <div>
       <h1>What the data shows</h1>
       <p className="prose">
-        Every table on this page counts readings. A reading is what the model said about one reply.
-        The five readings are below. Each table says in one line what it shows and what it cannot
-        tell you.
+        Start with the public record, then explore Jev’s judgements about replies. The civic tables
+        count questions and people. The model tables count readings: what Jev said about a reply. A
+        pattern can suggest where to investigate; it does not establish that the readings are
+        correct.
       </p>
       <p className="prose">
-        A table is a count, not a question you can read. To read real questions, open a portfolio in{" "}
+        To check a reading against its question, reply and official source, open a portfolio in{" "}
         <Link to="/browse">Browse the results</Link> and pick one.
       </p>
+      <nav className="findings-contents" aria-label="On this page">
+        <a href="#run">Time and estimated cost</a>
+        {findingsState.status === "ok" && (
+          <>
+            <a href="#civic-record">Who asks and who receives</a>
+            <a href="#corpus">The source record</a>
+            <a href="#reply-shape">Patterns in the readings</a>
+            <a href="#confidence">Model confidence</a>
+            <a href="#secondary">Other assessment questions</a>
+            <a href="#cross-checks">Agreement between readings</a>
+            <a href="#same-question">Same question, different replies</a>
+          </>
+        )}
+      </nav>
       <LabelKey />
 
-      <section className="findings-section">
-        <h2>What it cost to read everything</h2>
+      <section id="run" tabIndex={-1} className="findings-section">
+        <h2>Time and estimated model cost</h2>
         <p>
-          This is what it took to have one model read every pair and answer five questions about
-          each. It is the reason this page can count all of them instead of a sample.
+          These are the recorded time and usage for pairs processed in this run. Asking the same
+          questions repeatedly makes large-scale comparison possible. This does not mean every
+          record has a published reading.
         </p>
         <p style={{ color: "var(--muted)" }}>
           It cannot show whether that cost is worth it; that is a judgement call. {TERMS.token}
@@ -337,7 +365,7 @@ export function Findings() {
             }
           />
 
-          <section className="findings-section">
+          <section id="corpus" tabIndex={-1} className="findings-section">
             <h2>What the record looks like</h2>
             <p>
               This is the shape of the whole 2024 and 2025 written-question record, counted by
@@ -349,7 +377,7 @@ export function Findings() {
             <ul className="corpus-facts">
               <li>
                 <span className="mono">{formatNumber(findingsState.data.corpus.records)}</span>{" "}
-                written questions were sent in 2024 and 2025, each with its own reply
+                written questions were recorded in 2024 and 2025
               </li>
               <li>
                 <span className="mono">{formatNumber(findingsState.data.corpus.answered)}</span> of
@@ -407,6 +435,7 @@ export function Findings() {
           </section>
 
           <BreakdownTable
+            id="reply-shape"
             title="Replies that answer, replies that point elsewhere, replies in a file"
             shows="Replies come in three kinds. Most answer in their own words. Some only point at a reply the minister gave earlier. Some say the answer is in an attached file, which we did not open. This shows how the readings differ between the three."
             cannotShow="It cannot show why a particular reply took the shape it did."
@@ -414,6 +443,7 @@ export function Findings() {
           />
 
           <BreakdownTable
+            id="reply-length"
             title="Short replies and long replies"
             shows="Replies are grouped by how many words they contain. This shows how the readings change as replies get longer."
             cannotShow="It cannot show whether a longer reply is a better one."
@@ -421,13 +451,15 @@ export function Findings() {
           />
 
           <BreakdownTable
+            id="question-parts"
             title="Questions that ask one thing, and questions that ask several"
-            shows="Code counts how many separate things a question asks. This shows how the readings change as a question asks for more."
+            shows="Code estimates how many separate things a question asks using text rules. These groups may include miscounts, so use them to explore patterns rather than as exact measures."
             cannotShow="It cannot show which part, if any, went unanswered."
             rows={findingsState.data.byQuestionParts}
           />
 
           <BreakdownTable
+            id="months"
             title="Month by month"
             shows="This shows how the readings are spread across the twenty-four months covered."
             cannotShow="It cannot show whether any change over time reflects replies, questions, or the model."
@@ -435,6 +467,7 @@ export function Findings() {
           />
 
           <BreakdownTable
+            id="fan-out"
             title="Questions sent to one minister, and questions sent to many"
             shows="The same question is often posted to many ministers at once. This shows how the readings differ between a question sent to one minister and a question sent to a great many."
             cannotShow="It cannot show whether a wide mailout was itself a reasonable way to ask."
@@ -442,6 +475,7 @@ export function Findings() {
           />
 
           <BreakdownTable
+            id="stock-phrases"
             title="Replies that use a stock phrase"
             shows={`${TERMS.stockPhrase} This shows how the readings differ when a reply uses one of them.`}
             cannotShow="It cannot show whether the phrase was the right or only reason for that reading."
@@ -449,13 +483,14 @@ export function Findings() {
           />
 
           <BreakdownTable
+            id="question-openers"
             title={CIVICS.openerHeading}
             shows={CIVICS.openerShows}
             cannotShow={CIVICS.openerCannotShow}
             rows={findingsState.data.byQuestionOpener}
           />
 
-          <section className="findings-section">
+          <section id="confidence" tabIndex={-1} className="findings-section">
             <h2>How firmly the model settled on its answer</h2>
             <p>
               {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0 at
@@ -470,8 +505,10 @@ export function Findings() {
             {findingsState.data.confidenceHistogram.length === 0 ? (
               <EmptyNote>No data yet.</EmptyNote>
             ) : (
-              <div className="table-scroll">
+              // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region.
+              <section className="table-scroll" aria-label="Model confidence bands" tabIndex={0}>
                 <table>
+                  <caption>Readings grouped by model confidence, not measured accuracy</caption>
                   <thead>
                     <tr>
                       <th scope="col">Confidence</th>
@@ -485,9 +522,9 @@ export function Findings() {
                   <tbody>
                     {findingsState.data.confidenceHistogram.map((bin) => (
                       <tr key={bin.from}>
-                        <td className="mono">
-                          {bin.from.toFixed(1)}–{bin.to.toFixed(1)}
-                        </td>
+                        <th scope="row" className="mono">
+                          {bin.from.toFixed(1)} to {bin.to.toFixed(1)}
+                        </th>
                         <td className="mono">{formatNumber(bin.byChoice.answered)}</td>
                         <td className="mono">{formatNumber(bin.byChoice.partly_answered)}</td>
                         <td className="mono">{formatNumber(bin.byChoice.not_answered)}</td>
@@ -496,15 +533,15 @@ export function Findings() {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </section>
             )}
           </section>
 
-          <section className="findings-section">
-            <h2>The other four questions asked of every reply</h2>
+          <section id="secondary" tabIndex={-1} className="findings-section">
+            <h2>Other assessment questions</h2>
             <p>
               Besides “does the reply give the information asked for”, the model was asked four more
-              questions about every reply. These are the totals for three of them.
+              questions about each processed pair. These are the totals for three of them.
             </p>
             <p style={{ color: "var(--muted)" }}>
               It cannot show how these answers line up with the main reading for the same reply. The
@@ -526,7 +563,7 @@ export function Findings() {
             </div>
           </section>
 
-          <section className="findings-section">
+          <section id="cross-checks" tabIndex={-1} className="findings-section">
             <h2>Do the five readings agree with each other?</h2>
             <p>
               Each line below takes a group of replies and asks what a second reading said about the
@@ -553,7 +590,7 @@ export function Findings() {
             )}
           </section>
 
-          <section className="findings-section">
+          <section id="same-question" tabIndex={-1} className="findings-section">
             <h2>Same question, different reading</h2>
             <p>
               When one question goes to many ministers, the replies differ, and so do the readings.

@@ -46,3 +46,38 @@
 .worked-example .section-label {
   margin-bottom: 2px;
 }
+
+.method-contents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 24px 0;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.method-contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.worked-example h3.section-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  margin-top: 20px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+#checks caption {
+  text-align: left;
+  padding: 0 0 12px;
+  color: var(--muted);
+}
+
+#checks th[scope="row"] {
+  font-weight: 400;
+}
