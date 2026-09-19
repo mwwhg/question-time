@@ -1,6 +1,6 @@
 # Did they answer?
 
-An experiment in reading a large public record. Members of New Zealand's Parliament sent ministers 141,686 written questions in 2024 and 2025, and every question and reply is published. This project asks a small model, Jev, one narrow thing about each pair: does the text of the reply give what the question asked for?
+An experiment in reading a large public record. Members of New Zealand's Parliament sent ministers 182,961 written questions from 2024 to 18 September 2026, and every question and reply is published. This project asks a small model, Jev, one narrow thing about each pair: does the text of the reply give what the question asked for?
 
 The repo holds two things:
 
