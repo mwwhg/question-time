@@ -157,7 +157,7 @@ button {
   overflow-y: auto;
 }
 
-.pane-side p {
+:where(.pane-side) p {
   margin: 0;
 }
 
