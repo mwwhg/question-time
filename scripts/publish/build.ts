@@ -601,7 +601,7 @@ function monthOf(dateAsked: string): string {
 }
 
 // Every month from January 2024 to the last month asked, so a month with no readings still shows.
-function monthsThrough(lastMonth: string): string[] {
+export function monthsThrough(lastMonth: string): string[] {
   const months: string[] = [];
   for (let year = 2024; ; year++) {
     for (let m = 1; m <= 12; m++) {

@@ -6,7 +6,7 @@ import { probability } from "../judgement/vocabulary.ts";
 import { parseMemberships } from "../question/party.ts";
 import type { Question } from "../question/question.ts";
 import type { BuildInput } from "./build.ts";
-import { activeAndPaused, aggregate, questionOpenerGroup } from "./build.ts";
+import { activeAndPaused, aggregate, monthsThrough, questionOpenerGroup } from "./build.ts";
 
 function question(overrides: Omit<Partial<Question>, "id"> & { id: string }): Question {
   return {
@@ -427,4 +427,11 @@ test("activeAndPaused: gaps over a minute count as pauses, not reading time", ()
     pauses: 1,
     pausedSeconds: 3600,
   });
+});
+
+test("monthsThrough: every month from January 2024 to the last month asked, none for no readings", () => {
+  assert.deepEqual(monthsThrough("2024-03"), ["2024-01", "2024-02", "2024-03"]);
+  assert.equal(monthsThrough("2026-09").length, 33);
+  assert.equal(monthsThrough("2026-09").at(-1), "2026-09");
+  assert.deepEqual(monthsThrough(""), []);
 });
