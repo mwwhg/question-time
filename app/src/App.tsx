@@ -3,7 +3,7 @@ import { portfolioIndexPath } from "@contract";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import { Footer } from "./components/footer.tsx";
 import { Header } from "./components/header.tsx";
-import { PreviewNotice } from "./components/preview-notice.tsx";
+import { PageBanner } from "./components/page-banner.tsx";
 import { RouteNavigation } from "./components/route-navigation.tsx";
 import { PreviewProvider } from "./context/preview-context.tsx";
 import { useJson } from "./hooks/use-json.ts";
@@ -28,23 +28,13 @@ export function App() {
         </a>
         <RouteNavigation />
         <Header />
-        <main
-          id="main"
-          tabIndex={-1}
-          className="page-shell"
-          style={{ paddingTop: 24, paddingBottom: 24 }}
-        >
-          <RoutePreviewNotice />
+        <main id="main" tabIndex={-1}>
           <PageRoutes />
         </main>
         <Footer />
       </BrowserRouter>
     </PreviewProvider>
   );
-}
-
-function RoutePreviewNotice() {
-  return useLocation().pathname === "/" ? null : <PreviewNotice />;
 }
 
 function PageRoutes() {
@@ -64,9 +54,13 @@ function PageRoutes() {
 
 function NotFound() {
   return (
-    <div className="prose">
-      <h1>Page not found</h1>
-      <p>That page does not exist.</p>
-    </div>
+    <>
+      <PageBanner>
+        <h1>Page not found</h1>
+      </PageBanner>
+      <div className="wrap page-body">
+        <p>That page does not exist.</p>
+      </div>
+    </>
   );
 }
