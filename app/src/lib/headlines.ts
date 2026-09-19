@@ -108,7 +108,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "labelSplit",
     id: "label-split",
     counts: index.totals.all,
-    sentence: "This is how the model read every reply, split across the four possible readings.",
+    sentence:
+      "Published model readings, with replies that have no published reading shown separately.",
     cannotTell: "This is the model's own reading. It has not yet been checked against people.",
     tag: HEADLINE_TAG_MODEL,
     linkTo: "/findings",
@@ -151,8 +152,9 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "number",
     id: "cost-and-time",
     value: `$${index.run.estimatedCostUsd.toFixed(2)}`,
-    sentence: `is what it cost to have a model read every one of these replies, ${runDurationPhrase(index)}.`,
-    cannotTell: "This can't tell you whether that cost is worth it. That is a judgement call.",
+    sentence: `is the estimated model cost for ${formatNumber(index.run.pairsJudged)} assessed pairs, ${runDurationPhrase(index)}.`,
+    cannotTell:
+      "Calculated from reported input tokens and the vendor's listed US-dollar price. This is not an invoice or evidence of accuracy.",
     tag: HEADLINE_TAG_RUN,
     linkTo: "/method",
     linkText: "See the run in numbers",

@@ -6,7 +6,13 @@ export function PreviewNotice() {
   if (checkedAgainstPeople) return null;
   return (
     <div className="notice" role="note">
-      <strong>{PREVIEW_NOTICE.heading}</strong> {PREVIEW_NOTICE.body}
+      <p>
+        <strong>{PREVIEW_NOTICE.heading}</strong> {PREVIEW_NOTICE.summary}
+      </p>
+      <details>
+        <summary>{PREVIEW_NOTICE.disclosure}</summary>
+        <p>{PREVIEW_NOTICE.body}</p>
+      </details>
     </div>
   );
 }
