@@ -184,3 +184,7 @@ Cannot show: "A list-of-documents question is harder to answer in full than a ye
 | no reading | No reading | We did not read an attached file, or this pair is being checked by people first. |
 
 `evasionType` is never called evasion on the site. Its heading is "What the reply does instead".
+
+## Headline card tags (Start here)
+
+Every headline card carries one of three tags, so a reader can tell where the number came from: "Counted from the official record", "Measured from our own run", or "Model's reading, not yet checked against people".
