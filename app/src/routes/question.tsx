@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { Link, useParams } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
 import { PageBanner } from "../components/page-banner.tsx";
-import { PreviewNotice } from "../components/preview-notice.tsx";
 import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
@@ -59,35 +58,28 @@ export function Question() {
     state.status === "ok" ? state.data.items.find((i) => i.number === numberNumber) : undefined;
 
   useDocumentTitle(item ? `WQ ${item.number} (${item.year})` : `WQ ${number}`);
+  const heading = `Written question ${number} of ${year}`;
 
-  if (state.status === "loading")
+  if (state.status === "loading") return <Pending heading={heading} note={<LoadingNote />} />;
+  if (state.status === "error") return <Pending heading={heading} note={<ErrorNote />} />;
+  if (!item) {
     return (
-      <Bare>
-        <LoadingNote />
-      </Bare>
+      <Pending heading={heading} note={<EmptyNote>That question could not be found.</EmptyNote>} />
     );
-  if (state.status === "error")
-    return (
-      <Bare>
-        <ErrorNote />
-      </Bare>
-    );
-  if (!item)
-    return (
-      <Bare>
-        <EmptyNote>That question could not be found.</EmptyNote>
-      </Bare>
-    );
+  }
 
   return <QuestionView item={item} />;
 }
 
-/** States with no question to show have no banner, so they carry the preview notice themselves. */
-function Bare({ children }: { readonly children: ReactNode }) {
+/** The h1 comes from the URL, so the banner and the notice under it hold their place while the
+    block loads instead of mounting above content that has already painted. */
+function Pending({ heading, note }: { readonly heading: string; readonly note: ReactNode }) {
   return (
     <>
-      <PreviewNotice />
-      <div className="wrap page-body">{children}</div>
+      <PageBanner>
+        <h1>{heading}</h1>
+      </PageBanner>
+      <div className="wrap page-body">{note}</div>
     </>
   );
 }
