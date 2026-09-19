@@ -122,17 +122,17 @@ export function Browse() {
             <div className="card">
               <LabelKey />
             </div>
-            <p className="muted">
-              Each row shows one portfolio, the number of questions it received that year, and a bar
-              splitting those questions by reading. {BROWSE_COMPARISON_NOTE} The bar cannot tell you
-              whether any one reading is right.
-            </p>
             {state.status === "ok" && activeYear !== null && (
               <p className="muted">{TERMS.distinctQuestion}</p>
             )}
           </>
         }
       >
+        <p className="prose muted">
+          Each row shows one portfolio, the number of questions it received that year, and a bar
+          splitting those questions by reading. {BROWSE_COMPARISON_NOTE} The bar cannot tell you
+          whether any one reading is right.
+        </p>
         {state.status === "loading" && <LoadingNote />}
         {state.status === "error" && <ErrorNote />}
         {state.status === "ok" && years.length === 0 && <EmptyNote>No data yet.</EmptyNote>}

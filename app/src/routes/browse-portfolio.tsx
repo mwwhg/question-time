@@ -111,11 +111,6 @@ export function BrowsePortfolio() {
             <div className="card">
               <LabelKey />
             </div>
-            <p className="muted">
-              {TERMS.wq} Each row is one question. Open a number to read the question, the reply and
-              the reading side by side. The table cannot tell you whether a reading is right, and it
-              is not a score for the minister who replied.
-            </p>
           </>
         }
       >
@@ -126,6 +121,11 @@ export function BrowsePortfolio() {
         )}
         {state.status === "ok" && hasRows && (
           <>
+            <p className="prose muted">
+              {TERMS.wq} Each row is one question. Open a number to read the question, the reply and
+              the reading side by side. The table cannot tell you whether a reading is right, and it
+              is not a score for the minister who replied.
+            </p>
             <h2
               ref={resultsHeading}
               tabIndex={-1}
