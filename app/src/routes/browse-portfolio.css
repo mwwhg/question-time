@@ -8,6 +8,16 @@
 .pagination {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
+}
+
+.results-heading {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.table-scroll tbody th {
+  font-weight: 400;
 }

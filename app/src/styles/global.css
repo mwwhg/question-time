@@ -22,6 +22,7 @@ body {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 
 h1,
@@ -82,6 +83,7 @@ fieldset.toggle-row {
   border: none;
   padding: 0;
   margin: 0;
+  min-width: 0;
 }
 
 .control-note {
@@ -195,6 +197,7 @@ td {
 
 .table-scroll {
   overflow-x: auto;
+  max-width: 100%;
 }
 
 .button {
@@ -202,6 +205,8 @@ td {
   background: var(--surface);
   border-radius: var(--radius-control);
   padding: 6px 12px;
+  min-height: 36px;
+  max-width: 100%;
   cursor: pointer;
   color: var(--body-dark);
 }
@@ -212,8 +217,26 @@ td {
   border-color: var(--ink);
 }
 
-@media (max-width: 640px) {
-  body {
-    overflow-x: hidden;
-  }
+.results-summary {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+h2.section-label {
+  font-family: var(--font-body);
+  font-size: 15px;
+  text-transform: none;
+  letter-spacing: normal;
+  margin: 0 0 12px;
+}
+
+[tabindex="-1"] {
+  scroll-margin-top: 16px;
+}
+
+/* Hash links focus a whole section so reading continues from it. A ring around thousands of pixels
+   of content marks nothing; the scroll position already shows where focus went. */
+main:focus-visible,
+section[tabindex="-1"]:focus-visible {
+  outline: none;
 }

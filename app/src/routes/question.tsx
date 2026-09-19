@@ -89,19 +89,19 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
       </p>
 
       <div className="source-box">
-        <p className="section-label">The question</p>
+        <h2 className="section-label">The question</h2>
         <p className="question-text">{item.question}</p>
       </div>
 
       <div className="source-box" style={{ marginTop: 16 }}>
-        <p className="section-label">The reply</p>
+        <h2 className="section-label">The reply</h2>
         <p>{item.reply}</p>
         {item.replyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
       </div>
 
       {item.referredReply !== null && (
         <div className="source-box" style={{ marginTop: 16 }}>
-          <p className="section-label">The earlier reply it points to</p>
+          <h2 className="section-label">The earlier reply it points to</h2>
           <p style={{ color: "var(--source-text)" }}>{TERMS.referral}</p>
           <p>{item.referredReply}</p>
           {item.referredReplyTruncated && <p className="mono shortened-note">{SHORTENED_NOTE}</p>}
@@ -109,7 +109,7 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
       )}
 
       <div className="gold-box" style={{ marginTop: 24 }}>
-        <p className="section-label">The model's reading</p>
+        <h2 className="section-label">The model's reading</h2>
         {item.reading === null ? (
           <p>{item.noReadingReason ? NO_READING_REASON_TEXT[item.noReadingReason] : null}</p>
         ) : (
@@ -122,7 +122,7 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
       </div>
 
       <div className="prose reading-yourself">
-        <p className="section-label">Reading it yourself</p>
+        <h2 className="section-label">Reading it yourself</h2>
         <p style={{ fontSize: 13, color: "var(--muted)" }}>{READING_IT_YOURSELF_INTRO}</p>
         <ul>
           {readingItYourselfBullets(item).map((bullet) => (
@@ -136,7 +136,7 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
       </div>
 
       <div className="provenance">
-        <p className="section-label">Where this came from</p>
+        <h2 className="section-label">Where this came from</h2>
         <p>
           <a href={item.provenance.sourceUrl} target="_blank" rel="noopener noreferrer">
             Read the full text on the official record
@@ -149,7 +149,7 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
         <p>
           {item.provenance.evaluatedAt
             ? `The model read it on ${formatDate(item.provenance.evaluatedAt)}.`
-            : "The model has not read this pair."}{" "}
+            : "No reading date is published for this pair."}{" "}
           The exact version of the model and of the five questions is recorded below, so this
           reading can be reproduced.
         </p>
@@ -173,17 +173,19 @@ function readingItYourselfBullets(item: QuestionDetail): string[] {
   const bullets: string[] = [];
   bullets.push(
     item.features.questionParts === 1
-      ? "This question asks one thing."
-      : `This question asks ${item.features.questionParts} separate things.`,
+      ? "Code estimates that this question asks one thing, based on its wording and punctuation."
+      : `Code estimates that this question asks ${item.features.questionParts} separate things, based on its wording and punctuation.`,
   );
-  bullets.push(`The reply is ${item.features.replyWords} words long.`);
+  bullets.push(
+    `The reply is ${item.features.replyWords} ${item.features.replyWords === 1 ? "word" : "words"} long.`,
+  );
   bullets.push(`The reply ${item.features.hasNumber ? "contains" : "does not contain"} a number.`);
   if (item.replyShape === "referral" && item.referredReply !== null) {
     const pointer = formatPointer(item.referralChain[0]);
     bullets.push(
       pointer
-        ? `The reply points to an earlier reply, ${pointer}. We show that earlier reply above, and the model read both.`
-        : "The reply points to an earlier reply. We show that earlier reply above, and the model read both.",
+        ? `The reply points to an earlier reply, ${pointer}. We show that earlier reply above. ${item.reading ? "The model read both replies." : "Both replies are available for assessment."}`
+        : `The reply points to an earlier reply. We show that earlier reply above. ${item.reading ? "The model read both replies." : "Both replies are available for assessment."}`,
     );
   }
   for (const phrase of item.features.stockPhrases) {
@@ -258,7 +260,7 @@ function ChoiceBars({ reading }: { readonly reading: ChoiceReading }) {
       {Object.entries(reading.probabilities).map(([choice, probability]) => (
         <li key={choice} className="choice-bar-row">
           <span className="choice-bar-label">{prettyChoice(choice)}</span>
-          <span className="choice-bar-track">
+          <span className="choice-bar-track" aria-hidden="true">
             <span
               className="choice-bar-fill"
               style={{ width: `${Math.round(probability * 100)}%` }}

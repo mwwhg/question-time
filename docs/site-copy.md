@@ -10,21 +10,25 @@ independent experiment · not from Parliament or any party
 
 ## Preview notice, every page while `checkedAgainstPeople` is false
 
-**Early preview.** These readings were made by a computer model and have not yet been checked against people's judgement. Some are wrong. We are hand-checking 300 of them and will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.
+**Early preview.** Model readings have not yet been checked against people. Read the source before drawing conclusions.
 
-## New here? Start with this (Start here, above everything else)
+Expandable disclosure, "What is still being checked":
 
-A Member of Parliament can send a written question to a government minister. A minister is the MP put in charge of an area of government, such as health or transport. The question is published, the minister has to send back a written reply, and that is published too. It is one of the few ways anyone can make the government answer a plain question in public. So it matters whether the reply gives what the question asked for, and that one thing is all this site looks at.
+These readings were made by a computer model and have not yet been checked against people's judgement. Some are wrong. The planned human check covers 300 pairs. We will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.
 
-## What this is (Start here)
+## Why these questions matter (Start here, after the opening purpose)
 
-This is an experiment in reading a very large public record.
+A Member of Parliament can send a written question to a government minister. A minister is the MP put in charge of an area of government, such as health or transport. The question is published, the minister has to send back a written reply, and that is published too. This gives the public a record of what MPs asked and how ministers replied. So it matters whether the reply gives what the question asked for, and that one thing is all this site looks at.
 
-Members of Parliament send ministers tens of thousands of written questions a year. In 2024 and 2025 there were 141,686. Every question and reply is published, and almost nobody can read them all. We asked a small, fast computer model called Jev to read every pair and say one narrow thing: does the text of the reply give what the question asked for?
+## What changes when we can ask at scale?
 
-We are testing two things. One is whether a model like this can do that job well enough to be useful. The other is what becomes possible when it costs a few dollars, not a research budget, to ask several questions of every document in a public record.
+A public record can be open to everyone and still be too large for one person to read. This experiment uses Jev, a small AI model, to assess whether a reply gives the information a question asked for.
 
-Civic and political records have been hard to study at scale. They are mostly free text, there is a great deal of it, and the questions worth asking need judgement: did this reply address that question? Until now the choices were to read a small sample by hand, or to count words and phrases and hope they stood for meaning. This site is a first look at a third way, where every document gets read and several plain questions are asked of each one. It is an initial exploration. It will have errors, the method is published in full, and we would rather show the work early and be corrected than wait.
+The useful change is the ability to turn a question about meaning into a repeatable assessment across many documents. That could help a civic reader find examples worth examining and help a researcher test a pattern beyond a small sample.
+
+People still choose the criteria, check the results and decide what they mean. A consistent question does not guarantee a correct answer. Our human accuracy check is unfinished.
+
+General-purpose language models can also assess meaning. This experiment explores Jev's structured outputs and estimated cost for this task; it has not established that Jev is more accurate or better value than those alternatives.
 
 ## What this is not
 
@@ -40,14 +44,14 @@ It is not from Parliament, the Office of the Clerk, any party, or any member.
 
 - A model made these readings, and models make mistakes. Open any question to see the full question, the full reply and the model's reading side by side, then decide for yourself.
 - The model read text only. When a reply says the answer is in an attached file, we did not read the file, and we show no reading.
-- About one reply in four only points to an earlier reply. We fetched the earlier reply and the model read both together.
+- Some replies point to an earlier reply. Where we could fetch it, both texts are supplied for the model to assess.
 - The same question is often sent to many ministers at once. We show counts both ways: every question, and each distinct question once.
 - Long replies are shortened on this site. The link to the official record always has the full text.
 - One pattern we have already seen: when a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.
 
 ## While `checkedAgainstPeople` is false (How we checked, under "What has not been done yet")
 
-Until these are done, the site does not claim the readings are accurate. Every number shown is the model's own, and no wording on the site suggests it has been checked. The preview notice stays at the top of every page.
+Until these checks are done, the site does not claim the readings are accurate. Model probabilities have not been validated against people. A preview notice remains visible on every page.
 
 ## Plain meanings (one line beside each term at first use)
 
@@ -59,7 +63,7 @@ Until these are done, the site does not claim the readings are accurate. Every n
 | WQ | Short for written question. Each one has a number and a year. |
 | points to an earlier reply | Some replies do not answer in their own words. They point at a reply the minister gave earlier. We fetch that earlier reply and show it here too. |
 | stock phrase | A set form of words that turns up in many replies, such as "not in the public interest". We picked a short list by hand, so it is not every phrase. |
-| every question / each distinct question once | The same wording is often sent to many ministers on the same day. "Every question" counts each one. "Each distinct question once" counts the wording once, however many ministers received it. |
+| every question / each distinct question once | The same wording is often sent to many ministers on the same day. "Every question" counts each one. "Each distinct question once" groups repeated wording and uses the reading of the lowest-numbered question in each group. Other replies in that group may differ; this is not an average or a consensus. |
 | median | The middle one. Half are shorter and half are longer. |
 | 95th percentile | 95 in 100 are shorter than this. 5 in 100 are longer. |
 | token | A chunk of text, roughly three-quarters of a word. The model is priced by how much text it is sent. |
@@ -69,7 +73,7 @@ Until these are done, the site does not claim the readings are accurate. Every n
 
 ## How to read the readings (question page, beside the reading)
 
-The model splits 100 between the possible answers. The share it gives the most is the answer shown. These are the model's own numbers. Nobody has checked them against people yet.
+The model splits 100 between the possible answers. The largest share normally determines the reading. The published reading is “Unclear” when the model's confidence is below 50 in 100, even if one option has the largest share. These are the model's own numbers, not measured accuracy.
 
 ## Watch Jev read one reply (How we checked, short version on Start here)
 
@@ -79,29 +83,27 @@ This is one real pair. We picked it before running anything, and it is the pair 
 
 **What Jev was asked.** In that first test it was given three questions. The full run asks the five set out below. One of the three was the same "does the reply give the information asked for" question used in the run.
 
-**What came out.** No sentences. Jev wrote nothing back. It split 100 across the four possible answers: partly answered 95 in 100, answered 3 in 100, not answered 2 in 100, unclear 0 in 100. The biggest share wins, so the reading is "Partly answered". It also put the chance that the reply declines and gives a reason at 60 in 100.
+**What came out.** No sentences. Jev wrote nothing back. It split 100 across the four possible answers: partly answered 95 in 100, answered 3 in 100, not answered 2 in 100, unclear 0 in 100. In this example the biggest share determines the reading, so the reading is "Partly answered". It also put the chance that the reply declines and gives a reason at 60 in 100.
 
-**Why that is a sensible reading.** The question asks two things. The reply says yes to the first and names no project at all, so some of what was asked is there and some is not. You do not have to agree. That is the point of showing the question and the reply above every reading.
+**Our interpretation, not a Jev explanation.** The question asks two things. The reply says yes to the first and names no project at all, so some of what was asked is there and some is not. You do not have to agree. That is the point of showing the question and the reply above every reading.
 
 **What it took.** That one pair took 719 milliseconds and 639 tokens of text.
 
-## Why read every reply? (How we checked, one line on Start here)
+## Why apply the same questions across the record?
 
-There are three ways to look at 141,686 replies.
+Reading a sample by hand gives people room to consider context, but the sample needs careful selection. Keyword rules can count a phrase reliably, but cannot establish whether the reply gives the information asked for.
 
-Read a few hundred by hand. That is careful work, but a few hundred is not the record. Somebody has to choose which few hundred, and that choice shapes the answer.
+General-purpose language models can assess meaning and produce structured results too. Jev is another approach: this experiment gives it narrow questions with predefined answers and receives probabilities for those answers.
 
-Count words instead. A computer can count how many replies contain "not in the public interest" in about a second. Counting a phrase is not reading one. A reply can use the phrase and still answer the question, and a reply can answer nothing at all without using any phrase on the list.
+Applying the same criteria across many replies can reveal patterns worth investigating. The published run figures show the work recorded so far. Excluded, withheld and unavailable results are shown as no reading.
 
-Read all of them. That is what happened here. One small model read every pair and answered the same five questions about each. What it cost and how long it took are in the run numbers above.
-
-The trick pairs further down show the difference between matching words and reading meaning. On replies swapped in from a different portfolio, the phrase rules called 2 of 10 correctly and the model called 10 of 10. On replies that only repeat the question back, the phrase rules called 0 of 10 and the model called 10 of 10. Those are twenty pairs we built ourselves, so they show the rules cannot tell what a reply is about. They do not show how often the model is right on real replies. That check is not finished.
+On twenty constructed pairs, Jev detected unrelated or repeated-question replies more often than our keyword rules. This is a limited check of those cases, not evidence of accuracy on the public record or superiority to general-purpose models. The human check and broader comparisons remain unfinished.
 
 ## What Jev is not good at, and what we did about it (How we checked)
 
 - **It cannot open an attached file.** Some replies say the answer is in an attachment. The model never sees it, so those questions show no reading and we say so on the page.
 - **It only sees the text we hand it.** About one reply in four is just a pointer to an earlier reply. Handed only that sentence, the model would be reading "I refer the member to reply number 1" and nothing else. Ordinary code finds the earlier reply first and gives it both. A small number could not be found, mostly because they point back to 2023, outside the two years we fetched.
-- **It does not do the counting.** Every count on this site is done by ordinary code: how long a reply is, whether it contains a number, how many things a question asks, which stock phrases it uses. The model is only asked for judgement.
+- **It does not do the counting.** Code counts words, detects numbers and matches selected phrases. It also estimates how many parts a question has using text rules; that estimate can be wrong. The model is asked for judgement.
 - **It gives no reason.** It returns numbers, not an explanation. That is why the full question and the full reply sit above every reading, with a link to the official record.
 - **Exact wording matters, including ours.** In the first draw of the trick pairs, two replies of "None." were counted as misses. Looking again, "None." does answer a question of the form "What advice, if any". The trick pair was wrong and the model was right. We changed how the pairs are built and published both draws.
 - **We do not know yet whether its confidence means anything.** Whether the readings it was surest about turn out right more often is exactly what the 300-pair check will test. Until then, treat the numbers as the model's own.
@@ -110,7 +112,7 @@ The company that makes it says one request can carry up to 64,000 tokens of text
 
 ## Found a mistake?
 
-If a reading is wrong, or a question or reply is shown incorrectly, message Matthew Wood on LinkedIn (https://www.linkedin.com/in/matthewawood/) and we will correct it and list the correction on the How we checked page.
+If a reading is wrong, or a question or reply is shown incorrectly, message Matthew Wood on LinkedIn (https://www.linkedin.com/in/matthewawood/) and we will review it and list any correction on the method page.
 
 ## Reading it yourself (template, every question page)
 
@@ -133,17 +135,17 @@ This work includes part of Office of the Clerk/Parliamentary Service's written p
 
 The company that makes Jev says it reads instructions literally, does not count reliably, is unreliable at comparing dates and doing arithmetic, handles double negatives and indirect instructions poorly, gets less accurate as the text it is given fills with detail unrelated to the question, can be swayed by text that argues with it, and does not write text. We have not tested these claims ourselves. This is why code does the counting, the model is sent only the question, the reply and a few computed facts, and each question we ask it is one narrow thing.
 
-## What we found so far (Start page, under "New here? Start with this")
+## What we found so far (Start page, after the example and explanation of scale)
 
 Headline cards. Each is one number, one plain sentence and one line saying what it cannot tell you, built live from `findings.json` and `portfolios.json`. Numbers below are examples; the site always computes the live figure.
 
 - **Questions and askers.** "{N} written questions got a reply. They were asked by {M} different MPs." Cannot tell: "This counts questions asked, not whether the replies were any good."
 - **Repeated wording.** "{P}% of written questions repeat a wording already sent to another minister." Cannot tell: "This can't tell you whether sending the same wording to many ministers was a reasonable way to ask it."
 - **Referrals.** "{N in 100} replies do not answer in their own words. They only point to a reply the minister gave earlier." Cannot tell: "This can't tell you whether the earlier reply, once read together with the question, actually answered it."
-- **The published label split.** "This is how the model read every reply, split across the four possible readings." Cannot tell: "This is the model's own reading. It has not yet been checked against people."
+- **The published label split.** "Published model readings, with replies that have no published reading shown separately." Cannot tell: "This is the model's own reading. It has not yet been checked against people."
 - **Figures given.** "Of questions that ask for a number, amount or date, this is how often the model read the reply as giving it." Cannot tell: "This is the model's own reading of whether a figure was given, not a check that the figure is correct."
 - **Every part addressed.** "Of questions that ask more than one thing, this is how often the model read the reply as addressing every part." Cannot tell: "This is the model's own reading. It does not say which part, if any, was missed."
-- **Cost and time.** "{$X} is what it cost to have a model read every one of these replies, {over about D days | over about H hours | in under an hour}." Cannot tell: "This can't tell you whether that cost is worth it. That is a judgement call."
+- **Cost and time.** "{$X} is the estimated model cost for {N} assessed pairs, {run duration}." Cannot tell: "Calculated from reported input tokens and the vendor’s listed US-dollar price. This is not an invoice or evidence of accuracy."
 
 ## Parliament's written questions in numbers (`/findings`, plain counts, no model)
 
@@ -181,10 +183,31 @@ Cannot show: "A list-of-documents question is harder to answer in full than a ye
 | `partly_answered` | Partly answered | The reply gives some of what was asked. |
 | `not_answered` | Not answered | The reply does not give what was asked. This describes the reply, not whether declining was justified. |
 | `unclear` | Unclear | The model could not tell, or was not sure enough to say. |
-| no reading | No reading | We did not read an attached file, or this pair is being checked by people first. |
+| no reading | No reading | No model judgement is published for this pair. It may be excluded, held for human checks, or have no result available. |
 
 `evasionType` is never called evasion on the site. Its heading is "What the reply does instead".
 
 ## Headline card tags (Start here)
 
 Every headline card carries one of three tags, so a reader can tell where the number came from: "Counted from the official record", "Measured from our own run", or "Model's reading, not yet checked against people".
+
+## Opening purpose and entry links
+
+Can a small AI model help us examine a large public record?
+
+Jev helps us ask the same carefully defined questions across New Zealand Parliament's written replies. Its structured judgements can help people find patterns and choose what to investigate.
+
+Give equal prominence to "Understand the civic example" linking to the worked example and "Understand the method" linking to `/method`.
+
+## From one reply to a public record
+
+1. People define the questions. We choose what to assess and what each possible answer means.
+2. Jev returns structured judgements. The model assigns probabilities to the answers we specify. It does not write an explanation.
+3. Code counts the results. Software groups the published readings so we can explore patterns across many replies.
+4. People check and interpret. We test accuracy against human readings. You can open the original replies and judge the evidence yourself.
+
+## Coverage wording
+
+Say how many questions have a published reading, using the displayed counts. Do not infer that all remaining records are unread: attachments, withheld results, unfinished processing and failed requests can all leave no reading. The current `model_error` field does not distinguish an unfinished run from a failed request.
+
+The "Every question" button always counts all records, regardless of the selected chart mode. The distinct view uses the reading of the lowest-numbered question in each repeated-wording group. Other replies in the group may differ; it is not an average or a consensus.

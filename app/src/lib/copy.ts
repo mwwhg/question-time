@@ -5,16 +5,19 @@ export const PILL_TEXT = "independent experiment · not from Parliament or any p
 
 export const PREVIEW_NOTICE = {
   heading: "Early preview.",
-  body: "These readings were made by a computer model and have not yet been checked against people's judgement. Some are wrong. We are hand-checking 300 of them and will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.",
+  summary:
+    "Model readings have not yet been checked against people. Read the source before drawing conclusions.",
+  disclosure: "What is still being checked",
+  body: "These readings were made by a computer model and have not yet been checked against people's judgement. Some are wrong. The planned human check covers 300 pairs. We will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.",
 };
 
 export const NEW_HERE = {
-  heading: "New here? Start with this",
+  heading: "Why these questions matter",
   paragraphs: [
     "A Member of Parliament can send a written question to a government minister.",
     "A minister is the MP put in charge of an area of government, such as health or transport.",
     "The question is published, the minister has to send back a written reply, and that is published too.",
-    "It is one of the few ways anyone can make the government answer a plain question in public.",
+    "This gives the public a record of what MPs asked and how ministers replied.",
     "So it matters whether the reply gives what the question asked for, and that one thing is all this site looks at.",
   ],
 };
@@ -33,7 +36,7 @@ export const TERMS: Readonly<Record<string, string>> = {
   stockPhrase:
     "A stock phrase is a set form of words that turns up in many replies, such as “not in the public interest”. We picked a short list by hand, so it is not every phrase.",
   distinctQuestion:
-    "The same wording is often sent to many ministers on the same day. “Every question” counts each one. “Each distinct question once” counts the wording once, however many ministers received it.",
+    "The same wording is often sent to many ministers on the same day. “Every question” counts each one. “Each distinct question once” groups repeated wording and uses the reading of the lowest-numbered question in each group. Other replies in that group may differ; this is not an average or a consensus.",
   median: "The median is the middle one. Half are shorter and half are longer.",
   percentile95: "95 in 100 are shorter than this. 5 in 100 are longer.",
   token:
@@ -47,7 +50,7 @@ export const TERMS: Readonly<Record<string, string>> = {
 };
 
 export const HOW_TO_READ_A_READING =
-  "The model splits 100 between the possible answers. The share it gives the most is the answer shown. These are the model's own numbers. Nobody has checked them against people yet.";
+  "The model splits 100 between the possible answers. The largest share normally determines the reading. The published reading is “Unclear” when the model's confidence is below 50 in 100, even if one option has the largest share. These are the model's own numbers, not measured accuracy.";
 
 export const WORKED_EXAMPLE = {
   heading: "Watch Jev read one reply",
@@ -70,13 +73,12 @@ export const WORKED_EXAMPLE = {
 };
 
 export const WHY_READ_EVERY_REPLY = {
-  heading: "Why read every reply?",
+  heading: "Why apply the same questions across the record?",
   paragraphs: [
-    "There are three ways to look at 141,686 replies.",
-    "Read a few hundred by hand. That is careful work, but a few hundred is not the record. Somebody has to choose which few hundred, and that choice shapes the answer.",
-    "Count words instead. A computer can count how many replies contain “not in the public interest” in about a second. Counting a phrase is not reading one. A reply can use the phrase and still answer the question, and a reply can answer nothing at all without using any phrase on the list.",
-    "Read all of them. That is what happened here. One small model read every pair and answered the same five questions about each. What it cost and how long it took are in the run numbers above.",
-    "The trick pairs further down show the difference between matching words and reading meaning. On replies swapped in from a different portfolio, the phrase rules called 2 of 10 correctly and the model called 10 of 10. On replies that only repeat the question back, the phrase rules called 0 of 10 and the model called 10 of 10. Those are twenty pairs we built ourselves, so they show the rules cannot tell what a reply is about. They do not show how often the model is right on real replies. That check is not finished.",
+    "Reading a sample by hand gives people room to consider context, but the sample needs careful selection. Keyword rules can count a phrase reliably, but cannot establish whether the reply gives the information asked for.",
+    "General-purpose language models can assess meaning and produce structured results too. Jev is another approach: this experiment gives it narrow questions with predefined answers and receives probabilities for those answers.",
+    "Applying the same criteria across many replies can reveal patterns worth investigating. The published run figures show the work recorded so far. Excluded, withheld and unavailable results are shown as no reading.",
+    "On twenty constructed pairs, Jev detected unrelated or repeated-question replies more often than our keyword rules. This is a limited check of those cases, not evidence of accuracy on the public record or superiority to general-purpose models. The human check and broader comparisons remain unfinished.",
   ],
 };
 
@@ -93,7 +95,7 @@ export const NOT_GOOD_AT = {
     },
     {
       lead: "It does not do the counting.",
-      body: "Every count on this site is done by ordinary code: how long a reply is, whether it contains a number, how many things a question asks, which stock phrases it uses. The model is only asked for judgement.",
+      body: "Code counts words, detects numbers and matches selected phrases. It also estimates how many parts a question has using text rules; that estimate can be wrong. The model is asked for judgement.",
     },
     {
       lead: "It gives no reason.",
@@ -145,15 +147,44 @@ export const WHY_NO_BEST_TABLE = {
 };
 
 export const NOT_CHECKED_YET_NOTE =
-  "Until these are done, the site does not claim the readings are accurate. Every number shown is the model's own, and no wording on the site suggests it has been checked. The preview notice stays at the top of every page.";
+  "Until these checks are done, the site does not claim the readings are accurate. Model probabilities have not been validated against people. A preview notice remains visible on every page.";
+
+export const INTRO = {
+  heading: "Can a small AI model help us examine a large public record?",
+  body: "Jev helps us ask the same carefully defined questions across New Zealand Parliament's written replies. Its structured judgements can help people find patterns and choose what to investigate.",
+  civicLink: "Understand the civic example",
+  builderLink: "Understand the method",
+};
+
+export const WORKFLOW = {
+  heading: "From one reply to a public record",
+  steps: [
+    {
+      heading: "People define the questions",
+      body: "We choose what to assess and what each possible answer means.",
+    },
+    {
+      heading: "Jev returns structured judgements",
+      body: "The model assigns probabilities to the answers we specify. It does not write an explanation.",
+    },
+    {
+      heading: "Code counts the results",
+      body: "Software groups the published readings so we can explore patterns across many replies.",
+    },
+    {
+      heading: "People check and interpret",
+      body: "We test accuracy against human readings. You can open the original replies and judge the evidence yourself.",
+    },
+  ],
+};
 
 export const WHAT_THIS_IS = {
-  heading: "What this is",
+  heading: "What changes when we can ask at scale?",
   paragraphs: [
-    "This is an experiment in reading a very large public record.",
-    "Members of Parliament send ministers tens of thousands of written questions a year. In 2024 and 2025 there were 141,686. Every question and reply is published, and almost nobody can read them all. We asked a small, fast computer model called Jev to read every pair and say one narrow thing: does the text of the reply give what the question asked for?",
-    "We are testing two things. One is whether a model like this can do that job well enough to be useful. The other is what becomes possible when it costs a few dollars, not a research budget, to ask several questions of every document in a public record.",
-    "Civic and political records have been hard to study at scale. They are mostly free text, there is a great deal of it, and the questions worth asking need judgement: did this reply address that question? Until now the choices were to read a small sample by hand, or to count words and phrases and hope they stood for meaning. This site is a first look at a third way, where every document gets read and several plain questions are asked of each one. It is an initial exploration. It will have errors, the method is published in full, and we would rather show the work early and be corrected than wait.",
+    "A public record can be open to everyone and still be too large for one person to read. This experiment uses Jev, a small AI model, to assess whether a reply gives the information a question asked for.",
+    "The useful change is the ability to turn a question about meaning into a repeatable assessment across many documents. That could help a civic reader find examples worth examining and help a researcher test a pattern beyond a small sample.",
+    "People still choose the criteria, check the results and decide what they mean. A consistent question does not guarantee a correct answer. Our human accuracy check is unfinished.",
+    "General-purpose language models can also assess meaning. This experiment explores Jev's structured outputs and estimated cost for this task; it has not established that Jev is more accurate or better value than those alternatives.",
   ],
 };
 
@@ -172,7 +203,7 @@ export const KNOW_BEFORE_YOU_READ = {
   items: [
     "A model made these readings, and models make mistakes. Open any question to see the full question, the full reply and the model's reading side by side, then decide for yourself.",
     "The model read text only. When a reply says the answer is in an attached file, we did not read the file, and we show no reading.",
-    "About one reply in four only points to an earlier reply. We fetched the earlier reply and the model read both together.",
+    "Some replies point to an earlier reply. Where we could fetch it, both texts are supplied for the model to assess.",
     "The same question is often sent to many ministers at once. We show counts both ways: every question, and each distinct question once.",
     "Long replies are shortened on this site. The link to the official record always has the full text.",
     `One pattern we have already seen: when a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.`,
@@ -184,7 +215,7 @@ export const FOUND_A_MISTAKE = {
   contactUrl: "https://www.linkedin.com/in/matthewawood/",
   contactLabel: "message Matthew Wood on LinkedIn",
   before: "If a reading is wrong, or a question or reply is shown incorrectly, ",
-  after: " and we will correct it and list the correction on the How we checked page.",
+  after: " and we will review it and list any correction on the method page.",
 };
 
 export const ATTRIBUTION_TEXT =
@@ -219,7 +250,8 @@ export const LABEL_WORDING: Readonly<
 
 export const NO_READING_WORDING = {
   shownAs: "No reading",
-  meaning: "We did not read an attached file, or this pair is being checked by people first.",
+  meaning:
+    "No model judgement is published for this pair. It may be excluded, held for human checks, or have no result available.",
 };
 
 export const EVASION_TYPE_HEADING = "What the reply does instead";
@@ -229,7 +261,8 @@ export const NO_READING_REASON_TEXT: Readonly<Record<string, string>> = {
     "The reply says the information is in an attached file. We did not read the file, so there is no reading here. The file is on the official page.",
   held_for_human_check:
     "This pair is part of the 300-pair human check. Its reading stays unpublished until both people have labelled it, so nobody labels with the model's answer in view.",
-  model_error: "The model could not produce a reading for this pair.",
+  model_error:
+    "No model result is available in this published dataset. This may mean processing is unfinished or a request failed.",
 };
 
 export const BROWSE_COMPARISON_NOTE =

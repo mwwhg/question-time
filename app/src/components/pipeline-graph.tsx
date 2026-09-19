@@ -20,7 +20,7 @@ const NODES: readonly GraphNode[] = [
   { id: "record", kind: "source", tag: "Source", title: "The official record", x: 8, y: 135 },
   { id: "tidy", kind: "code", tag: "Code", title: "Tidy and link replies", x: 206, y: 60 },
   { id: "measure", kind: "code", tag: "Code", title: "Measure each reply", x: 206, y: 210 },
-  { id: "jev", kind: "model", tag: "Model", title: "Jev reads every pair", x: 404, y: 135 },
+  { id: "jev", kind: "model", tag: "Model", title: "Jev assesses each pair", x: 404, y: 135 },
   {
     id: "people",
     kind: "people",
@@ -62,12 +62,12 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "code",
     title: "Measure each reply",
-    body: "Anything that can be counted exactly is counted by code: how long the reply is, whether it contains a number, how many things the question asks, and whether it uses a stock phrase.",
+    body: "Code counts reply length, checks for numbers and stock phrases, and estimates how many things the question asks. That last measure uses text rules and can miscount parts.",
   },
   {
     kind: "model",
-    title: "Jev reads every pair",
-    body: "This is the only step that needs judgement. Jev is given one question, its reply, and the same five plain questions every time. It never writes a sentence. For each question it splits 100 between the possible answers, such as 95 in 100 for “partly answered”, and the biggest share is the answer. What it took and what it cost are set out below.",
+    title: "Jev assesses each pair",
+    body: "People first define the assessment questions. Jev is then given one question, its reply, and the same five plain questions every time. It never writes a sentence. For each question it splits 100 between the possible answers, such as 95 in 100 for “partly answered”, and the biggest share is its choice. Code displays “Unclear” when the model’s confidence is below 50 in 100. What it took and what it cost are set out below.",
   },
   {
     kind: "code",
@@ -82,12 +82,12 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "code",
     title: "Add up the readings",
-    body: "Code adds the readings up by portfolio, by month, by how long the reply was, and more, then writes the totals out as plain data files. No model is involved in any count on this site.",
+    body: "Code adds the readings up by portfolio, by month, by how long the reply was, and more, then writes the totals out as plain data files. The arithmetic is ordinary code; counts of readings still depend on the model’s judgements.",
   },
   {
     kind: "site",
     title: "This site",
-    body: "The pages you are reading are fixed files. No model runs when you visit, nothing about you is sent anywhere, and every reading shown was made once, ahead of time, and can be checked against the official record.",
+    body: "The pages you are reading are fixed files. No model runs when you visit, and every reading shown was made once, ahead of time, and can be checked against the official record.",
   },
 ];
 
@@ -169,8 +169,9 @@ export function PipelineGraph() {
         ))}
       </svg>
       <figcaption className="pipeline-caption">
-        Follow the lines from left to right. Solid lines are finished work. Dashed lines are work
-        still under way. Only one box uses a model. Everything else is ordinary code or people.
+        Follow the lines from left to right. Solid lines show the processing steps. Dashed lines
+        show the planned human check. Only one box uses a model. Everything else is ordinary code or
+        people.
       </figcaption>
       <ol className="pipeline-steps">
         {STEPS.map((step) => (

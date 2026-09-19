@@ -10,7 +10,7 @@ function formatDuration(ms: number): string {
   return rest === 0 ? `${hours} ${hourWord}` : `${hours} ${hourWord} ${rest} minutes`;
 }
 
-/** The full Jev run in plain numbers. Every figure comes from the run's own records, not from an estimate. */
+/** Recorded usage and timing, with model cost estimated from the listed token price. */
 export function RunFacts({ run }: { readonly run: RunFactsData }) {
   const perSecond = run.activeSeconds > 0 ? run.pairsJudged / run.activeSeconds : 0;
   const costPerThousand = run.pairsJudged > 0 ? (run.estimatedCostUsd / run.pairsJudged) * 1000 : 0;
@@ -26,7 +26,8 @@ export function RunFacts({ run }: { readonly run: RunFactsData }) {
       </li>
       <li>
         Time spent reading: <span className="mono">{formatDuration(run.activeSeconds * 1000)}</span>
-        , on one laptop, about <span className="mono">{perSecond.toFixed(0)}</span> pairs a second.
+        , with the run managed from one laptop, about{" "}
+        <span className="mono">{perSecond.toFixed(0)}</span> pairs a second.
         {run.pauses > 0 && (
           <>
             {" "}
@@ -47,8 +48,8 @@ export function RunFacts({ run }: { readonly run: RunFactsData }) {
         (a token is roughly three-quarters of a word).
       </li>
       <li>
-        Total spend: <span className="mono">US${run.estimatedCostUsd.toFixed(2)}</span>, worked out
-        from the tokens sent at the vendor's listed price of{" "}
+        Estimated model cost: <span className="mono">US${run.estimatedCostUsd.toFixed(2)}</span>,
+        worked out from the tokens sent at the vendor's listed price of{" "}
         <span className="mono">US${run.usdPerMillionInputTokens}</span> per million. That is about{" "}
         <span className="mono">US${costPerThousand.toFixed(3)}</span> per thousand pairs. We will
         replace this with the invoiced amount when it arrives.
