@@ -1,9 +1,10 @@
 import type { PortfolioIndex } from "@contract";
 import { portfolioIndexPath } from "@contract";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import { Footer } from "./components/footer.tsx";
 import { Header } from "./components/header.tsx";
 import { PreviewNotice } from "./components/preview-notice.tsx";
+import { RouteNavigation } from "./components/route-navigation.tsx";
 import { PreviewProvider } from "./context/preview-context.tsx";
 import { useJson } from "./hooks/use-json.ts";
 import { Browse } from "./routes/browse.tsx";
@@ -25,22 +26,39 @@ export function App() {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <RouteNavigation />
         <Header />
-        <main id="main" className="page-shell" style={{ paddingTop: 24, paddingBottom: 24 }}>
-          <PreviewNotice />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/browse/:slug/:year" element={<BrowsePortfolio />} />
-            <Route path="/q/:year/:number" element={<Question />} />
-            <Route path="/findings" element={<Findings />} />
-            <Route path="/method" element={<Method />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+        <main
+          id="main"
+          tabIndex={-1}
+          className="page-shell"
+          style={{ paddingTop: 24, paddingBottom: 24 }}
+        >
+          <RoutePreviewNotice />
+          <PageRoutes />
         </main>
         <Footer />
       </BrowserRouter>
     </PreviewProvider>
+  );
+}
+
+function RoutePreviewNotice() {
+  return useLocation().pathname === "/" ? null : <PreviewNotice />;
+}
+
+function PageRoutes() {
+  const { pathname } = useLocation();
+  return (
+    <Routes key={pathname}>
+      <Route path="/" element={<Home />} />
+      <Route path="/browse" element={<Browse />} />
+      <Route path="/browse/:slug/:year" element={<BrowsePortfolio />} />
+      <Route path="/q/:year/:number" element={<Question />} />
+      <Route path="/findings" element={<Findings />} />
+      <Route path="/method" element={<Method />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
