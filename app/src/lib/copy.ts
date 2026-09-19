@@ -6,9 +6,9 @@ export const PILL_TEXT = "independent experiment · not from Parliament or any p
 export const PREVIEW_NOTICE = {
   heading: "Early preview.",
   summary:
-    "Model readings have not yet been checked against people. Read the source before drawing conclusions.",
+    "The model's readings are not yet checked against people. Read the source before you draw conclusions.",
   disclosure: "What is still being checked",
-  body: "These readings were made by a computer model and have not yet been checked against people's judgement. Some are wrong. The planned human check covers 300 pairs. We will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.",
+  body: "A computer model made these readings. They are not yet checked against people's judgement. Some are wrong. The planned human check covers 300 pairs. We will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.",
 };
 
 export const NEW_HERE = {
@@ -29,24 +29,24 @@ export const TERMS: Readonly<Record<string, string>> = {
   minister:
     "A minister is the MP put in charge of an area of government, such as health or transport.",
   portfolio:
-    "A portfolio is one minister's area of government, such as Health or Transport. The same portfolio is held by different people over time.",
+    "A portfolio is one minister's area of government, such as Health or Transport. Different people hold the same portfolio over time.",
   wq: "WQ is short for written question. Each one has a number and a year.",
   referral:
     "Some replies do not answer in their own words. They point at a reply the minister gave earlier. We fetch that earlier reply and show it here too.",
   stockPhrase:
-    "A stock phrase is a set form of words that turns up in many replies, such as “not in the public interest”. We picked a short list by hand, so it is not every phrase.",
+    "A stock phrase is a set form of words that appears in many replies, such as “not in the public interest”. We picked a short list by hand, so it is not every phrase.",
   distinctQuestion:
-    "The same wording is often sent to many ministers on the same day. “Every question” counts each one. “Each distinct question once” groups repeated wording and uses the reading of the lowest-numbered question in each group. Other replies in that group may differ; this is not an average or a consensus.",
+    "The same wording is often sent to many ministers on the same day. “Every question” counts each one. “Each distinct question once” groups repeated wording and uses the reading of the lowest-numbered question in each group. Other replies in that group may differ. This is not an average or a consensus.",
   median: "The median is the middle one. Half are shorter and half are longer.",
   percentile95: "95 in 100 are shorter than this. 5 in 100 are longer.",
   token:
-    "A token is a chunk of text, roughly three-quarters of a word. The model is priced by how much text it is sent.",
+    "A token is a chunk of text, roughly three-quarters of a word. The price of the model depends on how much text we send it.",
   confidence:
     "Confidence is the model's own number for how strongly it settled on one answer. It is not a measure of whether the answer is right.",
   controls:
-    "Trick pairs are pairs we made up on purpose so we already know the right answer, to see whether a method notices.",
+    "Trick pairs are pairs we wrote on purpose, so we already know the right answer. They show whether a method notices.",
   calibration:
-    "Calibration is whether the readings a model was surest about turn out right more often than the ones it was unsure about.",
+    "Calibration is whether the readings a model was surest about are right more often than the ones it was unsure about.",
 };
 
 export const HOW_TO_READ_A_READING =
@@ -65,7 +65,7 @@ export const WORKED_EXAMPLE = {
     "In that first test Jev was given three questions. The full run asks the five set out below. One of the three was the same “does the reply give the information asked for” question used in the run.",
   // Numbers below are read from docs/gate0/jev-response.json, the committed record of that test.
   outcome:
-    "No sentences. Jev wrote nothing back. It split 100 across the four possible answers: partly answered 95 in 100, answered 3 in 100, not answered 2 in 100, unclear 0 in 100. The biggest share wins, so the reading is “Partly answered”. It also put the chance that the reply declines and gives a reason at 60 in 100.",
+    "Jev wrote nothing back. It split 100 across the four possible answers: partly answered 95 in 100, answered 3 in 100, not answered 2 in 100, unclear 0 in 100. The biggest share wins, so the reading is “Partly answered”. It also put the chance that the reply declines and gives a reason at 60 in 100.",
   why: "The question asks two things. The reply says yes to the first and names no project at all, so some of what was asked is there and some is not. You do not have to agree. That is the point of showing the question and the reply above every reading.",
   cost: "That one pair took 719 milliseconds and 639 tokens of text.",
   sitePath: "/q/2024/962",
@@ -75,10 +75,10 @@ export const WORKED_EXAMPLE = {
 export const WHY_READ_EVERY_REPLY = {
   heading: "Why apply the same questions across the record?",
   paragraphs: [
-    "Reading a sample by hand gives people room to consider context, but the sample needs careful selection. Keyword rules can count a phrase reliably, but cannot establish whether the reply gives the information asked for.",
-    "General-purpose language models can assess meaning and produce structured results too. Jev is another approach: this experiment gives it narrow questions with predefined answers and receives probabilities for those answers.",
-    "Applying the same criteria across many replies can reveal patterns worth investigating. The published run figures show the work recorded so far. Excluded, withheld and unavailable results are shown as no reading.",
-    "On twenty constructed pairs, Jev detected unrelated or repeated-question replies more often than our keyword rules. This is a limited check of those cases, not evidence of accuracy on the public record or superiority to general-purpose models. The human check and broader comparisons remain unfinished.",
+    "People who read a sample by hand can weigh context, but someone has to choose the sample. Keyword rules count a phrase reliably. They cannot tell whether the reply gives what the question asked for.",
+    "General-purpose language models can also judge meaning and return structured results. Jev is another way to do it. We give it narrow questions with fixed answers, and it returns a probability for each answer.",
+    "When the same questions go to many replies, patterns show that are worth a closer look. The run figures on this site cover the work recorded so far. Pairs that are excluded, withheld or unavailable show as “No reading”.",
+    "On twenty pairs we wrote ourselves, Jev caught unrelated replies and replies that repeat the question more often than our keyword rules did. That is a small check of those cases. It does not show accuracy on the public record, and it does not show that Jev beats general-purpose models. The human check and the wider comparisons are not finished.",
   ],
 };
 
@@ -91,11 +91,11 @@ export const NOT_GOOD_AT = {
     },
     {
       lead: "It only sees the text we hand it.",
-      body: "About one reply in four is just a pointer to an earlier reply. Handed only that sentence, the model would be reading “I refer the member to reply number 1” and nothing else. Ordinary code finds the earlier reply first and gives it both. A small number could not be found, mostly because they point back to 2023, outside the two years we fetched.",
+      body: "About one reply in four only points to an earlier reply. With only that sentence, the model would read “I refer the member to reply number 1” and nothing else. Ordinary code finds the earlier reply first and gives it both. We could not find a small number, mostly because they point to 2023, outside the two years we fetched.",
     },
     {
       lead: "It does not do the counting.",
-      body: "Code counts words, detects numbers and matches selected phrases. It also estimates how many parts a question has using text rules; that estimate can be wrong. The model is asked for judgement.",
+      body: "Code counts words, detects numbers and matches selected phrases. It also uses text rules to estimate how many parts a question has. That estimate can be wrong. We ask the model only for judgement.",
     },
     {
       lead: "It gives no reason.",
@@ -103,19 +103,19 @@ export const NOT_GOOD_AT = {
     },
     {
       lead: "Exact wording matters, including ours.",
-      body: "In the first draw of the trick pairs, two replies of “None.” were counted as misses. Looking again, “None.” does answer a question of the form “What advice, if any”. The trick pair was wrong and the model was right. We changed how the pairs are built and published both draws.",
+      body: "In the first draw of the trick pairs, two replies of “None.” were counted as misses. When we looked again, “None.” does answer a question of the form “What advice, if any”. The trick pair was wrong and the model was right. We changed how the pairs are built and published both draws.",
     },
     {
       lead: "We do not know yet whether its confidence means anything.",
-      body: "Whether the readings it was surest about turn out right more often is exactly what the 300-pair check will test. Until then, treat the numbers as the model's own.",
+      body: "The 300-pair check will test whether the readings it was surest about are right more often. Until then, treat the numbers as the model's own.",
     },
   ],
   vendorNote:
-    "The company that makes it says one request can carry up to 64,000 tokens of text and that the text sent costs US$0.042 per million tokens. We have not tested the limit ourselves, and the price on this site is worked out from that listed figure, not from an invoice.",
+    "The company that makes it says one request can carry up to 64,000 tokens of text. It lists the price of text sent as US$0.042 per million tokens. We did not test the limit ourselves. The price on this site comes from that listed figure, not from an invoice.",
 };
 
 export const JEV_VENDOR_LIMITS_NOTE =
-  "The company that makes Jev says it reads instructions literally, does not count reliably, is unreliable at comparing dates and doing arithmetic, handles double negatives and indirect instructions poorly, gets less accurate as the text it is given fills with detail unrelated to the question, can be swayed by text that argues with it, and does not write text. We have not tested these claims ourselves. This is why code does the counting, the model is sent only the question, the reply and a few computed facts, and each question we ask it is one narrow thing.";
+  "The company that makes Jev says it reads instructions literally and does not count reliably. It says Jev is unreliable at comparing dates and doing arithmetic, and handles double negatives and indirect instructions poorly. It says Jev gets less accurate as the text fills with detail unrelated to the question. It says text that argues with it can sway it, and that it does not write text. We did not test these claims ourselves. They are why code does the counting and why each question we ask is one narrow thing. They are also why the model gets only the question, the reply and a few computed facts.";
 
 export const HEADLINE_TAG_MODEL = "Model's reading, not yet checked against people";
 export const HEADLINE_TAG_COUNTED = "Counted from the official record";
@@ -143,15 +143,15 @@ export const CIVICS = {
 
 export const WHY_NO_BEST_TABLE = {
   heading: "Why there is no table of who answered best",
-  body: "You might expect a list here of which minister gave the best answers. We have not made one, for three reasons. First, the readings come from a computer model and have not yet been checked against people, so a league table would present unchecked guesses as a verdict on named people. Second, ministers are not sent the same questions. A minister asked for long lists of documents will look different from one asked yes or no questions, whatever they do. Third, a reply that declines can be a proper reply. What you can do instead is open any portfolio, read the questions and replies yourself, and see the kinds of question that tend to get a full reply in the section below.",
+  body: "You might expect a list here of which minister gave the best answers. We did not make one, for three reasons. First, the readings come from a computer model and are not yet checked against people. A league table would present unchecked guesses as a verdict on named people. Second, ministers are not sent the same questions. A minister asked for long lists of documents will look different from one asked yes or no questions, whatever they do. Third, a reply that declines can be a proper reply. You can open any portfolio and read the questions and replies yourself. The section below shows the kinds of question that tend to get a full reply.",
 };
 
 export const NOT_CHECKED_YET_NOTE =
-  "Until these checks are done, the site does not claim the readings are accurate. Model probabilities have not been validated against people. A preview notice remains visible on every page.";
+  "Until these checks are done, the site does not claim the readings are accurate. The model's probabilities are not yet checked against people. A preview notice remains visible on every page.";
 
 export const INTRO = {
   heading: "Can a small AI model help us examine a large public record?",
-  body: "Jev helps us ask the same carefully defined questions across New Zealand Parliament's written replies. Its structured judgements can help people find patterns and choose what to investigate.",
+  body: "We use Jev to ask the same five questions about written replies in New Zealand's Parliament. Its answers come back as numbers. People can use them to find patterns and choose what to read.",
   civicLink: "Understand the civic example",
   builderLink: "Understand the method",
 };
@@ -169,7 +169,7 @@ export const WORKFLOW = {
     },
     {
       heading: "Code counts the results",
-      body: "Software groups the published readings so we can explore patterns across many replies.",
+      body: "Code groups the published readings, so people can look for patterns across many replies.",
     },
     {
       heading: "People check and interpret",
@@ -179,12 +179,12 @@ export const WORKFLOW = {
 };
 
 export const WHAT_THIS_IS = {
-  heading: "What changes when we can ask at scale?",
+  heading: "What this makes possible",
   paragraphs: [
     "A public record can be open to everyone and still be too large for one person to read. This experiment uses Jev, a small AI model, to assess whether a reply gives the information a question asked for.",
-    "The useful change is the ability to turn a question about meaning into a repeatable assessment across many documents. That could help a civic reader find examples worth examining and help a researcher test a pattern beyond a small sample.",
-    "People still choose the criteria, check the results and decide what they mean. A consistent question does not guarantee a correct answer. Our human accuracy check is unfinished.",
-    "General-purpose language models can also assess meaning. This experiment explores Jev's structured outputs and estimated cost for this task; it has not established that Jev is more accurate or better value than those alternatives.",
+    "A question about meaning becomes a check we can repeat across many documents. A civic reader could use it to find examples worth reading. A researcher could use it to test a pattern beyond a small sample.",
+    "People still choose the criteria, check the results and decide what they mean. A consistent question does not guarantee a correct answer. Our check against people is not finished.",
+    "General-purpose language models can also assess meaning. This experiment looks at Jev's structured outputs and estimated cost for this task. It does not show that Jev is more accurate or better value than those models.",
   ],
 };
 
@@ -203,10 +203,10 @@ export const KNOW_BEFORE_YOU_READ = {
   items: [
     "A model made these readings, and models make mistakes. Open any question to see the full question, the full reply and the model's reading side by side, then decide for yourself.",
     "The model read text only. When a reply says the answer is in an attached file, we did not read the file, and we show no reading.",
-    "Some replies point to an earlier reply. Where we could fetch it, both texts are supplied for the model to assess.",
+    "Some replies point to an earlier reply. Where we could fetch it, the model gets both texts.",
     "The same question is often sent to many ministers at once. We show counts both ways: every question, and each distinct question once.",
     "Long replies are shortened on this site. The link to the official record always has the full text.",
-    `One pattern we have already seen: when a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.`,
+    `We already see one pattern. When a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.`,
   ],
 };
 
@@ -224,7 +224,7 @@ export const ATTRIBUTION_TEXT =
 export const CC_LICENCE_URL = "https://creativecommons.org/licenses/by/4.0/";
 
 export const READING_IT_YOURSELF_INTRO =
-  "Built from computed features only. It describes structure, never motive.";
+  "These points come from computed features only. They describe structure, never motive.";
 
 export const READING_IT_YOURSELF_CLOSE =
   "Read the question and the reply above and see whether you agree.";
@@ -260,7 +260,7 @@ export const NO_READING_REASON_TEXT: Readonly<Record<string, string>> = {
   attachment_not_read:
     "The reply says the information is in an attached file. We did not read the file, so there is no reading here. The file is on the official page.",
   held_for_human_check:
-    "This pair is part of the 300-pair human check. Its reading stays unpublished until both people have labelled it, so nobody labels with the model's answer in view.",
+    "This pair is part of the 300-pair human check. Its reading stays unpublished until both people label it, so nobody labels with the model's answer in view.",
   model_error:
     "No model result is available in this published dataset. This may mean processing is unfinished or a request failed.",
 };

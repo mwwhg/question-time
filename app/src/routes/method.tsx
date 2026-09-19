@@ -77,7 +77,7 @@ export function Method() {
         <h2>How it works</h2>
         <p>{TERMS.writtenQuestion}</p>
         <p>
-          A model does one narrow job here: it reads a question and its reply and says whether the
+          A model does one narrow job here. It reads a question and its reply and says whether the
           reply gives what was asked. Everything around that job is ordinary code or people.
         </p>
       </section>
@@ -115,10 +115,10 @@ export function Method() {
       <section id="run" tabIndex={-1}>
         <h2>The run, in numbers</h2>
         <p>
-          These figures come from the run's own records: the time stamped on each reading and the
-          amount of text the model reported receiving. Cost is an estimate using the vendor's listed
-          price. These figures describe the recorded run, not proof of accuracy or a completed
-          reading of every record.
+          These figures come from the run's own records. Those records are the time stamped on each
+          reading and the amount of text the model reported receiving. Cost is an estimate using the
+          vendor's listed price. These figures describe the recorded run, not proof of accuracy or a
+          completed reading of every record.
         </p>
         <p style={{ color: "var(--muted)" }}>{TERMS.token}</p>
         {indexState.status === "loading" && <LoadingNote />}
@@ -185,9 +185,9 @@ export function Method() {
         <h2>What is computed by code, not the model</h2>
         <ul>
           <li>
-            Whether a reading counts as "unclear": the model is treated as not sure enough whenever
-            its top-choice confidence is below a fixed threshold, decided once by the pipeline and
-            never by the site.
+            Whether a reading counts as "unclear": the pipeline treats the model as not sure enough
+            when its top-choice confidence is below 50 in 100. The pipeline decides this once. The
+            site never does.
           </li>
           <li>
             The reply's word count, whether it contains a number, and which stock phrases it uses.
@@ -201,7 +201,7 @@ export function Method() {
           <li>
             Counting each question two ways: every record, and each distinct question text once,
             since the same question is often sent to many ministers. The distinct-question view uses
-            the reading of the lowest-numbered record for each wording; it does not combine the
+            the reading of the lowest-numbered record for each wording. It does not combine the
             replies or their judgements.
           </li>
           <li>
@@ -254,11 +254,10 @@ export function Method() {
           </table>
         </section>
         <p>
-          The phrase rules got 2 of 10 swapped pairs and 0 of 10 echo pairs. That is what matching
-          words does when the words are in the wrong place: an echo reply is made entirely of the
-          question's own words and contains no stock phrase at all, so the rules have nothing to go
-          on. Jev got 10 of 10 on both. These are twenty pairs we built ourselves. They show the
-          rules cannot tell what a reply is about. They do not show how often Jev is right on real
+          The phrase rules got 2 of 10 swapped pairs and 0 of 10 echo pairs. An echo reply uses only
+          the question's own words and contains no stock phrase, so the rules find nothing to match.
+          Jev got 10 of 10 on both. These are twenty pairs we built ourselves. They show the rules
+          cannot tell what a reply is about. They do not show how often Jev is right on real
           replies.
         </p>
         <p>{DISCARD_EXPLANATION}</p>
