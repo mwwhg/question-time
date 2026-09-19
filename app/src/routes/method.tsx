@@ -150,9 +150,9 @@ export function Method() {
         <h2>The five questions asked of each processed pair</h2>
         <p>
           Jev receives the same five assessment questions for each pair, in the same words each
-          time. Phrase rules provide a simple comparison. A comparison with a general-purpose
-          language model on the same human-reviewed sample is planned but has not been completed.
-          Here are the assessment questions in plain words.
+          time. Phrase rules provide a simple comparison. We plan to compare a general-purpose
+          language model on the same human-reviewed sample. That comparison is not done yet. Here
+          are the assessment questions in plain words.
         </p>
         <ol className="question-set-list">
           {QS_V1_INSTRUCTIONS.map((q) => (
