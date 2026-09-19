@@ -10,25 +10,25 @@ independent experiment · not from Parliament or any party
 
 ## Preview notice, every page while `checkedAgainstPeople` is false
 
-**Early preview.** Model readings have not yet been checked against people. Read the source before drawing conclusions.
+**Early preview.** The model's readings are not yet checked against people. Read the source before you draw conclusions.
 
 Expandable disclosure, "What is still being checked":
 
-These readings were made by a computer model and have not yet been checked against people's judgement. Some are wrong. The planned human check covers 300 pairs. We will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.
+A computer model made these readings. They are not yet checked against people's judgement. Some are wrong. The planned human check covers 300 pairs. We will publish how often the model and people agree, including every case where the model was sure and wrong. Until then, treat each reading as a prompt to read the reply yourself.
 
 ## Why these questions matter (Start here, after the opening purpose)
 
 A Member of Parliament can send a written question to a government minister. A minister is the MP put in charge of an area of government, such as health or transport. The question is published, the minister has to send back a written reply, and that is published too. This gives the public a record of what MPs asked and how ministers replied. So it matters whether the reply gives what the question asked for, and that one thing is all this site looks at.
 
-## What changes when we can ask at scale?
+## What this makes possible
 
 A public record can be open to everyone and still be too large for one person to read. This experiment uses Jev, a small AI model, to assess whether a reply gives the information a question asked for.
 
-The useful change is the ability to turn a question about meaning into a repeatable assessment across many documents. That could help a civic reader find examples worth examining and help a researcher test a pattern beyond a small sample.
+A question about meaning becomes a check we can repeat across many documents. A civic reader could use it to find examples worth reading. A researcher could use it to test a pattern beyond a small sample.
 
-People still choose the criteria, check the results and decide what they mean. A consistent question does not guarantee a correct answer. Our human accuracy check is unfinished.
+People still choose the criteria, check the results and decide what they mean. A consistent question does not guarantee a correct answer. Our check against people is not finished.
 
-General-purpose language models can also assess meaning. This experiment explores Jev's structured outputs and estimated cost for this task; it has not established that Jev is more accurate or better value than those alternatives.
+General-purpose language models can also assess meaning. This experiment looks at Jev's structured outputs and estimated cost for this task. It does not show that Jev is more accurate or better value than those models.
 
 ## What this is not
 
@@ -44,14 +44,14 @@ It is not from Parliament, the Office of the Clerk, any party, or any member.
 
 - A model made these readings, and models make mistakes. Open any question to see the full question, the full reply and the model's reading side by side, then decide for yourself.
 - The model read text only. When a reply says the answer is in an attached file, we did not read the file, and we show no reading.
-- Some replies point to an earlier reply. Where we could fetch it, both texts are supplied for the model to assess.
+- Some replies point to an earlier reply. Where we could fetch it, the model gets both texts.
 - The same question is often sent to many ministers at once. We show counts both ways: every question, and each distinct question once.
 - Long replies are shortened on this site. The link to the official record always has the full text.
-- One pattern we have already seen: when a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.
+- We already see one pattern. When a question says "if any" and the reply is "I am not responsible for any departments", the model often reads it as not answered. A person might well say that reply does answer the question. Expect other patterns like this.
 
 ## While `checkedAgainstPeople` is false (How we checked, under "What has not been done yet")
 
-Until these checks are done, the site does not claim the readings are accurate. Model probabilities have not been validated against people. A preview notice remains visible on every page.
+Until these checks are done, the site does not claim the readings are accurate. The model's probabilities are not yet checked against people. A preview notice remains visible on every page.
 
 ## Plain meanings (one line beside each term at first use)
 
@@ -59,17 +59,17 @@ Until these checks are done, the site does not claim the readings are accurate. 
 |---|---|
 | written question | A question an MP sends to a minister in writing. The minister has to reply in writing, and both are published. |
 | minister | The MP put in charge of an area of government, such as health or transport. |
-| portfolio | One minister's area of government, such as Health or Transport. The same portfolio is held by different people over time. |
+| portfolio | One minister's area of government, such as Health or Transport. Different people hold the same portfolio over time. |
 | WQ | Short for written question. Each one has a number and a year. |
 | points to an earlier reply | Some replies do not answer in their own words. They point at a reply the minister gave earlier. We fetch that earlier reply and show it here too. |
-| stock phrase | A set form of words that turns up in many replies, such as "not in the public interest". We picked a short list by hand, so it is not every phrase. |
-| every question / each distinct question once | The same wording is often sent to many ministers on the same day. "Every question" counts each one. "Each distinct question once" groups repeated wording and uses the reading of the lowest-numbered question in each group. Other replies in that group may differ; this is not an average or a consensus. |
+| stock phrase | A set form of words that appears in many replies, such as "not in the public interest". We picked a short list by hand, so it is not every phrase. |
+| every question / each distinct question once | The same wording is often sent to many ministers on the same day. "Every question" counts each one. "Each distinct question once" groups repeated wording and uses the reading of the lowest-numbered question in each group. Other replies in that group may differ. This is not an average or a consensus. |
 | median | The middle one. Half are shorter and half are longer. |
 | 95th percentile | 95 in 100 are shorter than this. 5 in 100 are longer. |
-| token | A chunk of text, roughly three-quarters of a word. The model is priced by how much text it is sent. |
+| token | A chunk of text, roughly three-quarters of a word. The price of the model depends on how much text we send it. |
 | confidence | The model's own number for how strongly it settled on one answer. It is not a measure of whether the answer is right. |
-| trick pairs (controls) | Pairs we made up on purpose so we already know the right answer, to see whether a method notices. |
-| calibration | Whether the readings a model was surest about turn out right more often than the ones it was unsure about. |
+| trick pairs (controls) | Pairs we wrote on purpose, so we already know the right answer. They show whether a method notices. |
+| calibration | Whether the readings a model was surest about are right more often than the ones it was unsure about. |
 
 ## How to read the readings (question page, beside the reading)
 
@@ -83,7 +83,7 @@ This is one real pair. We picked it before running anything, and it is the pair 
 
 **What Jev was asked.** In that first test it was given three questions. The full run asks the five set out below. One of the three was the same "does the reply give the information asked for" question used in the run.
 
-**What came out.** No sentences. Jev wrote nothing back. It split 100 across the four possible answers: partly answered 95 in 100, answered 3 in 100, not answered 2 in 100, unclear 0 in 100. In this example the biggest share determines the reading, so the reading is "Partly answered". It also put the chance that the reply declines and gives a reason at 60 in 100.
+**What came out.** Jev wrote nothing back. It split 100 across the four possible answers: partly answered 95 in 100, answered 3 in 100, not answered 2 in 100, unclear 0 in 100. In this example the biggest share determines the reading, so the reading is "Partly answered". It also put the chance that the reply declines and gives a reason at 60 in 100.
 
 **Our interpretation, not a Jev explanation.** The question asks two things. The reply says yes to the first and names no project at all, so some of what was asked is there and some is not. You do not have to agree. That is the point of showing the question and the reply above every reading.
 
@@ -91,24 +91,24 @@ This is one real pair. We picked it before running anything, and it is the pair 
 
 ## Why apply the same questions across the record?
 
-Reading a sample by hand gives people room to consider context, but the sample needs careful selection. Keyword rules can count a phrase reliably, but cannot establish whether the reply gives the information asked for.
+People who read a sample by hand can weigh context, but someone has to choose the sample. Keyword rules count a phrase reliably. They cannot tell whether the reply gives what the question asked for.
 
-General-purpose language models can assess meaning and produce structured results too. Jev is another approach: this experiment gives it narrow questions with predefined answers and receives probabilities for those answers.
+General-purpose language models can also judge meaning and return structured results. Jev is another way to do it. We give it narrow questions with fixed answers, and it returns a probability for each answer.
 
-Applying the same criteria across many replies can reveal patterns worth investigating. The published run figures show the work recorded so far. Excluded, withheld and unavailable results are shown as no reading.
+When the same questions go to many replies, patterns show that are worth a closer look. The run figures on this site cover the work recorded so far. Pairs that are excluded, withheld or unavailable show as “No reading”.
 
-On twenty constructed pairs, Jev detected unrelated or repeated-question replies more often than our keyword rules. This is a limited check of those cases, not evidence of accuracy on the public record or superiority to general-purpose models. The human check and broader comparisons remain unfinished.
+On twenty pairs we wrote ourselves, Jev caught unrelated replies and replies that repeat the question more often than our keyword rules did. That is a small check of those cases. It does not show accuracy on the public record, and it does not show that Jev beats general-purpose models. The human check and the wider comparisons are not finished.
 
 ## What Jev is not good at, and what we did about it (How we checked)
 
 - **It cannot open an attached file.** Some replies say the answer is in an attachment. The model never sees it, so those questions show no reading and we say so on the page.
-- **It only sees the text we hand it.** About one reply in four is just a pointer to an earlier reply. Handed only that sentence, the model would be reading "I refer the member to reply number 1" and nothing else. Ordinary code finds the earlier reply first and gives it both. A small number could not be found, mostly because they point back to 2023, outside the two years we fetched.
-- **It does not do the counting.** Code counts words, detects numbers and matches selected phrases. It also estimates how many parts a question has using text rules; that estimate can be wrong. The model is asked for judgement.
+- **It only sees the text we hand it.** About one reply in four only points to an earlier reply. With only that sentence, the model would read "I refer the member to reply number 1" and nothing else. Ordinary code finds the earlier reply first and gives it both. We could not find a small number, mostly because they point to 2023, outside the two years we fetched.
+- **It does not do the counting.** Code counts words, detects numbers and matches selected phrases. It also uses text rules to estimate how many parts a question has. That estimate can be wrong. We ask the model only for judgement.
 - **It gives no reason.** It returns numbers, not an explanation. That is why the full question and the full reply sit above every reading, with a link to the official record.
-- **Exact wording matters, including ours.** In the first draw of the trick pairs, two replies of "None." were counted as misses. Looking again, "None." does answer a question of the form "What advice, if any". The trick pair was wrong and the model was right. We changed how the pairs are built and published both draws.
-- **We do not know yet whether its confidence means anything.** Whether the readings it was surest about turn out right more often is exactly what the 300-pair check will test. Until then, treat the numbers as the model's own.
+- **Exact wording matters, including ours.** In the first draw of the trick pairs, two replies of "None." were counted as misses. When we looked again, "None." does answer a question of the form "What advice, if any". The trick pair was wrong and the model was right. We changed how the pairs are built and published both draws.
+- **We do not know yet whether its confidence means anything.** The 300-pair check will test whether the readings it was surest about are right more often. Until then, treat the numbers as the model's own.
 
-The company that makes it says one request can carry up to 64,000 tokens of text and that the text sent costs US$0.042 per million tokens. We have not tested the limit ourselves, and the price on this site is worked out from that listed figure, not from an invoice.
+The company that makes it says one request can carry up to 64,000 tokens of text. It lists the price of text sent as US$0.042 per million tokens. We did not test the limit ourselves. The price on this site comes from that listed figure, not from an invoice.
 
 ## Found a mistake?
 
@@ -116,7 +116,7 @@ If a reading is wrong, or a question or reply is shown incorrectly, message Matt
 
 ## Reading it yourself (template, every question page)
 
-Built from computed features only. It describes structure, never motive.
+These points come from computed features only. They describe structure, never motive.
 
 - Parts: "This question asks {one thing | N separate things}."
 - Figure: "It asks for a number, amount or date." (only when the rules detect one)
@@ -133,7 +133,7 @@ This work includes part of Office of the Clerk/Parliamentary Service's written p
 
 ## Vendor's own limits note (How we checked, under "What Jev is not good at, and what we did about it")
 
-The company that makes Jev says it reads instructions literally, does not count reliably, is unreliable at comparing dates and doing arithmetic, handles double negatives and indirect instructions poorly, gets less accurate as the text it is given fills with detail unrelated to the question, can be swayed by text that argues with it, and does not write text. We have not tested these claims ourselves. This is why code does the counting, the model is sent only the question, the reply and a few computed facts, and each question we ask it is one narrow thing.
+The company that makes Jev says it reads instructions literally and does not count reliably. It says Jev is unreliable at comparing dates and doing arithmetic, and handles double negatives and indirect instructions poorly. It says Jev gets less accurate as the text fills with detail unrelated to the question. It says text that argues with it can sway it, and that it does not write text. We did not test these claims ourselves. They are why code does the counting and why each question we ask is one narrow thing. They are also why the model gets only the question, the reply and a few computed facts.
 
 ## What we found so far (Start page, after the example and explanation of scale)
 
@@ -161,7 +161,7 @@ Explanatory line: "How many questions a portfolio receives depends on what is in
 
 **Why there is no table of who answered best.** Exact text, placed right after the portfolio volume table:
 
-> You might expect a list here of which minister gave the best answers. We have not made one, for three reasons. First, the readings come from a computer model and have not yet been checked against people, so a league table would present unchecked guesses as a verdict on named people. Second, ministers are not sent the same questions. A minister asked for long lists of documents will look different from one asked yes or no questions, whatever they do. Third, a reply that declines can be a proper reply. What you can do instead is open any portfolio, read the questions and replies yourself, and see the kinds of question that tend to get a full reply in the section below.
+> You might expect a list here of which minister gave the best answers. We did not make one, for three reasons. First, the readings come from a computer model and are not yet checked against people. A league table would present unchecked guesses as a verdict on named people. Second, ministers are not sent the same questions. A minister asked for long lists of documents will look different from one asked yes or no questions, whatever they do. Third, a reply that declines can be a proper reply. You can open any portfolio and read the questions and replies yourself. The section below shows the kinds of question that tend to get a full reply.
 
 "open any portfolio" links to `/browse`.
 
@@ -195,7 +195,7 @@ Every headline card carries one of three tags, so a reader can tell where the nu
 
 Can a small AI model help us examine a large public record?
 
-Jev helps us ask the same carefully defined questions across New Zealand Parliament's written replies. Its structured judgements can help people find patterns and choose what to investigate.
+We use Jev to ask the same five questions about written replies in New Zealand's Parliament. Its answers come back as numbers. People can use them to find patterns and choose what to read.
 
 Give equal prominence to "Understand the civic example" linking to the worked example and "Understand the method" linking to `/method`.
 
@@ -203,7 +203,7 @@ Give equal prominence to "Understand the civic example" linking to the worked ex
 
 1. People define the questions. We choose what to assess and what each possible answer means.
 2. Jev returns structured judgements. The model assigns probabilities to the answers we specify. It does not write an explanation.
-3. Code counts the results. Software groups the published readings so we can explore patterns across many replies.
+3. Code counts the results. Code groups the published readings, so people can look for patterns across many replies.
 4. People check and interpret. We test accuracy against human readings. You can open the original replies and judge the evidence yourself.
 
 ## Coverage wording

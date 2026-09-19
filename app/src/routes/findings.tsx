@@ -344,7 +344,7 @@ export function Findings() {
           record has a published reading.
         </p>
         <p style={{ color: "var(--muted)" }}>
-          It cannot show whether that cost is worth it; that is a judgement call. {TERMS.token}
+          It cannot show whether that cost is worth it. That is a judgement call. {TERMS.token}
         </p>
         {indexState.status === "loading" && <LoadingNote />}
         {indexState.status === "error" && <ErrorNote />}
@@ -494,13 +494,13 @@ export function Findings() {
             <h2>How firmly the model settled on its answer</h2>
             <p>
               {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0 at
-              the bottom, and the four columns count how many readings in that band got each answer.
-              A reading in the last row is one the model settled on very firmly.
+              the bottom. The four columns count how many readings in that band got each answer. A
+              reading in the last row is one the model settled on very firmly.
             </p>
             <p style={{ color: "var(--muted)" }}>
               It cannot show whether those firm readings are right more often than the unsure ones.
-              That is the check that has not been done yet. See{" "}
-              <Link to="/method">How we checked</Link>.
+              That check is not done yet. See{" "}
+              <Link to="/method">How Jev works and how we check it</Link>.
             </p>
             {findingsState.data.confidenceHistogram.length === 0 ? (
               <EmptyNote>No data yet.</EmptyNote>
