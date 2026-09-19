@@ -1,6 +1,6 @@
 import type { BrowseShard, Label } from "@contract";
 import { browseShardPath, LABELS } from "@contract";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router";
 import { EmptyNote, ErrorNote, LoadingNote } from "../components/data-state.tsx";
 import { LabelKey } from "../components/label-key.tsx";
@@ -19,6 +19,15 @@ export function BrowsePortfolio() {
   const state = useJson<BrowseShard>(browseShardPath(slug, yearNumber));
   const [filter, setFilter] = useState<FilterValue>("all");
   const [page, setPage] = useState(1);
+  const resultsHeading = useRef<HTMLHeadingElement>(null);
+  const focusResults = useRef(false);
+
+  useEffect(() => {
+    if (focusResults.current && page > 0) {
+      resultsHeading.current?.focus();
+      focusResults.current = false;
+    }
+  }, [page]);
 
   useDocumentTitle(state.status === "ok" ? state.data.portfolio : "Browse the results");
 
@@ -31,6 +40,11 @@ export function BrowsePortfolio() {
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const pageRows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  function changePage(nextPage: number) {
+    focusResults.current = true;
+    setPage(nextPage);
+  }
 
   function setFilterAndResetPage(value: FilterValue) {
     setFilter(value);
@@ -95,11 +109,23 @@ export function BrowsePortfolio() {
                 </button>
               </fieldset>
 
-              {filtered.length === 0 ? (
-                <EmptyNote>No questions match that filter.</EmptyNote>
-              ) : (
+              <h2
+                ref={resultsHeading}
+                tabIndex={-1}
+                className="results-heading"
+                id="question-results"
+              >
+                Questions
+              </h2>
+              <p role="status" aria-atomic="true" className="results-summary">
+                {filtered.length === 0
+                  ? "No questions match that filter."
+                  : `${filtered.length} questions. Showing ${(page - 1) * PAGE_SIZE + 1}–${Math.min(page * PAGE_SIZE, filtered.length)}. Page ${page} of ${pageCount}.`}
+              </p>
+              {filtered.length > 0 && (
                 <>
-                  <div className="table-scroll">
+                  {/* biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll the table region. */}
+                  <section className="table-scroll" aria-labelledby="question-results" tabIndex={0}>
                     <table>
                       <caption className="section-label">
                         {filtered.length === state.data.rows.length
@@ -119,9 +145,9 @@ export function BrowsePortfolio() {
                           const wording = row.label ? LABEL_WORDING[row.label] : NO_READING_WORDING;
                           return (
                             <tr key={row.number}>
-                              <td className="mono">
+                              <th scope="row" className="mono">
                                 <Link to={`/q/${row.year}/${row.number}`}>{row.number}</Link>
-                              </td>
+                              </th>
                               <td className="mono">{formatDate(row.dateAsked)}</td>
                               <td>{row.question}</td>
                               <td>{wording?.shownAs}</td>
@@ -130,7 +156,7 @@ export function BrowsePortfolio() {
                         })}
                       </tbody>
                     </table>
-                  </div>
+                  </section>
 
                   {pageCount > 1 && (
                     <nav className="pagination" aria-label="Pagination">
@@ -138,7 +164,7 @@ export function BrowsePortfolio() {
                         type="button"
                         className="button"
                         disabled={page <= 1}
-                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        onClick={() => changePage(Math.max(1, page - 1))}
                       >
                         Previous
                       </button>
@@ -149,7 +175,7 @@ export function BrowsePortfolio() {
                         type="button"
                         className="button"
                         disabled={page >= pageCount}
-                        onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
+                        onClick={() => changePage(Math.min(pageCount, page + 1))}
                       >
                         Next
                       </button>

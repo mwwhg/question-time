@@ -125,6 +125,12 @@ export function Browse() {
             </fieldset>
           </div>
 
+          <p role="status" aria-atomic="true" className="results-summary">
+            {sorted.length} portfolios for {activeYear}. Counting{" "}
+            {mode === "all" ? "every question" : "each distinct question once"}, sorted by{" "}
+            {sort === "name" ? "name" : "number of questions"}.
+          </p>
+
           {sorted.length === 0 && <EmptyNote>No portfolios for this year.</EmptyNote>}
 
           <ul className="portfolio-list">
