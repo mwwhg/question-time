@@ -117,6 +117,7 @@ export const JEV_VENDOR_LIMITS_NOTE =
 
 export const HEADLINE_TAG_MODEL = "Model's reading, not yet checked against people";
 export const HEADLINE_TAG_COUNTED = "Counted from the official record";
+export const HEADLINE_TAG_RUN = "Measured from our own run";
 
 export const WHAT_WE_FOUND_SO_FAR_HEADING = "What we found so far";
 
