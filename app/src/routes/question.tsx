@@ -8,10 +8,13 @@ import { useCheckedAgainstPeople } from "../context/preview-context.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import {
+  CHOICE_WORDING,
   EVASION_TYPE_HEADING,
   HOW_TO_READ_A_READING,
   LABEL_WORDING,
   NO_READING_REASON_TEXT,
+  QUESTION_PAGE,
+  READING_IT_YOURSELF,
   READING_IT_YOURSELF_CLOSE,
   READING_IT_YOURSELF_INTRO,
   TERMS,
@@ -20,32 +23,14 @@ import { formatDate, formatNInHundred } from "../lib/format.ts";
 import { QS_V1_INSTRUCTIONS } from "../lib/qs-v1-texts.ts";
 import "./question.css";
 
-const SHORTENED_NOTE = "Shortened here. The full text is on the official record.";
-
-const CHOICE_LABELS: Readonly<Record<string, string>> = {
-  answered: "Answered",
-  partly_answered: "Partly answered",
-  not_answered: "Not answered",
-  unclear: "Unclear",
-  yes: "Yes",
-  no: "No",
-  no_figure_requested: "No figure requested",
-  all_parts: "All parts",
-  some_parts: "Some parts",
-  no_parts: "No parts",
-  single_part_question: "Single-part question",
-  related_topic: "Talks about a related topic",
-  restates_policy: "Restates government policy",
-  refers_elsewhere: "Refers elsewhere without giving the content",
-  none: "None of the above",
-};
+const SHORTENED_NOTE = QUESTION_PAGE.shortened;
 
 function withParty(name: string, party: string | null): string {
   return party === null ? name : `${name}, ${party}`;
 }
 
 function prettyChoice(choice: string): string {
-  return CHOICE_LABELS[choice] ?? choice.replaceAll("_", " ");
+  return LABEL_WORDING[choice]?.shownAs ?? CHOICE_WORDING[choice] ?? choice.replaceAll("_", " ");
 }
 
 export function Question() {
@@ -175,16 +160,12 @@ function QuestionView({ item }: { readonly item: QuestionDetail }) {
                 Read the full text on the official record
               </a>
             </p>
-            <p>
-              We copied this question and reply from the official record on{" "}
-              {formatDate(item.provenance.retrievedAt)} and did not change the words.
-            </p>
+            <p>{QUESTION_PAGE.copied(formatDate(item.provenance.retrievedAt))}</p>
             <p>
               {item.provenance.evaluatedAt
-                ? `The model read it on ${formatDate(item.provenance.evaluatedAt)}.`
-                : "No reading date is published for this pair."}{" "}
-              The exact version of the model and of the five questions is recorded below, so this
-              reading can be reproduced.
+                ? QUESTION_PAGE.modelReadOn(formatDate(item.provenance.evaluatedAt))
+                : QUESTION_PAGE.noReadingDate}{" "}
+              {QUESTION_PAGE.versions}
             </p>
             <p className="mono provenance-versions">
               Model {item.provenance.model} · question set {item.provenance.questionSetVersion} (
@@ -206,25 +187,19 @@ function formatPointer(entry: string | undefined): string | null {
 
 function readingItYourselfBullets(item: QuestionDetail): string[] {
   const bullets: string[] = [];
-  bullets.push(
-    item.features.questionParts === 1
-      ? "Code estimates that this question asks one thing, based on its wording and punctuation."
-      : `Code estimates that this question asks ${item.features.questionParts} separate things, based on its wording and punctuation.`,
-  );
-  bullets.push(
-    `The reply is ${item.features.replyWords} ${item.features.replyWords === 1 ? "word" : "words"} long.`,
-  );
-  bullets.push(`The reply ${item.features.hasNumber ? "contains" : "does not contain"} a number.`);
+  bullets.push(READING_IT_YOURSELF.parts(item.features.questionParts));
+  bullets.push(READING_IT_YOURSELF.length(item.features.replyWords));
+  bullets.push(READING_IT_YOURSELF.number(item.features.hasNumber));
   if (item.replyShape === "referral" && item.referredReply !== null) {
-    const pointer = formatPointer(item.referralChain[0]);
     bullets.push(
-      pointer
-        ? `The reply points to an earlier reply, ${pointer}. We show that earlier reply above. ${item.reading ? "The model read both replies." : "Both replies are available for assessment."}`
-        : `The reply points to an earlier reply. We show that earlier reply above. ${item.reading ? "The model read both replies." : "Both replies are available for assessment."}`,
+      READING_IT_YOURSELF.referral({
+        pointer: formatPointer(item.referralChain[0]),
+        modelReadBoth: item.reading !== null,
+      }),
     );
   }
   for (const phrase of item.features.stockPhrases) {
-    bullets.push(`The reply uses the phrase “${phrase}”.`);
+    bullets.push(READING_IT_YOURSELF.stockPhrase(phrase));
   }
   return bullets;
 }
@@ -253,11 +228,7 @@ function ReadingView({
           </span>
         </p>
         {wording && <p>{wording.meaning}</p>}
-        {unsure && (
-          <p className="muted">
-            The model was not sure enough to say, so we count this as unclear.
-          </p>
-        )}
+        {unsure && <p className="muted">{QUESTION_PAGE.countedAsUnclear}</p>}
 
         <p className="small muted">{HOW_TO_READ_A_READING}</p>
 
@@ -265,16 +236,13 @@ function ReadingView({
 
         <p className="reading-confidence">
           {checkedAgainstPeople
-            ? `How sure: ${formatNInHundred(reading.answered.confidence)}`
-            : `The model settled on that answer at ${formatNInHundred(reading.answered.confidence)}. That is its own number and says nothing about whether the answer is right.`}
+            ? QUESTION_PAGE.confidenceChecked(formatNInHundred(reading.answered.confidence))
+            : QUESTION_PAGE.confidenceUnchecked(formatNInHundred(reading.answered.confidence))}
         </p>
       </div>
 
       <div className={`${boxClass} secondary-readings`}>
-        <p className="secondary-intro">
-          Jev was asked four more questions about this reply. Each answer is followed by the share
-          out of 100 the model gave it.
-        </p>
+        <p className="secondary-intro">{QUESTION_PAGE.secondaryIntro}</p>
         <SecondaryChoice
           heading={QS_V1_INSTRUCTIONS[1].label}
           reading={reading.givesRequestedFigure}

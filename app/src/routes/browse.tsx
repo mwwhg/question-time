@@ -9,7 +9,7 @@ import { StackedLabelBar } from "../components/stacked-label-bar.tsx";
 import { TwoPane } from "../components/two-pane.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { BROWSE_COMPARISON_NOTE, TERMS } from "../lib/copy.ts";
+import { BROWSE, BROWSE_COMPARISON_NOTE, TERMS } from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
 import "./browse.css";
 
@@ -56,7 +56,9 @@ export function Browse() {
     <>
       <PageBanner>
         <h1>Browse the results</h1>
-        <p>Pick a portfolio and read the questions sent to it. {TERMS.portfolio}</p>
+        <p>
+          {BROWSE.lead} {TERMS.portfolio}
+        </p>
       </PageBanner>
       <TwoPane
         side={
@@ -129,9 +131,7 @@ export function Browse() {
         }
       >
         <p className="prose muted">
-          Each row shows one portfolio, the number of questions it received that year, and a bar
-          splitting those questions by reading. {BROWSE_COMPARISON_NOTE} The bar cannot tell you
-          whether any one reading is right.
+          {BROWSE.rowsNote} {BROWSE_COMPARISON_NOTE} {BROWSE.barCannotTell}
         </p>
         {state.status === "loading" && <LoadingNote />}
         {state.status === "error" && <ErrorNote />}

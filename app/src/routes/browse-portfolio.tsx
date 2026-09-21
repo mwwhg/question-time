@@ -8,7 +8,7 @@ import { PageBanner } from "../components/page-banner.tsx";
 import { TwoPane } from "../components/two-pane.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { LABEL_WORDING, NO_READING_WORDING, TERMS } from "../lib/copy.ts";
+import { BROWSE_PORTFOLIO, LABEL_WORDING, NO_READING_WORDING, TERMS } from "../lib/copy.ts";
 import { formatDate } from "../lib/format.ts";
 import "./browse-portfolio.css";
 
@@ -64,7 +64,7 @@ export function BrowsePortfolio() {
         {state.status === "ok" && (
           <>
             <h1>{state.data.portfolio}</h1>
-            <p>Written questions sent to this portfolio in {year}.</p>
+            <p>{BROWSE_PORTFOLIO.lead(year)}</p>
           </>
         )}
       </PageBanner>
@@ -122,9 +122,7 @@ export function BrowsePortfolio() {
         {state.status === "ok" && hasRows && (
           <>
             <p className="prose muted">
-              {TERMS.wq} Each row is one question. Open a number to read the question, the reply and
-              the reading side by side. The table cannot tell you whether a reading is right, and it
-              is not a score for the minister who replied.
+              {TERMS.wq} {BROWSE_PORTFOLIO.tableNote}
             </p>
             <h2
               ref={resultsHeading}

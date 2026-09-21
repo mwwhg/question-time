@@ -9,7 +9,22 @@ import { RunFacts } from "../components/run-facts.tsx";
 import { TwoPane } from "../components/two-pane.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
-import { CIVICS, TERMS, WHY_NO_BEST_TABLE } from "../lib/copy.ts";
+import {
+  BREAKDOWN_HOW_TO_READ,
+  BREAKDOWNS,
+  CHOICE_WORDING,
+  CIVICS,
+  CORPUS_INTRO,
+  FIGURE_CHOICE_WORDING,
+  FINDINGS_CONFIDENCE,
+  FINDINGS_CROSS_CHECKS,
+  FINDINGS_INTRO,
+  FINDINGS_RUN,
+  FINDINGS_SAME_QUESTION,
+  FINDINGS_SECONDARY,
+  TERMS,
+  WHY_NO_BEST_TABLE,
+} from "../lib/copy.ts";
 import { formatNumber } from "../lib/format.ts";
 import "./findings.css";
 
@@ -49,20 +64,7 @@ function groupWording(group: string): string {
   return GROUP_WORDING[group] ?? group;
 }
 
-/** The raw option names from the question set, in the words the site uses for them. */
-const SECONDARY_KEY_WORDING: Readonly<Record<string, string>> = {
-  yes: "Yes, the reply states the figure",
-  no: "No, the reply does not state it",
-  no_figure_requested: "The question did not ask for a figure",
-  all_parts: "Every part",
-  some_parts: "Some parts",
-  no_parts: "No parts",
-  single_part_question: "The question asked only one thing",
-  related_topic: "Talks about a related topic",
-  restates_policy: "Restates government policy",
-  refers_elsewhere: "Points somewhere else without giving the content",
-  none: "None of those",
-};
+const SECONDARY_KEY_WORDING = { ...CHOICE_WORDING, ...FIGURE_CHOICE_WORDING };
 
 const LABEL_KEYS = ["answered", "partly_answered", "not_answered", "unclear", "noReading"] as const;
 const LABEL_HEADS = ["Answered", "Partly answered", "Not answered", "Unclear", "No reading"];
@@ -86,11 +88,12 @@ function BreakdownTable({
       <p>{shows}</p>
       {rows[0] !== undefined && totalOf(rows[0].counts) > 0 && (
         <p>
-          How to read it: the first row covers {formatNumber(totalOf(rows[0].counts))} questions in
-          the group “{groupWording(rows[0].group)}”. Of those,{" "}
-          {aboutOneIn(rows[0].counts.answered, totalOf(rows[0].counts))} were read as answered,
-          which is {formatNumber(rows[0].counts.answered)} questions. Every other row reads the same
-          way.
+          {BREAKDOWN_HOW_TO_READ({
+            questions: formatNumber(totalOf(rows[0].counts)),
+            group: groupWording(rows[0].group),
+            share: aboutOneIn(rows[0].counts.answered, totalOf(rows[0].counts)),
+            answered: formatNumber(rows[0].counts.answered),
+          })}
         </p>
       )}
       <p className="muted">{cannotShow}</p>
@@ -238,10 +241,7 @@ function CivicsSection({
   return (
     <section id="civic-record" tabIndex={-1} className="card findings-section">
       <h2>{CIVICS.sectionHeading}</h2>
-      <p>
-        These counts describe who asked questions and where they sent them. They come from the
-        public record, not Jev’s judgements about replies.
-      </p>
+      <p>{CIVICS.intro}</p>
 
       <h3>{CIVICS.askersHeading}</h3>
       <p className="muted">{CIVICS.askersNote}</p>
@@ -315,15 +315,11 @@ export function Findings() {
     <>
       <PageBanner>
         <h1>What the data shows</h1>
+        <p>{FINDINGS_INTRO.body}</p>
         <p>
-          Start with the public record, then explore Jev’s judgements about replies. The civic
-          tables count questions and people. The model tables count readings: what Jev said about a
-          reply. A pattern can suggest where to investigate; it does not establish that the readings
-          are correct.
-        </p>
-        <p>
-          To check a reading against its question, reply and official source, open a portfolio in{" "}
-          <Link to="/browse">Browse the results</Link> and pick one.
+          {FINDINGS_INTRO.checkBefore}
+          <Link to="/browse">Browse the results</Link>
+          {FINDINGS_INTRO.checkAfter}
         </p>
       </PageBanner>
       <TwoPane
@@ -351,13 +347,9 @@ export function Findings() {
       >
         <section id="run" tabIndex={-1} className="card findings-section">
           <h2>Time and estimated model cost</h2>
-          <p>
-            These are the recorded time and usage for pairs processed in this run. Asking the same
-            questions repeatedly makes large-scale comparison possible. This does not mean every
-            record has a published reading.
-          </p>
+          <p>{FINDINGS_RUN.shows}</p>
           <p className="muted">
-            It cannot show whether that cost is worth it. That is a judgement call. {TERMS.token}
+            {FINDINGS_RUN.cannotShow} {TERMS.token}
           </p>
           {indexState.status === "loading" && <LoadingNote />}
           {indexState.status === "error" && <ErrorNote />}
@@ -380,11 +372,8 @@ export function Findings() {
 
             <section id="corpus" tabIndex={-1} className="card findings-section">
               <h2>What the record looks like</h2>
-              <p>
-                This is the shape of the whole written-question record from 2024 to 18 September
-                2026, counted by ordinary code before the model read anything.
-              </p>
-              <p className="muted">It cannot show whether any reading of it is correct.</p>
+              <p>{CORPUS_INTRO.shows}</p>
+              <p className="muted">{CORPUS_INTRO.cannotShow}</p>
               <ul className="corpus-facts">
                 <li>
                   <span className="mono">{formatNumber(findingsState.data.corpus.records)}</span>{" "}
@@ -447,49 +436,49 @@ export function Findings() {
 
             <BreakdownTable
               id="reply-shape"
-              title="Replies that answer, replies that point elsewhere, replies in a file"
-              shows="Replies come in three kinds. Most answer in their own words. Some only point at a reply the minister gave earlier. Some say the answer is in an attached file, which we did not open. This shows how the readings differ between the three."
-              cannotShow="It cannot show why a particular reply took the shape it did."
+              title={BREAKDOWNS.replyShape.title}
+              shows={BREAKDOWNS.replyShape.shows}
+              cannotShow={BREAKDOWNS.replyShape.cannotShow}
               rows={findingsState.data.byReplyShape}
             />
 
             <BreakdownTable
               id="reply-length"
-              title="Short replies and long replies"
-              shows="Replies are grouped by how many words they contain. This shows how the readings change as replies get longer."
-              cannotShow="It cannot show whether a longer reply is a better one."
+              title={BREAKDOWNS.replyLength.title}
+              shows={BREAKDOWNS.replyLength.shows}
+              cannotShow={BREAKDOWNS.replyLength.cannotShow}
               rows={findingsState.data.byReplyLength}
             />
 
             <BreakdownTable
               id="question-parts"
-              title="Questions that ask one thing, and questions that ask several"
-              shows="Code estimates how many separate things a question asks using text rules. These groups may include miscounts, so use them to explore patterns rather than as exact measures."
-              cannotShow="It cannot show which part, if any, went unanswered."
+              title={BREAKDOWNS.questionParts.title}
+              shows={BREAKDOWNS.questionParts.shows}
+              cannotShow={BREAKDOWNS.questionParts.cannotShow}
               rows={findingsState.data.byQuestionParts}
             />
 
             <BreakdownTable
               id="months"
-              title="Month by month"
-              shows="This shows how the readings are spread across the twenty-four months covered."
-              cannotShow="It cannot show whether any change over time reflects replies, questions, or the model."
+              title={BREAKDOWNS.months.title}
+              shows={BREAKDOWNS.months.shows}
+              cannotShow={BREAKDOWNS.months.cannotShow}
               rows={findingsState.data.byMonth}
             />
 
             <BreakdownTable
               id="fan-out"
-              title="Questions sent to one minister, and questions sent to many"
-              shows="The same question is often posted to many ministers at once. This shows how the readings differ between a question sent to one minister and a question sent to a great many."
-              cannotShow="It cannot show whether a wide mailout was itself a reasonable way to ask."
+              title={BREAKDOWNS.fanOut.title}
+              shows={BREAKDOWNS.fanOut.shows}
+              cannotShow={BREAKDOWNS.fanOut.cannotShow}
               rows={findingsState.data.byFanOut}
             />
 
             <BreakdownTable
               id="stock-phrases"
-              title="Replies that use a stock phrase"
-              shows={`${TERMS.stockPhrase} This shows how the readings differ when a reply uses one of them.`}
-              cannotShow="It cannot show whether the phrase was the right or only reason for that reading."
+              title={BREAKDOWNS.stockPhrases.title}
+              shows={`${TERMS.stockPhrase} ${BREAKDOWNS.stockPhrases.shows}`}
+              cannotShow={BREAKDOWNS.stockPhrases.cannotShow}
               rows={findingsState.data.byStockPhrase}
             />
 
@@ -504,13 +493,10 @@ export function Findings() {
             <section id="confidence" tabIndex={-1} className="card findings-section">
               <h2>How firmly the model settled on its answer</h2>
               <p>
-                {TERMS.confidence} Each row is a band of that number, from 0.0 at the top to 1.0 at
-                the bottom. The four columns count how many readings in that band got each answer. A
-                reading in the last row is one the model settled on very firmly.
+                {TERMS.confidence} {FINDINGS_CONFIDENCE.shows}
               </p>
               <p className="muted">
-                It cannot show whether those firm readings are right more often than the unsure
-                ones. That check is not done yet. See{" "}
+                {FINDINGS_CONFIDENCE.cannotShow} See{" "}
                 <Link to="/method">How Jev works and how we check it</Link>.
               </p>
               {findingsState.data.confidenceHistogram.length === 0 ? (
@@ -554,14 +540,8 @@ export function Findings() {
 
             <section id="secondary" tabIndex={-1} className="card findings-section">
               <h2>Other assessment questions</h2>
-              <p>
-                Besides “does the reply give the information asked for”, the model was asked four
-                more questions about each processed pair. These are the totals for three of them.
-              </p>
-              <p className="muted">
-                It cannot show how these answers line up with the main reading for the same reply.
-                The cross-checks below do some of that.
-              </p>
+              <p>{FINDINGS_SECONDARY.shows}</p>
+              <p className="muted">{FINDINGS_SECONDARY.cannotShow}</p>
               <div className="secondary-grid">
                 <SecondaryCountList
                   title="Does the reply give the figure asked for?"
@@ -580,14 +560,8 @@ export function Findings() {
 
             <section id="cross-checks" tabIndex={-1} className="card findings-section">
               <h2>Do the five readings agree with each other?</h2>
-              <p>
-                Each line below takes a group of replies and asks what a second reading said about
-                the same replies. The five questions are answered independently, so they can
-                disagree.
-              </p>
-              <p className="muted">
-                It cannot show whether either reading, on its own, is correct.
-              </p>
+              <p>{FINDINGS_CROSS_CHECKS.shows}</p>
+              <p className="muted">{FINDINGS_CROSS_CHECKS.cannotShow}</p>
               {findingsState.data.crossChecks.length === 0 ? (
                 <EmptyNote>No data yet.</EmptyNote>
               ) : (
@@ -608,13 +582,8 @@ export function Findings() {
 
             <section id="same-question" tabIndex={-1} className="card findings-section">
               <h2>Same question, different reading</h2>
-              <p>
-                When one question goes to many ministers, the replies differ, and so do the
-                readings. These are the largest such groups. Follow the link to read one of them.
-              </p>
-              <p className="muted">
-                It cannot show which of the differing readings, if any, is the correct one.
-              </p>
+              <p>{FINDINGS_SAME_QUESTION.shows}</p>
+              <p className="muted">{FINDINGS_SAME_QUESTION.cannotShow}</p>
               {findingsState.data.sameQuestionDifferentReading.length === 0 ? (
                 <EmptyNote>No data yet.</EmptyNote>
               ) : (

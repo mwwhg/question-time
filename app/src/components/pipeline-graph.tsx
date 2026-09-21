@@ -1,3 +1,4 @@
+import { PIPELINE } from "../lib/copy.ts";
 import "./pipeline-graph.css";
 
 type NodeKind = "source" | "code" | "model" | "people" | "site";
@@ -52,42 +53,42 @@ const STEPS: readonly { kind: NodeKind; title: string; body: string }[] = [
   {
     kind: "source",
     title: "The official record",
-    body: "Parliament publishes every written question and its reply. We copied the 182,961 from 2024, 2025 and 2026 up to 18 September once, unchanged, and kept a note of when and from where.",
+    body: PIPELINE.record,
   },
   {
     kind: "code",
     title: "Tidy and link replies",
-    body: "Ordinary code, no model. About one reply in four does not answer in its own words. It only says “see my earlier reply”. The code goes and finds that earlier reply and puts the two together, so the model reads both.",
+    body: PIPELINE.tidy,
   },
   {
     kind: "code",
     title: "Measure each reply",
-    body: "Code counts reply length, checks for numbers and stock phrases, and estimates how many things the question asks. That last measure uses text rules and can miscount parts.",
+    body: PIPELINE.measure,
   },
   {
     kind: "model",
     title: "Jev assesses each pair",
-    body: "People first define the assessment questions. Jev is then given one question, its reply, and the same five plain questions every time. It never writes a sentence. For each question it splits 100 between the possible answers, such as 95 in 100 for “partly answered”, and the biggest share is its choice. Code displays “Unclear” when the model’s confidence is below 50 in 100. What it took and what it cost are set out below.",
+    body: PIPELINE.jev,
   },
   {
     kind: "code",
     title: "Trick pairs test Jev",
-    body: "We made up pairs where we already knew the right answer. Some put a reply from a completely different subject under the question. Some reply by repeating the question back. Anyone paying attention calls both of these not answered. The results are further down this page.",
+    body: PIPELINE.tricks,
   },
   {
     kind: "people",
     title: "Two people check 300",
-    body: "Not finished yet. Two people are reading 300 pairs on their own, without seeing what Jev said. Those 300 show no reading on this site until they are done. Then we publish how often Jev and people agree.",
+    body: PIPELINE.people,
   },
   {
     kind: "code",
     title: "Add up the readings",
-    body: "Code adds the readings up by portfolio, by month, by how long the reply was, and more, then writes the totals out as plain data files. The arithmetic is ordinary code. Counts of readings still depend on the model’s judgements.",
+    body: PIPELINE.addup,
   },
   {
     kind: "site",
     title: "This site",
-    body: "The pages you are reading are fixed files. No model runs when you visit, and every reading shown was made once, ahead of time, and can be checked against the official record.",
+    body: PIPELINE.site,
   },
 ];
 
@@ -168,11 +169,7 @@ export function PipelineGraph() {
           </g>
         ))}
       </svg>
-      <figcaption className="pipeline-caption">
-        Follow the lines from left to right. Solid lines show the processing steps. Dashed lines
-        show the planned human check. Only one box uses a model. Everything else is ordinary code or
-        people.
-      </figcaption>
+      <figcaption className="pipeline-caption">{PIPELINE.caption}</figcaption>
       <ol className="pipeline-steps">
         {STEPS.map((step) => (
           <li key={step.title} className={`pipeline-step pipeline-step-${step.kind}`}>
