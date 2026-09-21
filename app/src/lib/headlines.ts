@@ -1,7 +1,12 @@
 // Pure: turns findings.json + portfolios.json into the Start page's headline cards. No fetching,
 // no formatting side effects beyond string templates, so it is easy to point a test at directly.
 import type { Findings, LabelCounts, PortfolioIndex } from "@contract";
-import { HEADLINE_TAG_COUNTED, HEADLINE_TAG_MODEL, HEADLINE_TAG_RUN } from "./copy.ts";
+import {
+  HEADLINE_CARDS,
+  HEADLINE_TAG_COUNTED,
+  HEADLINE_TAG_MODEL,
+  HEADLINE_TAG_RUN,
+} from "./copy.ts";
 import { formatNInHundred, formatNumber } from "./format.ts";
 
 export type HeadlineTag =
@@ -64,8 +69,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "number",
     id: "askers",
     value: formatNumber(findings.corpus.answered),
-    sentence: `written questions got a reply. ${formatNumber(findings.civics.askers.length)} different MPs asked them.`,
-    cannotTell: "This counts questions asked, not whether the replies were any good.",
+    sentence: HEADLINE_CARDS.askers.sentence(formatNumber(findings.civics.askers.length)),
+    cannotTell: HEADLINE_CARDS.askers.cannotTell,
     tag: HEADLINE_TAG_COUNTED,
     linkTo: "/findings",
     linkText: "See who asked the most",
@@ -83,9 +88,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "number",
     id: "repeated-wording",
     value: `${repeatedShare}%`,
-    sentence: "of written questions repeat a wording already sent to another minister.",
-    cannotTell:
-      "This can't tell you whether sending the same wording to many ministers was a reasonable way to ask it.",
+    sentence: HEADLINE_CARDS.repeatedWording.sentence,
+    cannotTell: HEADLINE_CARDS.repeatedWording.cannotTell,
     tag: HEADLINE_TAG_COUNTED,
     linkTo: "/findings",
     linkText: "See the most repeated questions",
@@ -95,10 +99,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "number",
     id: "referrals",
     value: shareInHundred(findings.corpus.referralReplies, findings.corpus.answered),
-    sentence:
-      "of replies do not answer in their own words. They only point to a reply the minister gave earlier.",
-    cannotTell:
-      "This can't tell you whether the earlier reply, once read together with the question, answered it.",
+    sentence: HEADLINE_CARDS.referrals.sentence,
+    cannotTell: HEADLINE_CARDS.referrals.cannotTell,
     tag: HEADLINE_TAG_COUNTED,
     linkTo: "/findings",
     linkText: "See how replies are shaped",
@@ -108,9 +110,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "labelSplit",
     id: "label-split",
     counts: index.totals.all,
-    sentence:
-      "Published model readings, with replies that have no published reading shown separately.",
-    cannotTell: "This is the model's own reading. It is not yet checked against people.",
+    sentence: HEADLINE_CARDS.labelSplit.sentence,
+    cannotTell: HEADLINE_CARDS.labelSplit.cannotTell,
     tag: HEADLINE_TAG_MODEL,
     linkTo: "/findings",
     linkText: "See the breakdowns",
@@ -122,10 +123,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
       kind: "number",
       id: "figures-given",
       value: shareInHundred(figureCheck.numerator, figureCheck.denominator),
-      sentence:
-        "Of questions that ask for a number, amount or date, this is how often the model read the reply as giving it.",
-      cannotTell:
-        "This is the model's own reading of whether a figure was given, not a check that the figure is correct.",
+      sentence: HEADLINE_CARDS.figuresGiven.sentence,
+      cannotTell: HEADLINE_CARDS.figuresGiven.cannotTell,
       tag: HEADLINE_TAG_MODEL,
       linkTo: "/findings",
       linkText: "See the cross-checks",
@@ -138,10 +137,8 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
       kind: "number",
       id: "all-parts-addressed",
       value: shareInHundred(partsCheck.numerator, partsCheck.denominator),
-      sentence:
-        "Of questions that ask more than one thing, this is how often the model read the reply as addressing every part.",
-      cannotTell:
-        "This is the model's own reading. It does not say which part, if any, was missed.",
+      sentence: HEADLINE_CARDS.allPartsAddressed.sentence,
+      cannotTell: HEADLINE_CARDS.allPartsAddressed.cannotTell,
       tag: HEADLINE_TAG_MODEL,
       linkTo: "/findings",
       linkText: "See the cross-checks",
@@ -152,9 +149,11 @@ export function buildHeadlines(findings: Findings, index: PortfolioIndex): Headl
     kind: "number",
     id: "cost-and-time",
     value: `$${index.run.estimatedCostUsd.toFixed(2)}`,
-    sentence: `is the estimated model cost for ${formatNumber(index.run.pairsJudged)} assessed pairs, ${runDurationPhrase(index)}.`,
-    cannotTell:
-      "Calculated from reported input tokens and the vendor's listed US-dollar price. This is not an invoice or evidence of accuracy.",
+    sentence: HEADLINE_CARDS.costAndTime.sentence({
+      pairs: formatNumber(index.run.pairsJudged),
+      duration: runDurationPhrase(index),
+    }),
+    cannotTell: HEADLINE_CARDS.costAndTime.cannotTell,
     tag: HEADLINE_TAG_RUN,
     linkTo: "/method",
     linkText: "See the run in numbers",

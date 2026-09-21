@@ -9,6 +9,7 @@ import { StackedLabelBar } from "../components/stacked-label-bar.tsx";
 import { useDocumentTitle } from "../hooks/use-document-title.ts";
 import { useJson } from "../hooks/use-json.ts";
 import {
+  HOME_BAR,
   INTRO,
   KNOW_BEFORE_YOU_READ,
   NEW_HERE,
@@ -68,14 +69,8 @@ export function Home() {
 
           <section className="card headline-bar">
             <h2 className="section-label">Published readings across the record</h2>
-            <p>
-              Each band is one reading. The wider the band, the more replies got that reading. The
-              four model readings and the separate “No reading” category are explained under the
-              bar.
-            </p>
-            <p className="muted">
-              It cannot tell you whether any one reading is right, and it is not a score for anyone.
-            </p>
+            <p>{HOME_BAR.howToRead}</p>
+            <p className="muted">{HOME_BAR.cannotTell}</p>
             {state.status === "loading" && <LoadingNote />}
             {state.status === "error" && <ErrorNote />}
             {state.status === "ok" &&
@@ -121,10 +116,11 @@ export function Home() {
                       label={mode === "all" ? "Every question" : "Each distinct question once"}
                     />
                     <p role="status">
-                      {formatNumber(total - counts.noReading)} of {formatNumber(total)} questions in
-                      this view have a published reading.
-                      {noReadingShare > 0 &&
-                        ` About ${noReadingShare} in 100 have no reading published. This includes excluded, withheld or unavailable results.`}
+                      {HOME_BAR.published({
+                        withReading: formatNumber(total - counts.noReading),
+                        total: formatNumber(total),
+                      })}
+                      {noReadingShare > 0 && HOME_BAR.noReadingShare(noReadingShare)}
                     </p>
                     <LabelKey />
                   </>
@@ -165,7 +161,7 @@ export function Home() {
         >
           <h2 id="example-heading">{WORKED_EXAMPLE.heading}</h2>
           <p className="prose">
-            One question, one reply, and what came back. {WORKED_EXAMPLE.standfirst}
+            {WORKED_EXAMPLE.homeLead} {WORKED_EXAMPLE.standfirst}
           </p>
           <div className="worked-grid">
             <div className="worked-col">
@@ -181,10 +177,7 @@ export function Home() {
             <div className="worked-col">
               <div>
                 <h3 className="section-label">The assessment we asked Jev to make</h3>
-                <p>
-                  Does the reply give the information asked for? The possible answers are answered,
-                  partly answered, not answered and unclear.
-                </p>
+                <p>{WORKED_EXAMPLE.homeAsked}</p>
               </div>
               <div className="gold-box">
                 <h3 className="section-label">What Jev gave back</h3>

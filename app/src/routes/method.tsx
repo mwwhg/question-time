@@ -12,10 +12,18 @@ import { useJson } from "../hooks/use-json.ts";
 import {
   ATTRIBUTION_TEXT,
   CC_LICENCE_URL,
+  CODE_NOT_MODEL,
+  FIVE_QUESTIONS_INTRO,
+  HUMAN_CHECK_DONE_NOTE,
   JEV_VENDOR_LIMITS_NOTE,
+  METHOD_INTRO,
+  METHOD_RUN_NOTE,
   NOT_CHECKED_YET_NOTE,
+  NOT_DONE_YET,
   NOT_GOOD_AT,
   TERMS,
+  TRICK_PAIRS,
+  WHAT_JEV_IS,
   WHY_READ_EVERY_REPLY,
   WORKED_EXAMPLE,
 } from "../lib/copy.ts";
@@ -34,24 +42,6 @@ const CONTROLS = [
   { draw: "2", method: "Rules", swapped: "2 of 10", swappedHigh: "2 of 10", echo: "0 of 10" },
 ];
 
-const DISCARD_EXPLANATION =
-  'Draw 1 was discarded. Its two misses had swapped-in replies of "None." and "As the Minister for Treaty of Waitangi Negotiations, none." against questions of the form "What advice, if any, ...". Those replies do answer such a question, so the control was wrong and Jev was right. The sampler now requires both sides of a swap to have replies of at least 80 characters. This was a fix to the instrument, made after seeing results, so draw 1 is kept and reported here rather than quietly dropped.';
-
-const NOT_DONE_YET = [
-  {
-    id: "human-check",
-    text: "The 300-pair human check, comparing the model's readings against two independent people.",
-  },
-  {
-    id: "model-comparison",
-    text: "A comparison with a general-purpose language model on the same 300 pairs.",
-  },
-  {
-    id: "calibration",
-    text: "A calibration chart: whether the readings the model was surest about turn out right more often than the ones it was unsure about.",
-  },
-];
-
 export function Method() {
   useDocumentTitle("How Jev works and how we check it");
   const checkedAgainstPeople = useCheckedAgainstPeople();
@@ -61,10 +51,7 @@ export function Method() {
     <>
       <PageBanner>
         <h1>How Jev works and how we check it</h1>
-        <p>
-          People define the questions. Jev returns structured judgements. Code adds them up, and
-          people must check what those results mean.
-        </p>
+        <p>{METHOD_INTRO.banner}</p>
       </PageBanner>
       <TwoPane
         mainClassName="method-main"
@@ -84,10 +71,7 @@ export function Method() {
         <section id="workflow" tabIndex={-1} className="card">
           <h2>How it works</h2>
           <p>{TERMS.writtenQuestion}</p>
-          <p>
-            A model does one narrow job here. It reads a question and its reply and says whether the
-            reply gives what was asked. Everything around that job is ordinary code or people.
-          </p>
+          <p>{METHOD_INTRO.oneJob}</p>
         </section>
         <PipelineGraph />
 
@@ -119,10 +103,7 @@ export function Method() {
               <div>
                 <h3 className="section-label">Our interpretation, not a Jev explanation</h3>
                 <p>{WORKED_EXAMPLE.why}</p>
-                <p>
-                  That explanation is our interpretation. Jev returned the numerical reading, not
-                  this explanation.
-                </p>
+                <p>{WORKED_EXAMPLE.whyNote}</p>
               </div>
             </div>
           </div>
@@ -133,19 +114,13 @@ export function Method() {
             <a href={WORKED_EXAMPLE.officialUrl} target="_blank" rel="noopener noreferrer">
               read it on the official record
             </a>
-            . The numbers above come from the record of that first test, kept in the project files,
-            not from the run below.
+            . {WORKED_EXAMPLE.numbersSource}
           </p>
         </section>
 
         <section id="run" tabIndex={-1} className="card">
           <h2>The run, in numbers</h2>
-          <p>
-            These figures come from the run's own records. Those records are the time stamped on
-            each reading and the amount of text the model reported receiving. Cost is an estimate
-            using the vendor's listed price. These figures describe the recorded run, not proof of
-            accuracy or a completed reading of every record.
-          </p>
+          <p>{METHOD_RUN_NOTE}</p>
           <p className="muted">{TERMS.token}</p>
           {indexState.status === "loading" && <LoadingNote />}
           {indexState.status === "error" && <ErrorNote />}
@@ -161,25 +136,13 @@ export function Method() {
 
         <section className="card">
           <h2>What Jev is</h2>
-          <p>
-            Jev is a small, fast computer model. You hand it a piece of text and a question about
-            that text, and it hands back numbers. It never writes a sentence. For a question with a
-            fixed list of answers, it splits 100 between them, and the largest share is its raw
-            choice. The site displays “Unclear” when the model’s confidence falls below 50 in 100.
-            For a yes or no question, it gives one number out of 100 for yes. The worked example
-            above shows exactly what that looks like.
-          </p>
+          <p>{WHAT_JEV_IS}</p>
           <p className="muted">{TERMS.confidence}</p>
         </section>
 
         <section id="questions" tabIndex={-1} className="card">
           <h2>The five questions asked of each processed pair</h2>
-          <p>
-            Jev receives the same five assessment questions for each pair, in the same words each
-            time. Phrase rules provide a simple comparison. We plan to compare a general-purpose
-            language model on the same human-reviewed sample. That comparison is not done yet. Here
-            are the assessment questions in plain words.
-          </p>
+          <p>{FIVE_QUESTIONS_INTRO}</p>
           <ol className="question-set-list">
             {QS_V1_INSTRUCTIONS.map((q) => (
               <li key={q.key}>
@@ -208,50 +171,19 @@ export function Method() {
         </section>
 
         <section className="card">
-          <h2>What is computed by code, not the model</h2>
+          <h2>{CODE_NOT_MODEL.heading}</h2>
           <ul className="bullets">
-            <li>
-              Whether a reading counts as "unclear": the pipeline treats the model as not sure
-              enough when its top-choice confidence is below 50 in 100. The pipeline decides this
-              once. The site never does.
-            </li>
-            <li>
-              The reply's word count, whether it contains a number, and which stock phrases it uses.
-              Code also estimates how many separate things the question asks using simple text
-              rules. That estimate can miss or miscount parts.
-            </li>
-            <li>
-              Whether a reply is plain text, a referral to an earlier reply, or attachment-only,
-              including following referral chains and resolving them against earlier questions.
-            </li>
-            <li>
-              Counting each question two ways: every record, and each distinct question text once,
-              since the same question is often sent to many ministers. The distinct-question view
-              uses the reading of the lowest-numbered record for each wording. It does not combine
-              the replies or their judgements.
-            </li>
-            <li>
-              All aggregation shown on the Findings page: breakdowns, the confidence histogram,
-              cross-checks and cost figures.
-            </li>
+            {CODE_NOT_MODEL.items.map((item) => (
+              <li key={item.slice(0, 24)}>{item}</li>
+            ))}
           </ul>
         </section>
 
         <section id="checks" tabIndex={-1} className="card">
           <h2>Trick pairs, and what the phrase rules got wrong</h2>
           <p>{TERMS.controls}</p>
-          <p>
-            We built two kinds. A "swapped" pair keeps the question and puts a reply from a
-            completely different portfolio underneath it. A reader paying attention calls that not
-            answered. An "echo" pair replies to the question by repeating it back, which also
-            answers nothing.
-          </p>
-          <p>
-            Two methods were tested on them. The phrase rules look for set forms of words in the
-            reply and nothing else. Jev reads the question and the reply together. "Swapped at 0.8+"
-            counts the swapped pairs a method called not answered while giving that answer at least
-            80 of its 100 shares.
-          </p>
+          <p>{TRICK_PAIRS.kinds}</p>
+          <p>{TRICK_PAIRS.methods}</p>
           {/* biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll this named table region. */}
           <section className="table-scroll" aria-label="Control test results" tabIndex={0}>
             <table>
@@ -280,14 +212,8 @@ export function Method() {
               </tbody>
             </table>
           </section>
-          <p>
-            The phrase rules got 2 of 10 swapped pairs and 0 of 10 echo pairs. An echo reply uses
-            only the question's own words and contains no stock phrase, so the rules find nothing to
-            match. Jev got 10 of 10 on both. These are twenty pairs we built ourselves. They show
-            the rules cannot tell what a reply is about. They do not show how often Jev is right on
-            real replies.
-          </p>
-          <p>{DISCARD_EXPLANATION}</p>
+          <p>{TRICK_PAIRS.result}</p>
+          <p>{TRICK_PAIRS.discard}</p>
         </section>
 
         <section id="validation" tabIndex={-1} className="cream-panel">
@@ -299,11 +225,7 @@ export function Method() {
               ),
             )}
           </ul>
-          <p>
-            {checkedAgainstPeople
-              ? "The published data marks the human check complete. See the findings for available evidence; this does not establish that the model comparison or calibration work is complete."
-              : NOT_CHECKED_YET_NOTE}
-          </p>
+          <p>{checkedAgainstPeople ? HUMAN_CHECK_DONE_NOTE : NOT_CHECKED_YET_NOTE}</p>
         </section>
 
         <section className="card">
